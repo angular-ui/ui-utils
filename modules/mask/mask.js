@@ -14,7 +14,7 @@ angular.module('ui.directives').directive('uiMask', [
       restrict: 'A',
       link: function (scope, iElement, iAttrs, controller) {
         var maskProcessed = false, eventsBound = false,
-            maskCaretMap, maskPatterns, maskPlaceholder,
+            maskCaretMap, maskPatterns, maskPlaceholder, maskComponents,
             value, valueMasked, isValid,
             // Vars for initializing/uninitializing
             originalPlaceholder = iAttrs.placeholder,
@@ -121,11 +121,16 @@ angular.module('ui.directives').directive('uiMask', [
 
         function unmaskValue(value) {
           var valueUnmasked    = '',
-              maskPatternCopys = maskPatterns.slice();
-          angular.forEach(value.toString().split(''), function(chr, i) {
-            if (maskPatternCopys.length && maskPatternCopys[0].test(chr)) {
+              maskPatternsCopy = maskPatterns.slice();
+          // Preprocess by stripping mask components from value
+          value = value.toString();
+          angular.forEach(maskComponents, function(component, i) {
+            value = value.replace(component, '');
+          });
+          angular.forEach(value.split(''), function(chr, i) {
+            if (maskPatternsCopy.length && maskPatternsCopy[0].test(chr)) {
               valueUnmasked += chr;
-              maskPatternCopys.shift();
+              maskPatternsCopy.shift();
             }
           });
           return valueUnmasked;
@@ -151,24 +156,26 @@ angular.module('ui.directives').directive('uiMask', [
           maskPatterns       = [];
           maskPlaceholder    = '';
 
-          // If mask is an array, it's a complex mask!
-          if (mask instanceof Array) {
-            angular.forEach(mask, function(item, i) {
-              if (item instanceof RegExp) {
-                maskCaretMap.push(characterCount++);
-                maskPlaceholder += '_';
-                maskPatterns.push(item);
-              }
-              else if (typeof item == 'string') {
-                angular.forEach(item.split(''), function(chr, i) {
-                  maskPlaceholder += chr;
-                  characterCount++;
-                });
-              }
-            });
-          }
+          // No complex mask support for now...
+          // if (mask instanceof Array) {
+          //   angular.forEach(mask, function(item, i) {
+          //     if (item instanceof RegExp) {
+          //       maskCaretMap.push(characterCount++);
+          //       maskPlaceholder += '_';
+          //       maskPatterns.push(item);
+          //     }
+          //     else if (typeof item == 'string') {
+          //       angular.forEach(item.split(''), function(chr, i) {
+          //         maskPlaceholder += chr;
+          //         characterCount++;
+          //       });
+          //     }
+          //   });
+          // }
           // Otherwise it's a simple mask
-          else if (typeof mask === 'string') {
+          // else
+
+          if (typeof mask === 'string') {
             angular.forEach(mask.split(''), function(chr, i) {
               if (maskDefinitions[chr]) {
                 maskCaretMap.push(characterCount);
@@ -182,7 +189,11 @@ angular.module('ui.directives').directive('uiMask', [
           }
           // Caret position immediately following last position is valid.
           maskCaretMap.push(maskCaretMap.slice().pop() + 1);
-          maskProcessed = maskCaretMap.length > 1 ? true : false;
+          // Generate array of mask components that will be stripped from a masked value
+          // before processing to prevent mask components from being added to the unmasked value.
+          // E.g., a mask pattern of '+7 9999' won't have the 7 bleed into the unmasked value.
+          maskComponents = maskPlaceholder.replace(/[_\s]+/g,'_').split('_');
+          maskProcessed  = maskCaretMap.length > 1 ? true : false;
         }
 
         function blurHandler(e) {
@@ -206,8 +217,7 @@ angular.module('ui.directives').directive('uiMask', [
           // Prevent shift and ctrl from mucking with old values
           if (eventWhich == 16 || eventWhich == 91) return true;
 
-          var elem            = iElement,
-              val             = elem.val(),
+          var val             = iElement.val(),
               valOld          = oldValue,
               valMasked,
               valUnmasked     = unmaskValue(val),
@@ -252,10 +262,10 @@ angular.module('ui.directives').directive('uiMask', [
           // ==============
 
           // User attempted to delete but raw value was unaffected--correct this grievous offense
-          if ((eventType == 'input' || eventType == 'propertychange') && isDeletion && !wasSelected && valUnmasked === valUnmaskedOld) {
-            while (isKeyBackspace && caretPos > 0 && !isValidCaretPosition(caretPos))
+          if ((eventType == 'input') && isDeletion && !wasSelected && valUnmasked === valUnmaskedOld) {
+            while (isKeyBackspace && caretPos > caretPosMin && !isValidCaretPosition(caretPos))
               caretPos--;
-            while (isKeyDelete && caretPos < maskPlaceholder.length && maskCaretMap.indexOf(caretPos) == -1)
+            while (isKeyDelete && caretPos < caretPosMax && maskCaretMap.indexOf(caretPos) == -1)
               caretPos++;
             var charIndex = maskCaretMap.indexOf(caretPos);
             // Strip out non-mask character that user would have deleted if mask hadn't been in the way.
@@ -267,7 +277,7 @@ angular.module('ui.directives').directive('uiMask', [
           valMasked        = maskValue(valUnmasked);
           oldValue         = valMasked;
           oldValueUnmasked = valUnmasked;
-          elem.val(valMasked);
+          iElement.val(valMasked);
           if (valAltered) {
             // We've altered the raw value after it's been $digest'ed, we need to $apply the new value.
             scope.$apply(function() {
