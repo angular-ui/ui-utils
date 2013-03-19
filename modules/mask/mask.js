@@ -192,7 +192,12 @@ angular.module('ui.directives').directive('uiMask', [
           // Generate array of mask components that will be stripped from a masked value
           // before processing to prevent mask components from being added to the unmasked value.
           // E.g., a mask pattern of '+7 9999' won't have the 7 bleed into the unmasked value.
-          maskComponents = maskPlaceholder.replace(/[_\s]+/g,'_').split('_');
+                                                                // If a maskable char is followed by a mask char and has a mask
+                                                                // char behind it, we'll split it into it's own component so if
+                                                                // a user is aggressively deleting in the input and a char ahead
+                                                                // of the maskable char gets deleted, we'll still be able to strip
+                                                                // it in the unmaskValue() preprocessing.
+          maskComponents = maskPlaceholder.replace(/[_]+/g,'_').replace(/([^_]+)([a-zA-Z0-9])([^_])/g, '$1$2_$3').split('_');
           maskProcessed  = maskCaretMap.length > 1 ? true : false;
         }
 
