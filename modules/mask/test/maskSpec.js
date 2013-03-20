@@ -116,6 +116,20 @@ describe('uiMask', function () {
     });
   });
 
+  describe('changes from the model', function () {
+    it("should set the correct ngModelController.$viewValue", function() {
+      var form  = compileElement(formHtml);
+      var input = form.find('input');
+      scope.$apply("mask = '(A) * 9'");
+      scope.$apply("x = ''");
+      expect(scope.test.input.$viewValue).not.toBeDefined();
+      scope.$apply("x = 'abc'");
+      expect(scope.test.input.$viewValue).not.toBeDefined();
+      scope.$apply("x = 'abc123'");
+      expect(scope.test.input.$viewValue).toBe('(a) b 1');
+    });
+  });
+
   describe('blurring', function () {
     it("should clear an invalid value from the input", function() {
       var input = compileElement(inputHtml);

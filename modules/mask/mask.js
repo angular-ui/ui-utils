@@ -94,7 +94,7 @@ angular.module('ui.directives').directive('uiMask', [
           value   = unmaskValue(fromModelValue || '');
           isValid = validateValue(value);
           controller.$setValidity('mask', isValid);
-          return isValid ? maskValue(value) : undefined;
+          return isValid && value.length ? maskValue(value) : undefined;
         }
 
         function parser(fromViewValue) {
