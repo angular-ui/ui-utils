@@ -4,14 +4,9 @@ files = [
   JASMINE,
   JASMINE_ADAPTER,
   'components/angular/angular.js',
-  'components/*/*.js',
+  'components/angular-mocks/angular-mocks.js',
   'modules/*/*.js',
   'modules/*/test/*Spec.js'
-];
-
-// Avoid including minified version of angular and other libs again
-exclude = [
-  'components/*/*.min.js'
 ];
 
 singleRun = true;
