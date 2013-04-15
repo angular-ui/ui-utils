@@ -6,7 +6,7 @@
     describe('uiShow', function () {
 
         var scope, $compile;
-        beforeEach(module('ui.directives'));
+        beforeEach(module('ui.showhide'));
         beforeEach(inject(function (_$rootScope_, _$compile_) {
             scope = _$rootScope_.$new();
             $compile = _$compile_;
@@ -39,7 +39,7 @@
     describe('uiHide', function () {
 
         var scope, $compile;
-        beforeEach(module('ui.directives'));
+        beforeEach(module('ui.showhide'));
         beforeEach(inject(function (_$rootScope_, _$compile_) {
             scope = _$rootScope_.$new();
             $compile = _$compile_;
@@ -72,7 +72,7 @@
     describe('uiToggle', function () {
 
         var scope, $compile;
-        beforeEach(module('ui.directives'));
+        beforeEach(module('ui.showhide'));
         beforeEach(inject(function (_$rootScope_, _$compile_) {
             scope = _$rootScope_.$new();
             $compile = _$compile_;

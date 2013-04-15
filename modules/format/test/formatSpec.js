@@ -1,7 +1,7 @@
 describe('format', function() {
   var formatFilter;
 
-  beforeEach(module('ui.filters'));
+  beforeEach(module('ui.format'));
   beforeEach(inject(function($filter) {
     formatFilter = $filter('format');
   }));

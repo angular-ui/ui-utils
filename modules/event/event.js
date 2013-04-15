@@ -8,7 +8,7 @@
  *
  * @param ui-event {string|object literal} The event to bind to as a string or a hash of events with their callbacks
  */
-angular.module('ui.directives').directive('uiEvent', ['$parse',
+angular.module('ui.event',[]).directive('uiEvent', ['$parse',
   function ($parse) {
     return function (scope, elm, attrs) {
       var events = scope.$eval(attrs.uiEvent);

@@ -3,7 +3,7 @@ describe('uiReset', function () {
   'use strict';
 
   var scope, $compile;
-  beforeEach(module('ui.directives'));
+  beforeEach(module('ui.reset'));
   beforeEach(inject(function (_$rootScope_, _$compile_, _$window_) {
     scope = _$rootScope_.$new();
     $compile = _$compile_;

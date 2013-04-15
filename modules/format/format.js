@@ -12,7 +12,7 @@
  * @example: 'Records $0 to $1 out of $2 total'.format(['10', '20', '3000'])
  * @example: '$0 agrees to all mentions $0 makes in the event that $0 hits a tree while $0 is driving drunk'.format('Bob')
  */
-angular.module('ui.filters').filter('format', function(){
+angular.module('ui.format',[]).filter('format', function(){
   return function(value, replace) {
     if (!value) {
       return value;

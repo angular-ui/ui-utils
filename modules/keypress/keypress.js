@@ -1,4 +1,5 @@
-angular.module('ui.directives').factory('keypressHelper', ['$parse', function keypress($parse){
+angular.module('ui.keypress',[]).
+factory('keypressHelper', ['$parse', function keypress($parse){
   var keysByCode = {
     8: 'backspace',
     9: 'tab',
@@ -85,7 +86,7 @@ angular.module('ui.directives').factory('keypressHelper', ['$parse', function ke
  * @param hash {mixed} keyBindings Can be an object or string where keybinding expression of keys or keys combinations and AngularJS Exspressions are set. Object syntax: "{ keys1: expression1 [, keys2: expression2 [ , ... ]]}". String syntax: ""expression1 on keys1 [ and expression2 on keys2 [ and ... ]]"". Expression is an AngularJS Expression, and key(s) are dash-separated combinations of keys and modifiers (one or many, if any. Order does not matter). Supported modifiers are 'ctrl', 'shift', 'alt' and key can be used either via its keyCode (13 for Return) or name. Named keys are 'backspace', 'tab', 'enter', 'esc', 'space', 'pageup', 'pagedown', 'end', 'home', 'left', 'up', 'right', 'down', 'insert', 'delete'.
  * @example <input ui-keypress="{enter:'x = 1', 'ctrl-shift-space':'foo()', 'shift-13':'bar()'}" /> <input ui-keypress="foo = 2 on ctrl-13 and bar('hello') on shift-esc" />
  **/
-angular.module('ui.directives').directive('uiKeydown', ['keypressHelper', function(keypressHelper){
+angular.module('ui.keypress').directive('uiKeydown', ['keypressHelper', function(keypressHelper){
   return {
     link: function (scope, elm, attrs) {
       keypressHelper('keydown', scope, elm, attrs);
@@ -93,7 +94,7 @@ angular.module('ui.directives').directive('uiKeydown', ['keypressHelper', functi
   };
 }]);
 
-angular.module('ui.directives').directive('uiKeypress', ['keypressHelper', function(keypressHelper){
+angular.module('ui.keypress').directive('uiKeypress', ['keypressHelper', function(keypressHelper){
   return {
     link: function (scope, elm, attrs) {
       keypressHelper('keypress', scope, elm, attrs);
@@ -101,7 +102,7 @@ angular.module('ui.directives').directive('uiKeypress', ['keypressHelper', funct
   };
 }]);
 
-angular.module('ui.directives').directive('uiKeyup', ['keypressHelper', function(keypressHelper){
+angular.module('ui.keypress').directive('uiKeyup', ['keypressHelper', function(keypressHelper){
   return {
     link: function (scope, elm, attrs) {
       keypressHelper('keyup', scope, elm, attrs);

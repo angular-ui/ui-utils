@@ -3,7 +3,7 @@
  * Originally created by @tigbro, for the @jquery-mobile-angular-adapter
  * https://github.com/tigbro/jquery-mobile-angular-adapter
  */
-angular.module('ui.directives').directive('uiIf', [function () {
+angular.module('ui.if',[]).directive('uiIf', [function () {
   return {
     transclude: 'element',
     priority: 1000,

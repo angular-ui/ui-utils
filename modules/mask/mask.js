@@ -1,7 +1,7 @@
 /*
  Attaches input mask onto input element
  */
-angular.module('ui.directives').directive('uiMask', [
+angular.module('ui.mask',[]).directive('uiMask', [
   function () {
     var maskDefinitions = {
       '9': /\d/,

@@ -1,7 +1,7 @@
 /**
  * Set a $uiRoute boolean to see if the current route matches
  */
-angular.module('ui.directives').directive('uiRoute', ['$location', '$parse', function ($location, $parse) {
+angular.module('ui.route', []).directive('uiRoute', ['$location', '$parse', function ($location, $parse) {
   return {
     restrict: 'AC',
     scope: true,

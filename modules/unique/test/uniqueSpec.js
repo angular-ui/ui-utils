@@ -1,7 +1,7 @@
 describe('unique', function () {
   var uniqueFilter;
 
-  beforeEach(module('ui.filters'));
+  beforeEach(module('ui.unique'));
   beforeEach(inject(function ($filter) {
     uniqueFilter = $filter('unique');
   }));

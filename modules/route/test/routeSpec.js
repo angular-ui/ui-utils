@@ -3,7 +3,7 @@ describe('uiRoute', function () {
   'use strict';
 
   var scope, $compile, $location;
-  beforeEach(module('ui.directives'));
+  beforeEach(module('ui.route'));
   beforeEach(inject(function (_$rootScope_, _$compile_, _$window_, _$location_) {
     scope = _$rootScope_.$new();
     $compile = _$compile_;

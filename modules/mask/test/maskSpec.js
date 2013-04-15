@@ -4,7 +4,7 @@ describe('uiMask', function () {
   var inputHtml = "<input name='input' ng-model='x' ui-mask='{{mask}}'>";
   var compileElement, scope;
 
-  beforeEach(module('ui.directives'));
+  beforeEach(module('ui.mask'));
   beforeEach(inject(function ($rootScope, $compile) {
     c = console.log;
     scope = $rootScope;

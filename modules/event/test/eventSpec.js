@@ -1,7 +1,7 @@
 describe('uiEvent', function () {
   var $scope, $rootScope, $compile;
 
-  beforeEach(module('ui.directives'));
+  beforeEach(module('ui.event'));
   beforeEach(inject(function (_$rootScope_, _$compile_) {
     $compile = _$compile_;
     $rootScope = _$rootScope_;

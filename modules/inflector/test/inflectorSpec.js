@@ -1,7 +1,7 @@
 describe('inflector', function () {
   var inflectorFilter, testPhrase = 'here isMy_phone_number';
 
-  beforeEach(module('ui.filters'));
+  beforeEach(module('ui.inflector'));
   beforeEach(inject(function ($filter) {
     inflectorFilter = $filter('inflector');
   }));

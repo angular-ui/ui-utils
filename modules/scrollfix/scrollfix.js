@@ -4,7 +4,7 @@
  * @param [offset] {int} optional Y-offset to override the detected offset.
  *   Takes 300 (absolute) or -300 or +300 (relative to detected)
  */
-angular.module('ui.directives').directive('uiScrollfix', ['$window', function ($window) {
+angular.module('ui.scrollfix',[]).directive('uiScrollfix', ['$window', function ($window) {
   'use strict';
   return {
     link: function (scope, elm, attrs) {

@@ -1,7 +1,7 @@
 describe('highlight', function () {
   var highlightFilter, testPhrase = 'Prefix Highlight Suffix';
 
-  beforeEach(module('ui.filters'));
+  beforeEach(module('ui.highlight'));
   beforeEach(inject(function ($filter) {
     highlightFilter = $filter('highlight');
   }));

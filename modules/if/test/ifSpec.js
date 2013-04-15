@@ -1,7 +1,7 @@
 describe('ui-if', function () {
   var scope, $compile, elm;
 
-  beforeEach(module('ui.directives'));
+  beforeEach(module('ui.if'));
   beforeEach(inject(function ($rootScope, _$compile_) {
     scope = $rootScope.$new();
     $compile = _$compile_;

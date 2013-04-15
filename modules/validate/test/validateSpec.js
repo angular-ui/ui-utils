@@ -13,7 +13,7 @@ describe('uiValidate', function ($compile) {
     return valueToValidate;
   };
 
-  beforeEach(module('ui'));
+  beforeEach(module('ui.validate'));
   beforeEach(inject(function ($rootScope, $compile) {
 
     scope = $rootScope.$new();

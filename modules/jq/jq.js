@@ -13,7 +13,9 @@
  *
  * @example <input ui-jq="datepicker" ui-options="{showOn:'click'},secondParameter,thirdParameter" ui-refresh="iChange">
  */
-angular.module('ui.directives').directive('uiJq', ['ui.config', '$timeout', function uiJqInjectingFunction(uiConfig, $timeout) {
+angular.module('ui.jq',[]).
+  value('uiJqConfig',{}).
+  directive('uiJq', ['uiJqConfig', '$timeout', function uiJqInjectingFunction(uiJqConfig, $timeout) {
 
   return {
     restrict: 'A',
@@ -22,7 +24,7 @@ angular.module('ui.directives').directive('uiJq', ['ui.config', '$timeout', func
       if (!angular.isFunction(tElm[tAttrs.uiJq])) {
         throw new Error('ui-jq: The "' + tAttrs.uiJq + '" function does not exist');
       }
-      var options = uiConfig.jq && uiConfig.jq[tAttrs.uiJq];
+      var options = uiJqConfig && uiJqConfig[tAttrs.uiJq];
 
       return function uiJqLinkingFunction(scope, elm, attrs) {
 

@@ -5,7 +5,7 @@
  if the key === false then no filtering will be performed
  * @return {array}
  */
-angular.module('ui.filters').filter('unique', function () {
+angular.module('ui.unique',[]).filter('unique', function () {
 
   return function (items, filterOn) {
 

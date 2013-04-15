@@ -1,10 +1,10 @@
 /**
  * Add a clear button to form inputs to reset their value
  */
-angular.module('ui.directives').directive('uiReset', ['ui.config', function (uiConfig) {
+angular.module('ui.reset',[]).value('uiResetConfig',null).directive('uiReset', ['uiResetConfig', function (uiResetConfig) {
   var resetValue = null;
-  if (uiConfig.reset !== undefined)
-      resetValue = uiConfig.reset;
+  if (uiResetConfig !== undefined)
+      resetValue = uiResetConfig;
   return {
     require: 'ngModel',
     link: function (scope, elm, attrs, ctrl) {

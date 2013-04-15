@@ -1,7 +1,7 @@
 describe('uiJq', function () {
   var scope, compile, timeout;
   scope = null;
-  beforeEach(module('ui.directives'));
+  beforeEach(module('ui.jq'));
   beforeEach(function () {
     jQuery.fn.foo = function () {};
     module(function ($provide) {

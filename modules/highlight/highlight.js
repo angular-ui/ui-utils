@@ -4,7 +4,7 @@
  * @param search {string} needle to search for
  * @param [caseSensitive] {boolean} optional boolean to use case-sensitive searching
  */
-angular.module('ui.filters').filter('highlight', function () {
+angular.module('ui.highlight',[]).filter('highlight', function () {
   return function (text, search, caseSensitive) {
     if (search || angular.isNumber(search)) {
       text = text.toString();

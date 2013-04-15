@@ -7,7 +7,7 @@
  *          {{ 'Here Is my_phoneNumber' | inflector:'underscore' }} => here_is_my_phone_number
  *          {{ 'Here Is my_phoneNumber' | inflector:'variable' }} => hereIsMyPhoneNumber
  */
-angular.module('ui.filters').filter('inflector', function () {
+angular.module('ui.inflector',[]).filter('inflector', function () {
   function ucwords(text) {
     return text.replace(/^([a-z])|\s+([a-z])/g, function ($1) {
       return $1.toUpperCase();

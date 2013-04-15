@@ -18,7 +18,7 @@ describe('uiKeyup', function () {
     return $compile("<span ui-keyup='" + elementStr + "'></span>")($scope);
   };
 
-  beforeEach(module('ui.directives'));
+  beforeEach(module('ui.keypress'));
   beforeEach(inject(function (_$rootScope_, _$compile_) {
     $compile = _$compile_;
     $scope = _$rootScope_.$new();
