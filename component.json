@@ -4,7 +4,7 @@
   "description": "AngularUI Utilities - Companion Suite for AngularJS",
   "version": "0.0.1",
   "homepage": "http://angular-ui.github.com",
-  "main": "./modules/ui-utils.js",
+  "main": "./modules/utils.js",
   "dependencies": {
     "angular": ">= 1.0.2",
   },
