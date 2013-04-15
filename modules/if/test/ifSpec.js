@@ -5,7 +5,7 @@ describe('ui-if', function () {
   beforeEach(inject(function ($rootScope, _$compile_) {
     scope = $rootScope.$new();
     $compile = _$compile_;
-    elm = $('<div>');
+    elm = angular.element('<div>');
   }));
 
   function makeIf(expr) {

@@ -29,7 +29,7 @@ describe('uiReset', function () {
     it('should prevent the default action', function () {
       var element = $compile('<input type="text" ui-reset ng-model="foo"/>')(scope);
       spyOn($.Event.prototype, 'preventDefault');
-      element.siblings().get(0).click();
+      element.next().triggerHandler('click');
       expect($.Event.prototype.preventDefault).toHaveBeenCalled();
     });
     it('should set the model value to null and clear control when no options given', function () {
@@ -37,7 +37,7 @@ describe('uiReset', function () {
       var element = $compile('<input type="text" ui-reset ng-model="foo"/>')(scope);
       scope.$digest();
       expect(element.val()).toBe('bar');
-      element.next().click();
+      element.next().triggerHandler('click');
       expect(scope.foo).toBe(null);
       expect(element.val()).toBe('');
     });
@@ -47,7 +47,7 @@ describe('uiReset', function () {
       var element = $compile('<input type="text" ui-reset="resetTo" ng-model="foo"/>')(scope);
       scope.$digest();
       expect(element.val()).toBe('bar');
-      element.next().click();
+      element.next().triggerHandler('click');
       expect(scope.foo).toBe('i was reset');
       expect(element.val()).toBe('i was reset');
     });

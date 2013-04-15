@@ -32,7 +32,7 @@ describe('uiJq', function () {
     it('should fire after the view has rendered', function() {
       var length;
       jQuery.fn.bar = function() {
-        length = $(this).children().length;
+        length = angular.element(this).children().length;
         console.log(length);
       };
       scope.$apply('items=[1, 2]');

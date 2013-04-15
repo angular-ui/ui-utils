@@ -41,7 +41,7 @@ angular.module('ui.jq',[]).
         }
         // If change compatibility is enabled, the form input's "change" event will trigger an "input" event
         if (attrs.ngModel && elm.is('select,input,textarea')) {
-          elm.on('change', function() {
+          elm.bind('change', function() {
             elm.trigger('input');
           });
         }

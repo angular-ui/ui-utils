@@ -29,15 +29,15 @@ angular.module('ui.validate',[]).directive('uiValidate', function () {
         validateExpr = { validator: validateExpr };
       }
 
-      angular.forEach(validateExpr, function (expression, key) {
+      angular.forEach(validateExpr, function (exprssn, key) {
         validateFn = function (valueToValidate) {
-          var expression = scope.$eval(expression, { '$value' : valueToValidate });
+          var expression = scope.$eval(exprssn, { '$value' : valueToValidate });
           if (angular.isFunction(expression.then)) {
             // expression is a promise
             expression.then(function(){
-              ctrl.$setVa­lid­ity­(key, true);
+              ctrl.$setValidity(key, true);
             }, function(){
-              ctrl.$setVa­lid­ity­(key, false);
+              ctrl.$setValidity(key, false);
             });
             return valueToValidate;
           } else if (expression) {

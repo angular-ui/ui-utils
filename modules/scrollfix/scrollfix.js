@@ -19,7 +19,7 @@ angular.module('ui.scrollfix',[]).directive('uiScrollfix', ['$window', function 
           attrs.uiScrollfix = top + parseFloat(attrs.uiScrollfix.substr(1));
         }
       }
-      angular.element($window).on('scroll.ui-scrollfix', function () {
+      angular.element($window).bind('scroll.ui-scrollfix', function () {
         // if pageYOffset is defined use it, otherwise use other crap for IE
         var offset;
         if (angular.isDefined($window.pageYOffset)) {

@@ -18,7 +18,7 @@ describe('uiEvent', function () {
       $scope = $rootScope.$new();
       var elm = eventElement($scope, {'dblclick': 'dbl=true'});
       expect($scope.dbl).toBeUndefined();
-      elm.trigger('dblclick');
+      elm.triggerHandler('dblclick');
       expect($scope.dbl).toBe(true);
     });
 
@@ -29,8 +29,8 @@ describe('uiEvent', function () {
         $scope.counter++;
       };
       var elm = eventElement($scope, {'keyup mouseenter': 'myfn()'});
-      elm.trigger('keyup');
-      elm.trigger('mouseenter');
+      elm.triggerHandler('keyup');
+      elm.triggerHandler('mouseenter');
       expect($scope.counter).toBe(2);
     });
 
@@ -42,11 +42,11 @@ describe('uiEvent', function () {
         'mouseenter': 'amount=amount*4',
         'keyup': 'amount=amount*3'
       });
-      elm.trigger('click');
+      elm.triggerHandler('click');
       expect($scope.amount).toBe(10);
-      elm.trigger('mouseenter');
+      elm.triggerHandler('mouseenter');
       expect($scope.amount).toBe(40);
-      elm.trigger('keyup');
+      elm.triggerHandler('keyup');
       expect($scope.amount).toBe(120);
     });
 
@@ -58,7 +58,7 @@ describe('uiEvent', function () {
         expect(par2).toBe(2);
       };
       var elm = eventElement($scope, {'click': 'clicky(1, $event, 2)'});
-      $(elm).trigger({
+      elm.triggerHandler({
         type: 'click',
         foo: 'bar'
       });
@@ -72,7 +72,7 @@ describe('uiEvent', function () {
         expect($params[1]).toBe('bar');
       };
       var elm = eventElement($scope, {'stuff': 'onStuff($event, $params)'});
-      $(elm).trigger('stuff', ['foo', 'bar']);
+      elm.triggerHandler('stuff', ['foo', 'bar']);
     });
   });
 
