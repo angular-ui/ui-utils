@@ -1,4 +1,3 @@
-
 describe('uiKeypress', function () {
 
   var $scope, $compile;
