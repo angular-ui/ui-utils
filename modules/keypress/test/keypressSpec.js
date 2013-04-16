@@ -6,6 +6,7 @@ describe('uiKeypress', function () {
   var createKeyEvent = function (mainKey, alt, ctrl, shift) {
     var keyEvent = jQuery.Event("keypress");
 
+    keyEvent.which = mainKey;
     keyEvent.keyCode = mainKey;
     keyEvent.altKey = alt;
     keyEvent.ctrlKey = ctrl;
@@ -65,4 +66,23 @@ describe('uiKeypress', function () {
     element.trigger(createKeyEvent(13));
     expect($scope.event2.keyCode).toBe(13);
   });
+
+  it('should support pressing a text character', function() {
+
+    var elm = createElement({'a': 'event=true'}).trigger(createKeyEvent(97)); // 97 is keypress code for a
+    expect($scope.event).toBe(true);
+  });
+
+  it('should support pressing shift and a text character', function() {
+
+    var elm = createElement({'shift-a': 'event=true'}).trigger(createKeyEvent(65,false,false,true)); // 65 is keypress code for A
+    expect($scope.event).toBe(true);
+  });
+
+  it('should support pressing a non-text keyboard character', function() {
+
+    var elm = createElement({',': 'event=true'}).trigger(createKeyEvent(44)); // 44 is keypress code for ,
+    expect($scope.event).toBe(true);
+  });
+
 });

@@ -5,6 +5,7 @@ describe('uiKeyup', function () {
   var createKeyEvent = function (mainKey, alt, ctrl, shift) {
     var keyEvent = jQuery.Event("keyup");
 
+    keyEvent.which = mainKey;
     keyEvent.keyCode = mainKey;
     keyEvent.altKey = alt;
     keyEvent.ctrlKey = ctrl;
@@ -64,4 +65,17 @@ describe('uiKeyup', function () {
     element.trigger(createKeyEvent(13));
     expect($scope.event2.keyCode).toBe(13);
   });
+
+  it('should support pressing a text character', function() {
+
+    var elm = createElement({'a': 'event=true'}).trigger(createKeyEvent(65)); // 65 is IE/Mozilla key code for a
+    expect($scope.event).toBe(true);
+  });
+
+  it('should support pressing a non-text keyboard character', function() {
+
+    var elm = createElement({',': 'event=true'}).trigger(createKeyEvent(188)); // 188 is  IE/Mozilla key code for ,
+    expect($scope.event).toBe(true);
+  });
+
 });
