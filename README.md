@@ -34,16 +34,16 @@ We will likely be adding a `Gruntfile.js` in the near future for this
 
 1. Install global dependencies `grunt-cli`, `bower`, and `karma`:
 
-```bash
-$ npm install -g karma grunt-cli bower
-```
+    ```bash
+    $ npm install -g karma grunt-cli bower
+    ```
 
 2. Install local dependencies:
 
-```bash
-$ npm install
-$ bower install
-```
+    ```bash
+    $ npm install
+    $ bower install
+    ```
 
 ### Running Tests
 
