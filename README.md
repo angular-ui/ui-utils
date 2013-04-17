@@ -32,10 +32,10 @@ We will likely be adding a `Gruntfile.js` in the near future for this
 
 0. Install [Node.js](http://nodejs.org/) and NPM (should come with)
 
-1. Install global dependencies `grunt` and `karma`:
+1. Install global dependencies `grunt-cli`, `bower`, and `karma`:
 
 ```bash
-$ npm install -g karma grunt bower
+$ npm install -g karma grunt-cli bower
 ```
 
 2. Install local dependencies:
