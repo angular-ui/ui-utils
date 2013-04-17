@@ -9,65 +9,48 @@
 ### Requirements
 
 * **AngularJS v1.0.0+** is currently required.
-* **jQuery / Plugins** _(depends on directive)._ Check specific directive dependencies for more information
+* **jQuery*** Until the refactor is complete, some directives still require jQuery
 
 ## Installation
 
-The repository comes with the modules pre-built and compressed into the `build/` directory.
+Add the specific modules to your dependencies, or add the entire lib by depending on `ui.utils`
 
 ```javascript
-angular.module('myApp', ['ui']);
+angular.module('myApp', ['ui.keypress', 'ui.event', ...])
+// or if ALL modules are loaded along with modules/utils.js
+angular.module('myApp', ['ui.utils'])
 ```
 
-The modules can be found in the [Directives](https://github.com/angular-ui/angular-ui/tree/master/modules/directives) and [Filters](https://github.com/angular-ui/angular-ui/tree/master/modules/filters) folders. Check out the readme file associated with each module for specific module usage information.
+Each directive and filter is now it's own module and will have a relevant README.md in their respective folders
 
 ## Development
 
-You do not need to build the project to use it - see above - but if you are working on it then this is what you need to know.
+At this time, we do not have a build script. You must include all `.js` files you wish to work on.
+We will likely be adding a `Gruntfile.js` in the near future for this
 
 ### Requirements
 
 0. Install [Node.js](http://nodejs.org/) and NPM (should come with)
 
-1. Install local dependencies:
+1. Install global dependencies `grunt` and `karma`:
+
+```bash
+$ npm install -g karma grunt bower
+```
+
+2. Install local dependencies:
 
 ```bash
 $ npm install
+$ bower install
 ```
 
-2. Install global dependencies `grunt`, `coffee-script`, and `testacular`:
+### Running Tests
+
+Make sure all tests pass in order for your Pull Request to be accepted
+
+You can choose what browsers to test in: `Chrome,ChromeCanary,Firefox,PhantomJS`
 
 ```bash
-$ npm install -g testacular coffee-script grunt
+$ karma test.conf.js --browsers=Chrome,Firefox
 ```
-
-### Build Files & Run Tests
-
-Before you commit, always run `grunt` to build and test everything once.
-
-```bash
-$ grunt
-```
-
-### Test & Develop
-
-The modules come with unit tests that should be run on any changes and certainly before commiting changes to the project.  The unit tests should also provide further insight into the usage of the modules.
-
-First, start the testacular server:
-```bash
-$ grunt server
-```
-Then, open your browser to http://localhost:8080 and run the watch command to re-run tests on every save:
-```bash
-$ grunt watch
-```
-
-### Publishing
-
-For core team: if you wish to publish a new version follow these steps:
-
-1. Bump the version number inside `package.json`
-2. Build and test
-3. Commit the updated `package.json` and `build/` folder on their own commit
-4. Tag the commit: `git tag v[maj].[min].[patch]`
-5. Push the tag: `git push [angular-ui] master --tags`
