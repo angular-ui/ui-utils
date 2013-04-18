@@ -8,4 +8,4 @@
   - npm install -g karma bower
   - bower install
 
- script: "karma start test.conf.js --browsers=Firefox,PhantomJS"
+ script: "karma start test.conf.js --browsers=Chrome,Firefox,PhantomJS"
