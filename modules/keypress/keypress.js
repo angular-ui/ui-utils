@@ -46,7 +46,8 @@ factory('keypressHelper', ['$parse', function keypress($parse){
     // Check only matching of pressed keys one of the conditions
     elm.bind(mode, function (event) {
       // No need to do that inside the cycle
-      var altPressed = !!(event.metaKey || event.altKey);
+      var metaPressed = !!(event.metaKey && !event.ctrlKey);
+      var altPressed = !!event.altKey;
       var ctrlPressed = !!event.ctrlKey;
       var shiftPressed = !!event.shiftKey;
       var keyCode = event.keyCode;
@@ -61,12 +62,14 @@ factory('keypressHelper', ['$parse', function keypress($parse){
 
         var mainKeyPressed = combination.keys[keysByCode[event.keyCode]] || combination.keys[event.keyCode.toString()];
 
+        var metaRequired = !!combination.keys.meta;
         var altRequired = !!combination.keys.alt;
         var ctrlRequired = !!combination.keys.ctrl;
         var shiftRequired = !!combination.keys.shift;
 
         if (
           mainKeyPressed &&
+          ( metaRequired == metaPressed ) &&
           ( altRequired == altPressed ) &&
           ( ctrlRequired == ctrlPressed ) &&
           ( shiftRequired == shiftPressed )
