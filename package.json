@@ -3,7 +3,7 @@
   "version": "0.0.1",
   "description": "Swiss-Army-Knife of AngularJS tools (with no external dependencies!)",
   "author": "https://github.com/angular-ui/ui-utils/graphs/contributors",
-  "license": "MIT",
+  "license": "MIT License, http://www.opensource.org/licenses/MIT",
   "homepage": "http://angular-ui.github.com",
   "dependencies": {},
   "devDependencies": {
