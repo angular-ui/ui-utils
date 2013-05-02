@@ -18,6 +18,7 @@
     "grunt-contrib-concat": "~0.2.0",
     "grunt-contrib-clean": "~0.4.0",
     "grunt-contrib-watch": "~0.3.1",
+    "grunt-contrib-jshint": "~0.2.0",
     "grunt-karma": "~0.4.3"
   }
 }
