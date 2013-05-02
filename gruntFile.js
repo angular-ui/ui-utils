@@ -11,7 +11,7 @@ module.exports = function (grunt) {
 
 
   // Default task.
-  grunt.registerTask('build', ['x_concat', 'concat', 'uglify']);
+  grunt.registerTask('build', ['x_concat', 'concat', 'clean:rm_tmp', 'uglify']);
   grunt.registerTask('default', [/*'jshint',*/ 'karma']);
 
 
@@ -22,6 +22,13 @@ module.exports = function (grunt) {
   };
 
 
+  var banner = ['/**',
+    ' * <%= pkg.name %> - <%= pkg.description %>',
+    ' * @version v<%= pkg.version %> - <%= grunt.template.today("yyyy-mm-dd") %>',
+    ' * @link <%= pkg.homepage %>',
+    ' * @license <%= pkg.license %>',
+    ' */',
+  ''].join('\n');
   // Project configuration.
   grunt.initConfig({
     dist: 'build',
@@ -38,23 +45,24 @@ module.exports = function (grunt) {
       }
     },
     concat: {
+      make_tmp: {
+        src: [ 'modules/**/*.js', '!modules/utils.js',  '!modules/ie-shiv/*.js', '!modules/**/test/*.js'],
+        dest: 'tmp/dep.js'
+      },
       modules: {
-        src: ['<banner:meta.banner>', 'modules/**/*.js', '!modules/ie-shiv/*.js', '!modules/**/test/*.js'],
+        options: {banner : banner},
+        src: ['tmp/dep.js', 'modules/utils.js'],
         dest: '<%= dist %>/<%= pkg.name %>.js'
       },
       ieshiv: {
-        src: ['<banner:meta.banner>', 'modules/ie-shiv/*.js'],
+        options: {banner : banner},
+        src: ['modules/ie-shiv/*.js'],
         dest: '<%= dist %>/<%= pkg.name %>-ieshiv.js'
       }
     },
     uglify: {
       options: {
-        banner: ['/**',
-          ' * <%= pkg.name %> - <%= pkg.description %>',
-          ' * @version v<%= pkg.version %> - <%= grunt.template.today("yyyy-mm-dd") %>',
-          ' * @link <%= pkg.homepage %>',
-          ' * @license <%= pkg.license %>',
-          ' */'].join('\n')
+        banner: banner
       },
       build: {
         files: {
@@ -64,6 +72,7 @@ module.exports = function (grunt) {
       }
     },
     clean: {
+      rm_tmp:{src: ['tmp']},
       build: {
         src: ['*'],
         filter: 'isFile'
