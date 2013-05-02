@@ -130,7 +130,7 @@ angular.module('ui.mask',[]).directive('uiMask', [
 
         function validateValue(value) {
           // Zero-length value validity is ngRequired's determination
-          return value.length ? value.length === maskCaretMap.length - 11 : true;
+          return value.length ? value.length === maskCaretMap.length - 1 : true;
         }
 
         function unmaskValue(value) {
