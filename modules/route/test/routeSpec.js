@@ -27,7 +27,7 @@ describe('uiRoute', function () {
     var modelProp = routeModel || '$uiRoute', elm = angular.noop;
     function compileRoute(template) {
       elm = angular.element(template);
-      if (routeModel) elm.attr('ng-model', routeModel);
+      if (routeModel){ elm.attr('ng-model', routeModel);}
       return $compile(elm[0])(scope);
     }
     

@@ -99,8 +99,7 @@ describe('uiValidate', function ($compile) {
   describe('uiValidateWatch', function(){
     function validateWatch(watchMe) {
       return watchMe;
-    };
-
+    }
     beforeEach(function(){
       scope.validateWatch = validateWatch;
     });

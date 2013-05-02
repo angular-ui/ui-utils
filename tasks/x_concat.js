@@ -6,9 +6,9 @@
  * and  $2 a list of dependence..
  */
 
-'use strict';
-
 module.exports = function (grunt) {
+
+  'use strict';
 
   grunt.registerMultiTask('x_concat', 'Concatenate directory names for a AngularJS module.', function () {
 

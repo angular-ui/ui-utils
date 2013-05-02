@@ -13,7 +13,7 @@ module.exports = function (grunt) {
 
   // Default task.
   grunt.registerTask('build', ['x_concat', 'concat', 'clean:rm_tmp', 'uglify']);
-  grunt.registerTask('default', [/*'jshint',*/ 'karma']);
+  grunt.registerTask('default', ['jshint', 'karma']);
 
 
   var testConfig = function(configFile, customOptions) {

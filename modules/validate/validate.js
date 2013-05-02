@@ -23,7 +23,7 @@ angular.module('ui.validate',[]).directive('uiValidate', function () {
       var validateFn, watch, validators = {},
         validateExpr = scope.$eval(attrs.uiValidate);
 
-      if (!validateExpr) return;
+      if (!validateExpr){ return;}
 
       if (angular.isString(validateExpr)) {
         validateExpr = { validator: validateExpr };
