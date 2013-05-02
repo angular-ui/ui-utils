@@ -7,10 +7,21 @@ module.exports = function (grunt) {
   grunt.loadNpmTasks('grunt-contrib-jshint');
   grunt.loadNpmTasks('grunt-karma');
 
-
-  //require('./tasks/x_concat')(grunt);
-
   grunt.loadTasks('./tasks/');
+
+
+  // Default task.
+  grunt.registerTask('build', ['x_concat', 'concat', 'uglify']);
+  //grunt.registerTask('build', ['concat', 'uglify'])
+  grunt.registerTask('default', ['jshint', 'karma:unit', 'build']);
+
+
+  var testConfig = function(configFile, customOptions) {
+    var options = { configFile: configFile, singleRun: true };
+    var travisOptions = process.env.TRAVIS && { browsers: ['Firefox'], reporters: ['dots'] };
+    return grunt.util._.extend(options, customOptions, travisOptions);
+  };
+
 
   // Project configuration.
   grunt.initConfig({
@@ -23,18 +34,7 @@ module.exports = function (grunt) {
       }
     },
     karma: {
-      options: {
-        configFile: 'test.conf.js',
-        browsers: ['Chrome', 'Firefox']
-      },
-
-      unit: {
-        singleRun: true
-      },
-
-      unitBackground: {
-        background: true
-      }
+      unit: testConfig('test/karma.conf.js')
     },
     x_concat: {
       util: {
@@ -93,10 +93,5 @@ module.exports = function (grunt) {
       }
     }
   });
-
-  // Default task.
-  grunt.registerTask('build', ['x_concat', 'concat']);
-  //grunt.registerTask('build', ['concat', 'uglify'])
-  grunt.registerTask('default', ['karma:unit', 'build']);
 
 };

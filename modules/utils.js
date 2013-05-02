@@ -1,4 +1,4 @@
-angular.module('ui.utils', [
+angular.module('ui.utils',  [
   "ui.event",
   "ui.format",
   "ui.highlight",
