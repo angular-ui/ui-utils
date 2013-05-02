@@ -1,4 +1,5 @@
 module.exports = function (grunt) {
+
   // Loading external tasks
   grunt.loadNpmTasks('grunt-contrib-watch');
   grunt.loadNpmTasks('grunt-contrib-uglify');
@@ -72,11 +73,7 @@ module.exports = function (grunt) {
       }
     },
     clean: {
-      rm_tmp:{src: ['tmp']},
-      build: {
-        src: ['*'],
-        filter: 'isFile'
-      }
+      rm_tmp:{src: ['tmp']}
     },
     jshint: {
       files: ['modules/**/*.js', 'tasks/**/*.js'],
