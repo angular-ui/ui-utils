@@ -1,3 +1,4 @@
+---
 language: node_js
 node_js:
   - "0.8"
@@ -9,4 +10,18 @@ before_install:
   - npm install
   - bower install
 
-script: "grunt"
+after_success: .travis/after_success.sh
+
+branches:
+  only:
+  - demos
+
+script: grunt
+
+env:
+  global:
+  - secure: ! 'JAuD2HN5A9MTi5QgxJ7OocfV9yXP1PTEqXGGnbDtVV/167okmPmh/JLeNgP3
+
+      gUfxv7QJrDFzWDLETeAQbkAWP5zm62y26AoAA4mRuCuH2bSKZdSKf+LFUMJY
+
+      usbOybYFBWRfdLKY88aJePt072Pk4hUnPLv3w/N+L0ec6RB0Uvw='
