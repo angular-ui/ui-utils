@@ -69,10 +69,10 @@ factory('keypressHelper', ['$parse', function keypress($parse){
 
         if (
           mainKeyPressed &&
-          ( metaRequired == metaPressed ) &&
-          ( altRequired == altPressed ) &&
-          ( ctrlRequired == ctrlPressed ) &&
-          ( shiftRequired == shiftPressed )
+          ( metaRequired === metaPressed ) &&
+          ( altRequired === altPressed ) &&
+          ( ctrlRequired === ctrlPressed ) &&
+          ( shiftRequired === shiftPressed )
         ) {
           // Run the function
           scope.$apply(function () {
