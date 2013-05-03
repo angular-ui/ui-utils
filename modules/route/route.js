@@ -22,8 +22,9 @@ angular.module('ui.route', []).directive('uiRoute', ['$location', '$parse', func
 
         // Used by href and ngHref
         function staticWatcher(newVal) {
-          if ((hash = newVal.indexOf('#')) > -1)
+          if ((hash = newVal.indexOf('#')) > -1){
             newVal = newVal.substr(hash + 1);
+          }
           watcher = function watchHref() {
             modelSetter($scope, ($location.path().indexOf(newVal) > -1));
           };
@@ -31,8 +32,9 @@ angular.module('ui.route', []).directive('uiRoute', ['$location', '$parse', func
         }
         // Used by uiRoute
         function regexWatcher(newVal) {
-          if ((hash = newVal.indexOf('#')) > -1)
+          if ((hash = newVal.indexOf('#')) > -1){
             newVal = newVal.substr(hash + 1);
+          }
           watcher = function watchRegex() {
             var regexp = new RegExp('^' + newVal + '$', ['i']);
             modelSetter($scope, regexp.test($location.path()));
@@ -43,17 +45,19 @@ angular.module('ui.route', []).directive('uiRoute', ['$location', '$parse', func
         switch (useProperty) {
           case 'uiRoute':
             // if uiRoute={{}} this will be undefined, otherwise it will have a value and $observe() never gets triggered
-            if (attrs.uiRoute)
+            if (attrs.uiRoute){
               regexWatcher(attrs.uiRoute);
-            else
+            }else{
               attrs.$observe('uiRoute', regexWatcher);
+            }
             break;
           case 'ngHref':
             // Setup watcher() every time ngHref changes
-            if (attrs.ngHref)
+            if (attrs.ngHref){
               staticWatcher(attrs.ngHref);
-            else
+            }else{
               attrs.$observe('ngHref', staticWatcher);
+            }
             break;
           case 'href':
             // Setup watcher()
@@ -63,7 +67,7 @@ angular.module('ui.route', []).directive('uiRoute', ['$location', '$parse', func
         $scope.$on('$routeChangeSuccess', function(){
           watcher();
         });
-      }
+      };
     }
   };
 }]);

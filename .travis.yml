@@ -1,11 +1,12 @@
- language: node_js
- node_js:
-   - "0.8"
+language: node_js
+node_js:
+  - "0.8"
 
- before_install:
+before_install:
   - export DISPLAY=:99.0
   - sh -e /etc/init.d/xvfb start
-  - npm install -g testacular@0.4.x bower
+  - npm install -g bower grunt-cli
+  - npm install
   - bower install
 
- script: "testacular start test.conf.js --browsers=Firefox,PhantomJS"
+script: "grunt"
