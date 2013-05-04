@@ -1,3 +1,29 @@
+<style>
+
+    /* ui-reset */
+  .ui-resetwrap {
+    display: inline-block;
+    position: relative;
+  }
+  .ui-reset {
+    display: none;
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    right: 0;
+    z-index: 2;
+    height: 100%;
+  }
+  .ui-resetwrap:hover .ui-reset {
+    display: block;
+  }
+
+</style>
+<script>
+  function ResetCtrl($scope) {
+    $scope.resetModel = "Hover over";
+  }
+</script>
 <section id="reset" ng-controller="ResetCtrl">
 	<div class="page-header">
 		<h1>Reset</h1>
@@ -13,12 +39,12 @@
 		<div class="span6">
 			<h3>How?</h3>
 			<p>You can set an app-wide reset value using <code>ui.config</code></p>
-<pre class="prettyprint" ng-non-bindable>
-&lt;input ng-model="resetModel" ui-reset&gt;
-&lt;input ng-model="resetModel" ui-reset=" 'Empty' "&gt;
+<pre class="prettyprint">
+&lt;input ng-model=&quot;resetModel&quot; ui-reset&gt;
+&lt;input ng-model=&quot;resetModel&quot; ui-reset=&quot; 'Empty' &quot;&gt;
 
 &lt;script&gt;
-$scope.resetModel = &#x27;Hover over me&#x27;;
+    $scope.resetModel = &#x27;Hover over me&#x27;;
 &lt;/script&gt;
 </pre>
 		</div>

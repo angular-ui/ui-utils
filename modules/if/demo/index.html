@@ -1,3 +1,16 @@
+<style>
+    .piped-list li {
+        display: inline-block;
+        border-left: 2px solid;
+        margin-left: 5px;
+        padding-left: 10px;
+    }
+    .piped-list li:first-child {
+        border-left: none;
+        margin-left: 0;
+    }
+</style>
+
 <section id="if">
 	<div class="page-header">
 		<h1>If</h1>
@@ -26,25 +39,25 @@
 		<div class="span6">
 
 			<h3>How?</h3>
-<pre class="prettyprint linenums" ng-non-bindable>
-&lt;ul class="piped-list"&gt;
-	&lt;li ui-if=&quot;false&quot;&gt;First&lt;/li&gt;
-	&lt;li&gt;Middle&lt;/li&gt;
-	&lt;li&gt;Last&lt;/li&gt;
-&lt;/ul&gt;
-
+<pre class="prettyprint">
 &lt;style&gt;
 .piped-list li {
-	display: inline-block;
-	border-left: 2px solid;
-	margin-left: 5px;
-	padding-left: 10px;
+    display: inline-block;
+    border-left: 2px solid;
+    margin-left: 5px;
+    padding-left: 10px;
 }
 .piped-list li:first-child {
-	border-left: none;
-	margin-left: 0;
+    border-left: none;
+    margin-left: 0;
 }
 &lt;/style&gt;
+
+&lt;ul class=&quot;piped-list&quot;&gt;
+    &lt;li ui-if=&quot;false&quot;&gt;First&lt;/li&gt;
+    &lt;li&gt;Middle&lt;/li&gt;
+    &lt;li&gt;Last&lt;/li&gt;
+&lt;/ul&gt;
 </pre>
 		</div>
 	</div>

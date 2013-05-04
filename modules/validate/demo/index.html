@@ -1,3 +1,11 @@
+<script>
+  function ValidateCtrl($scope) {
+    $scope.notBlackListed = function (value) {
+      var blacklist = ['bad@domain.com', 'verybad@domain.com'];
+      return blacklist.indexOf(value) === -1;
+    }
+  }
+</script>
 <section id="validate">
     <div class="page-header">
         <h1>Validate</h1>
@@ -26,7 +34,7 @@
             <p>AngularJS comes with several built-in validation mechanism for input fields (ngRequired, ngPattern etc.) but using an arbitrary validation function requires creation of custom formatters and / or parsers. The ui-validate directive makes it easy to use any function(s) defined in scope as a validator function(s).</p>
         </div>
         <div class="span6">
-<pre class="prettyprint" ng-non-bindable>
+<pre class="prettyprint" >
 &lt;input name="email" ng-model="email"
 <strong>ui-validate</strong>='{blacklist : 'notBlackListed($value)' }'&gt;
 Is e-mail is black-listed? {{!!form.email.$error.blacklist}}
@@ -46,12 +54,13 @@ return blacklist.indexOf(value) === -1;
 </pre>
     		<h3>How?</h3>
             <p>Create an expression inside a string. If it evaluates to <code>true</code> the input is valid, the rule name will be <code>validator</code> by default.</p>
-<pre class="prettyprint" ng-non-bindable>ui-validate=" 'validateFoo($value)' "
+<pre class="prettyprint" >ui-validate=" 'validateFoo($value)' "
 Input is valid: {{!!myForm.myInput.$error.validator}}</pre>
             <p><strong>Or</strong> define multiple rules by creating an object where the key is the rule name and the value is the expression string.</p>
 <pre class="prettyprint">ui-validate="{foo:'valFoo($value)', bar:'$value == someVar'}"
 Foo rule passes: {{!!myForm.myInput.$error.foo}}
-Bar rule passes: {{!!myForm.myInput.$error.bar}}</pre>
+Bar rule passes: {{!!myForm.myInput.$error.bar}}
+</pre>
         </div>
     </div>
 </section>

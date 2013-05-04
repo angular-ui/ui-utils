@@ -1,3 +1,13 @@
+<style>
+  .ui-show {
+    color: blue;
+    transition: all 0.5s ease;
+  }
+  .ui-hide {
+    opacity: 0;
+    transition: all 0.5s ease;
+  }
+</style>
 <section id="showhide">
 	<div class="page-header">
 		<h1>Show, Hide and Toggle Alternatives</h1>
@@ -26,7 +36,7 @@
 	</div>
 
 	<h3>How?</h3>
-<pre class="prettyprint linenums" ng-non-bindable>
+<pre class="prettyprint">
 &lt;p&gt;&lt;a ng-click=&quot;showHide=!showHide&quot;&gt;Toggle State: {{!!showHide}}&lt;/a&gt;&lt;/p&gt;
 &lt;div ui-show=&quot;showHide&quot;&gt;Show&lt;/div&gt;
 &lt;div ui-hide=&quot;showHide&quot;&gt;Hide&lt;/div&gt;
@@ -34,12 +44,12 @@
 
 &lt;style&gt;
 .ui-show {
-color: blue;
-transition: all 0.5s ease; // You should probably browser-prefix this
+  color: blue;
+  transition: all 0.5s ease; /* You should probably browser-prefix this */
 }
 .ui-hide {
-opacity: 0;
-transition: all 0.5s ease; // You should probably browser-prefix this
+  opacity: 0;
+  transition: all 0.5s ease; /* You should probably browser-prefix this */
 }
 &lt;/style&gt;
 </pre>

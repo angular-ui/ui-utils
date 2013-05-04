@@ -1,4 +1,24 @@
-<section ng-controller="UniqueCtrl" id="unique">
+<script>
+  function UniqueCtrl($scope) {
+    $scope.items = [
+      { firstName: 'Dean', lastName: 'Sofer',
+        id: 1, gender: 'Male' },
+      { firstName: 'Dean', lastName: 'Kuntz',
+        id: 2, gender: 'Male' },
+      { firstName: 'Peter', lastName: 'Piper',
+        id: 3, gender: 'Female' },
+      { firstName: 'Peter', lastName: 'Darwin',
+        id: 4, gender: 'Male' },
+      { firstName: 'Janet', lastName: 'Piper',
+        id: 5, gender: 'Female' },
+      { firstName: 'Dan', lastName: 'Doyon',
+        id: 6, gender: 'Male' },
+      { firstName: 'Andy', lastName: 'Joslin',
+        id: 1, gender: 'Male' },
+    ];
+  }
+</script>
+<section id="unique" ng-controller="UniqueCtrl">
 	<div class="page-header">
 		<h1>Unique</h1>
 	</div>
@@ -21,7 +41,7 @@
 		<div class="span6">
 			<h3>How?</h3>
 			<p>The filter can take the name of the key to check for uniqueness or set to a non-string truthy value to check the entire object.</p>
-<pre class="prettyprint linenums" ng-non-bindable>
+<pre class="prettyprint">
 &lt;select ng-model=&quot;attribute&quot;&gt;
 &lt;option value=&quot;&quot;&gt;-- No Filter --&lt;/option&gt;
 &lt;option&gt;firstName&lt;/option&gt;

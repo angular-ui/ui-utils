@@ -1,3 +1,11 @@
+<script>
+function KeypressCtrl($scope) {
+    $scope.keypressCallback = function($event) {
+        alert('Voila!');
+        $event.preventDefault();
+    };
+}
+</script>
 <section id="keypress" ng-controller="KeypressCtrl">
 	<div class="page-header">
 		<h1>Keypress</h1>
@@ -22,22 +30,22 @@ Hit [Enter]. Remember not to close the alert using [Enter] or it will refire key
 			<h3>How?</h3>
 			<p>The directive takes a hash (object) with the key code as the key and the callback function to fire as the value. The callback function takes an 'event' param</p>
 			<p class="alert alert-info">Note that <strong>13</strong> represents the <code>RETURN</code> key code.</p>
-<pre class="prettyprint" ng-non-bindable>
+<pre class="prettyprint">
 &lt;textarea
-ui-keypress=&quot;{13:'keypressCallback($event)'}&quot;&gt;
+        ui-keypress=&quot;{13:'keypressCallback($event)'}&quot;&gt;
 &lt;/textarea&gt;
 &lt;textarea
-ui-keydown=&quot;{'enter alt-space':'keypressCallback($event)'}&quot;&gt;
+        ui-keydown=&quot;{'enter alt-space':'keypressCallback($event)'}&quot;&gt;
 &lt;/textarea&gt;
 &lt;textarea
-ui-keyup=&quot;{'enter':'keypressCallback($event)'}&quot;&gt;
+        ui-keyup=&quot;{'enter':'keypressCallback($event)'}&quot;&gt;
 &lt;/textarea&gt;
 
 &lt;script&gt;
-$scope.keypressCallback = function($event) {
-alert('Voila!');
-$event.preventDefault();
-};
+    $scope.keypressCallback = function($event) {
+        alert('Voila!');
+        $event.preventDefault();
+    };
 &lt;/script&gt;
 </pre>
 		</div>
