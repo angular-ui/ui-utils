@@ -1,0 +1,130 @@
+/* =Global rules
+-----------------------------------------------------------------------------*/
+[ng-cloak], .ng-cloak {
+    display: none
+}
+
+body {
+    background: #fff;
+    color: #444;
+}
+
+/* =Header
+-----------------------------------------------------------------------------*/
+.jumbotron {
+
+    padding-top: 4em;
+    margin-bottom: 2em;
+
+    background: #2d364c;
+    background: -moz-linear-gradient(45deg, #2d364c 0%, #3d549a 100%);
+    background: -webkit-gradient(linear, left bottom, right top, color-stop(0%, #2d364c), color-stop(100%, #3d549a));
+    background: -webkit-linear-gradient(45deg, #2d364c 0%, #3d549a 100%);
+    background: -o-linear-gradient(45deg, #2d364c 0%, #3d549a 100%);
+    background: -ms-linear-gradient(45deg, #2d364c 0%, #3d549a 100%);
+    background: linear-gradient(45deg, #2d364c 0%, #3d549a 100%);
+    color: #F1F1F1;
+    text-align: center;
+    border-bottom: #B3B3B3 solid 10px;
+    border-radius: 0;
+}
+
+.jumbotron h1 {
+    font-size: 80px;
+    font-weight: bold;
+    letter-spacing: -1px;
+    line-height: 1;
+}
+
+.navbar{
+    min-height: 2em;
+    z-index: 10;
+}
+
+/* =Main content
+-----------------------------------------------------------------------------*/
+
+.page-header{
+    padding-top: 3em;
+}
+
+.content h1:first-child {
+    margin-top: 0;
+}
+
+hr {
+    margin: 5em 0;
+}
+
+.bs-docs-section-header {
+    padding-top: 60px;
+    color: #4661B9;
+    border-bottom: 5px solid #4661B9;
+}
+
+/* =Add on
+-----------------------------------------------------------------------------*/
+.ace_editor_wrapper {
+    position: relative;
+    height: 200px
+}
+
+.ace_editor {
+    top: 0;
+    bottom: 0;
+    right: 0;
+    left: 0;
+}
+
+.CodeMirror {
+    height: 200px !important;
+}
+
+/* = Responsive  variations
+-----------------------------------------------------------------------------*/
+
+/* Hide code snippets on mobile devices */
+@media screen and (max-width: 480px) {
+    .bs-docs-example {
+        border-radius: 4px;
+    }
+
+    .prettyprint {
+        display: none;
+    }
+}
+
+/* Tablets and up */
+@media screen and (min-width: 768px) {
+
+    .bs-docs-section-header h1 {
+        font-size: 80px;
+        font-size: 8rem;
+        line-height: 1;
+    }
+
+    .side {
+        padding-top: 60px;
+    }
+
+    .bs-docs-sidenav.affix {
+        top: 40px;
+        position: fixed;
+    }
+}
+
+/* Tablets/desktops and up */
+@media screen and (min-width: 992px) {
+
+    .bs-docs-sidenav.affix {
+        width : 220px;
+    }
+}
+
+/* Large desktops and up */
+@media screen and (min-width: 1200px) {
+
+    .bs-docs-sidenav.affix {
+        width : 267px;
+    }
+}
