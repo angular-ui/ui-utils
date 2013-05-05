@@ -1,27 +1,22 @@
 ---
 language: node_js
 node_js:
-  - "0.8"
-
+- '0.8'
 before_install:
-  - export DISPLAY=:99.0
-  - sh -e /etc/init.d/xvfb start
-  - npm install -g bower grunt-cli
-  - npm install
-  - bower install
-
+- export DISPLAY=:99.0
+- sh -e /etc/init.d/xvfb start
+- npm install -g bower grunt-cli
+- npm install
+- bower install
 after_success: .travis/after_success.sh
-
 branches:
   only:
   - demos
-
 script: grunt
-
 env:
   global:
-  - secure: ! 'JAuD2HN5A9MTi5QgxJ7OocfV9yXP1PTEqXGGnbDtVV/167okmPmh/JLeNgP3
+  - secure: ! 'a3NfAhuOoDHtpuII/05yyvYdwZ62nyvQtXJ13W1X0JWUYm4ljq6ZR8ZpX0Ne
 
-      gUfxv7QJrDFzWDLETeAQbkAWP5zm62y26AoAA4mRuCuH2bSKZdSKf+LFUMJY
+      lQmbtousmGczcausEzKhv9MCNurNI1Y1qeguxeRSKq2OSCkq5Xjxa2dUYPUw
 
-      usbOybYFBWRfdLKY88aJePt072Pk4hUnPLv3w/N+L0ec6RB0Uvw='
+      mj7sWlDWIeUlvUdgFsg8RGl9OdfTEsRDCu7qIPF+0Gr02wQVMeU='
