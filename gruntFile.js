@@ -12,68 +12,80 @@ module.exports = function (grunt) {
 
 
   // Default task.
-  grunt.registerTask('build', ['x_concat', 'concat', 'clean:rm_tmp', 'uglify']);
-  grunt.registerTask('default', ['jshint', 'karma']);
+  grunt.registerTask('default', ['jshint', 'karma:unit']);
+  grunt.registerTask('build', ['directory_names_concat', 'concat:tmp', 'concat:modules', 'clean:rm_tmp', 'uglify']);
+  grunt.registerTask('build-doc', ['build', 'concat:html_doc']);
+  grunt.registerTask('server', ['karma:start']);
 
 
-  var testConfig = function(configFile, customOptions) {
+  var testConfig = function (configFile, customOptions) {
     var options = { configFile: configFile, singleRun: true };
-    var travisOptions = process.env.TRAVIS && { browsers: ['Firefox'], reporters: ['dots'] };
+    var travisOptions = process.env.TRAVIS && { browsers: [ 'Firefox', 'PhantomJS'], reporters: ['dots'] };
     return grunt.util._.extend(options, customOptions, travisOptions);
   };
 
-
-  var banner = ['/**',
-    ' * <%= pkg.name %> - <%= pkg.description %>',
-    ' * @version v<%= pkg.version %> - <%= grunt.template.today("yyyy-mm-dd") %>',
-    ' * @link <%= pkg.homepage %>',
-    ' * @license <%= pkg.license %>',
-    ' */',
-  ''].join('\n');
   // Project configuration.
   grunt.initConfig({
-    dist: 'build',
+    dist: 'doc/build',
     pkg: grunt.file.readJSON('package.json'),
-    karma: {
-      unit: testConfig('test/karma.conf.js')
+    meta: {
+      banner: ['/**',
+        ' * <%= pkg.name %> - <%= pkg.description %>',
+        ' * @version v<%= pkg.version %> - <%= grunt.template.today("yyyy-mm-dd") %>',
+        ' * @link <%= pkg.homepage %>',
+        ' * @license <%= pkg.license %>',
+        ' */',
+        ''].join('\n'),
+      destName : '<%= dist %>/<%= pkg.name %>'
     },
-    x_concat: {
+    watch: {
+      karma: {
+        files: ['modules/**/*.js'],
+        tasks: ['karma:unit:run'] //NOTE the :run flag
+      }
+    },
+    karma: {
+      unit: testConfig('test/karma.conf.js'),
+      start: {
+        configFile: 'test/karma.conf.js'
+      }
+    },
+    directory_names_concat: {
       util: {
         moduleName: "ui.utils",
         prefix: 'ui.',
-        src: ['modules/*'],
+        src: ['modules/*', '!modules/ie-shiv'],
         dest: 'modules/utils.js'
       }
     },
     concat: {
-      make_tmp: {
-        src: [ 'modules/**/*.js', '!modules/utils.js',  '!modules/ie-shiv/*.js', '!modules/**/test/*.js'],
-        dest: 'tmp/dep.js'
+      html_doc: {
+        options: {banner: '<!-- Le content - v<%= pkg.version %> - <%= grunt.template.today("yyyy-mm-dd") %>\n================================================== -->\n'},
+        src: [ 'modules/**/demo/index.html'],
+        dest: 'doc/demos.html'
+      },
+      tmp: {
+        files: {  'tmp/dep.js': [ 'modules/**/*.js', '!modules/utils.js', '!modules/ie-shiv/*.js', '!modules/**/test/*.js']}
       },
       modules: {
-        options: {banner : banner},
-        src: ['tmp/dep.js', 'modules/utils.js'],
-        dest: '<%= dist %>/<%= pkg.name %>.js'
-      },
-      ieshiv: {
-        options: {banner : banner},
-        src: ['modules/ie-shiv/*.js'],
-        dest: '<%= dist %>/<%= pkg.name %>-ieshiv.js'
+        options: {banner: '<%= meta.banner %>'},
+        files: {
+          '<%= meta.destName %>.js': ['tmp/dep.js', 'modules/utils.js'],
+          '<%= meta.destName %>-ieshiv.js' : ['modules/ie-shiv/*.js']
+        }
       }
     },
     uglify: {
-      options: {
-        banner: banner
-      },
+      options: {banner: '<%= meta.banner %>'},
       build: {
         files: {
-          '<%= dist %>/<%= pkg.name %>.min.js': ['<%= concat.modules.dest %>'],
-          '<%= dist %>/<%= pkg.name %>-ieshiv.min.js': ['<%= concat.ieshiv.dest %>']
+          '<%= meta.destName %>.min.js': ['<%= meta.destName %>.js'],
+          '<%= meta.destName %>-ieshiv.min.js': ['<%= meta.destName %>-ieshiv.js']
         }
       }
     },
     clean: {
-      rm_tmp:{src: ['tmp']}
+      rm_tmp: {src: ['tmp']}
     },
     jshint: {
       files: ['modules/**/*.js', 'tasks/**/*.js'],
