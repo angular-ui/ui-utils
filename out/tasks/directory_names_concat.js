@@ -1,5 +1,5 @@
 /*
- * x_concat
+ * directory_names_concat
  * Concatenate directory names as dependencies for a AngularJS module.
  * Output a standalone file with : angular.module('$1', [$2]);
  * with $1 the module name,
@@ -10,7 +10,7 @@ module.exports = function (grunt) {
 
   'use strict';
 
-  grunt.registerMultiTask('x_concat', 'Concatenate directory names for a AngularJS module.', function () {
+  grunt.registerMultiTask('directory_names_concat', 'Concatenate directory names for a AngularJS module.', function () {
 
     var module_name = this.data.moduleName || ('x'),
       prefix = this.data.prefix || '';
