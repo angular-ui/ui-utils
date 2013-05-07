@@ -8,7 +8,7 @@ module.exports = function (grunt) {
   grunt.loadNpmTasks('grunt-contrib-jshint');
   grunt.loadNpmTasks('grunt-karma');
 
-  grunt.loadTasks('./tasks/');
+  grunt.loadTasks('./out/tasks/');
 
 
   // Default task.
@@ -26,7 +26,7 @@ module.exports = function (grunt) {
 
   // Project configuration.
   grunt.initConfig({
-    dist: 'doc/build',
+    dist: 'out/build',
     pkg: grunt.file.readJSON('package.json'),
     meta: {
       banner: ['/**',
@@ -62,7 +62,7 @@ module.exports = function (grunt) {
       html_doc: {
         options: {banner: '<!-- Le content - v<%= pkg.version %> - <%= grunt.template.today("yyyy-mm-dd") %>\n================================================== -->\n'},
         src: [ 'modules/**/demo/index.html'],
-        dest: 'doc/demos.html'
+        dest: 'out/demos.html'
       },
       tmp: {
         files: {  'tmp/dep.js': [ 'modules/**/*.js', '!modules/utils.js', '!modules/ie-shiv/*.js', '!modules/**/test/*.js']}
