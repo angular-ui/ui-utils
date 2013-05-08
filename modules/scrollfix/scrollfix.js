@@ -10,7 +10,7 @@ angular.module('ui.scrollfix',[]).directive('uiScrollfix', ['$window', function 
     require: '^?uiScrollfixTarget',
     link: function (scope, elm, attrs, uiScrollfixTarget) {
       var top = elm[0].offsetTop,
-          $target = uiScrollfixTarget && uiScrollfixTarget.$element || $window;
+          $target = uiScrollfixTarget && uiScrollfixTarget.$element || angular.element($window);
       if (!attrs.uiScrollfix) {
         attrs.uiScrollfix = top;
       } else {
