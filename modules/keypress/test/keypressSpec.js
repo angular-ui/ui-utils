@@ -3,7 +3,7 @@ describe('uiKeypress', function () {
 
   var $scope, $compile;
 
-  var createKeyEvent = function (mainKey, alt, ctrl, shift) {
+  var createKeyEvent = function (mainKey, alt, ctrl, shift, meta) {
     var keyEvent = jQuery.Event("keypress");
 
     keyEvent.which = mainKey;
@@ -11,6 +11,7 @@ describe('uiKeypress', function () {
     keyEvent.altKey = alt;
     keyEvent.ctrlKey = ctrl;
     keyEvent.shiftKey = shift;
+    keyEvent.metaKey = meta;
 
     return keyEvent;
   };
@@ -36,13 +37,13 @@ describe('uiKeypress', function () {
   });
 
   it('should support combined key press', function () {
-    createElement({'ctrl-shift-13': 'event=true'}).trigger(createKeyEvent(13, false, true, true));
+    createElement({'ctrl-shift-13': 'event=true'}).trigger(createKeyEvent(13, false, true, true, false));
     expect($scope.event).toBe(true);
   });
   
   it('should support alternative combinations', function () {
     $scope.event = 0;
-    createElement({'ctrl-shift-14 ctrl-shift-13': 'event=event+1'}).trigger(createKeyEvent(13, false, true, true)).trigger(createKeyEvent(14, false, true, true));
+    createElement({'ctrl-shift-14 ctrl-shift-13': 'event=event+1'}).trigger(createKeyEvent(13, false, true, true, false)).trigger(createKeyEvent(14, false, true, true, false));
     expect($scope.event).toBe(2);
   });
 
@@ -52,8 +53,15 @@ describe('uiKeypress', function () {
     elm.trigger(createKeyEvent(13));
     expect($scope.event1).toBe(true);
 
-    elm.trigger(createKeyEvent(13, false, true, true));
+    elm.trigger(createKeyEvent(13, false, true, true, false));
     expect($scope.event2).toBe(true);
+  });
+
+  it('should handle meta key ("?" on OS X)', function () {
+    var elm = createElement({'meta-83': 'event1=true'});
+
+    elm.trigger(createKeyEvent(83, false, false, false, true));
+    expect($scope.event1).toBe(true);
   });
 
   it('should support $event in expressions', function () {

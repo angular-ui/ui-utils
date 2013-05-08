@@ -2,7 +2,7 @@
 
 ***
 
-[![Build Status](https://secure.travis-ci.org/angular-ui/ui-utils.png)](http://travis-ci.org/angular-ui/ui-utils)
+[![Build Status](https://travis-ci.org/angular-ui/ui-utils.png?branch=master)](https://travis-ci.org/angular-ui/ui-utils)
 
 ## Usage
 
@@ -52,5 +52,5 @@ Make sure all tests pass in order for your Pull Request to be accepted
 You can choose what browsers to test in: `Chrome,ChromeCanary,Firefox,PhantomJS`
 
 ```bash
-$ karma start --browsers=Chrome,Firefox test.conf.js
+$ karma start --browsers=Chrome,Firefox test/test.conf.js
 ```
