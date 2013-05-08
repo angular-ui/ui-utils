@@ -21,18 +21,18 @@ describe('uiScrollfix', function () {
   describe('scrolling the window', function () {
     it('should add the ui-scrollfix class if the offset is greater than specified', function () {
       var element = $compile('<div ui-scrollfix="-100"></div>')(scope);
-      angular.element($window).trigger('scroll.ui-scrollfix');
+      $window.trigger('scroll.ui-scrollfix');
       expect(element.hasClass('ui-scrollfix')).toBe(true);
     });
     it('should remove the ui-scrollfix class if the offset is less than specified (using absolute coord)', function () {
       var element = $compile('<div ui-scrollfix="100" class="ui-scrollfix"></div>')(scope);
-      angular.element($window).trigger('scroll.ui-scrollfix');
+      $window.trigger('scroll.ui-scrollfix');
       expect(element.hasClass('ui-scrollfix')).toBe(false);
 
     });
     it('should remove the ui-scrollfix class if the offset is less than specified (using relative coord)', function () {
       var element = $compile('<div ui-scrollfix="+100" class="ui-scrollfix"></div>')(scope);
-      angular.element($window).trigger('scroll.ui-scrollfix');
+      $window.trigger('scroll.ui-scrollfix');
       expect(element.hasClass('ui-scrollfix')).toBe(false);
     });
   });
