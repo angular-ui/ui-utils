@@ -15,7 +15,7 @@ angular.module('ui.unique',[]).filter('unique', ['$parse', function ($parse) {
 
     if ((filterOn || angular.isUndefined(filterOn)) && angular.isArray(items)) {
       var hashCheck = {}, newItems = [],
-        get = angular.isString(filterOn) ? $parse(filterOn) : function (item) { return item };
+        get = angular.isString(filterOn) ? $parse(filterOn) : function (item) { return item; };
 
       var extractValueToCompare = function (item) {
         return angular.isObject(item) ? get(item) : item;
