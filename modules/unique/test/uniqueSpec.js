@@ -54,6 +54,18 @@ describe('unique', function () {
     ]);
   });
 
+  it('should return unique entries based on the subkey provided for complex objects', function () {
+    var arrayToFilter = [
+      {key: 'value', other: {subkey: 'sub1'}},
+      {key: 'value', other: {subkey: 'sub2'}},
+      {key: 'value2', other: {subkey: 'sub1'}}
+    ];
+    expect(uniqueFilter(arrayToFilter, 'other.subkey')).toEqual([
+      {key: 'value', other: {subkey: 'sub1'}},
+      {key: 'value', other: {subkey: 'sub2'}}
+    ]);
+  });
+
   it('should return unique primitives in arrays', function () {
     expect(uniqueFilter([1, 2, 1, 3])).toEqual([1, 2, 3]);
   });
