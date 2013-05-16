@@ -52,5 +52,5 @@ Make sure all tests pass in order for your Pull Request to be accepted
 You can choose what browsers to test in: `Chrome,ChromeCanary,Firefox,PhantomJS`
 
 ```bash
-$ karma start --browsers=Chrome,Firefox test/test.conf.js
+$ karma start --browsers=Chrome,Firefox test/karma.conf.js --single-run=true
 ```

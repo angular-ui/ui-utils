@@ -6,6 +6,7 @@ describe('uiKeypress', function () {
   var createKeyEvent = function (mainKey, alt, ctrl, shift, meta) {
     var keyEvent = jQuery.Event("keypress");
 
+
     keyEvent.which = mainKey;
     keyEvent.keyCode = mainKey;
     keyEvent.altKey = alt;
@@ -58,7 +59,7 @@ describe('uiKeypress', function () {
   });
 
   it('should handle meta key ("?" on OS X)', function () {
-    var elm = createElement({'meta-83': 'event1=true'});
+    var elm = createElement({'meta-s': 'event1=true'});
     
     elm.trigger(createKeyEvent(115, false, false, false, true)); // 115 is keypress code for s
     expect($scope.event1).toBe(true);
@@ -74,6 +75,7 @@ describe('uiKeypress', function () {
     element.trigger(createKeyEvent(13));
     expect($scope.event2.keyCode).toBe(13);
   });
+
 
   it('should support pressing a text character', function() {
 

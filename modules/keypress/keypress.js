@@ -84,7 +84,6 @@ factory('keypressHelper', ['$parse', function keypress($parse){
       var altPressed = !!event.altKey;
       var ctrlPressed = !!event.ctrlKey;
       var shiftPressed = !!event.shiftKey;
-      console.log('Event.which: ' + event.which)
       var keyCode = event.which || event.keyCode;
 
       // normalize keycodes

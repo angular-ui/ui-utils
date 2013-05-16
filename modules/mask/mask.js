@@ -15,6 +15,8 @@ angular.module('ui.mask',[]).directive('uiMask', [
       link: function (scope, iElement, iAttrs, controller) {
         var maskProcessed = false, eventsBound = false,
             maskCaretMap, maskPatterns, maskPlaceholder, maskComponents,
+            // Minimum required length of the value to be considered valid
+            minRequiredLength,
             value, valueMasked, isValid,
             // Vars for initializing/uninitializing
             originalPlaceholder = iAttrs.placeholder,
@@ -130,7 +132,7 @@ angular.module('ui.mask',[]).directive('uiMask', [
 
         function validateValue(value) {
           // Zero-length value validity is ngRequired's determination
-          return value.length ? value.length === maskCaretMap.length - 1 : true;
+          return value.length ? value.length >= minRequiredLength : true;
         }
 
         function unmaskValue(value) {
@@ -191,16 +193,27 @@ angular.module('ui.mask',[]).directive('uiMask', [
           // else
 
           if (typeof mask === 'string') {
+            minRequiredLength = 0;
+            var isOptional = false;
+
             angular.forEach(mask.split(''), function(chr, i) {
               if (maskDefinitions[chr]) {
                 maskCaretMap.push(characterCount);
                 maskPlaceholder += '_';
                 maskPatterns.push(maskDefinitions[chr]);
+
+                characterCount++;
+                if (!isOptional) {
+                  minRequiredLength++;
+                }
+              }
+              else if (chr === "?") {
+                isOptional = true;
               }
               else{
                 maskPlaceholder += chr;
+                characterCount++;
               }
-              characterCount++;
             });
           }
           // Caret position immediately following last position is valid.
