@@ -21,19 +21,8 @@ factory('keypressHelper', ['$parse', function keypress($parse){
       91: 'leftwindows',
       92: 'rightwindows',
       93: 'windowsmenu',
-      96: '0',
-      97: '1',
-      98: '2',
-      99: '3',
-      100: '4',
-      101: '5',
-      102: '6',
-      103: '7',
-      104: '8',
-      105: '9',
       106: '*',
       107: '+',
-      109: '-',
       110: '.',
       111: '/',
       186: ';',
@@ -91,9 +80,11 @@ factory('keypressHelper', ['$parse', function keypress($parse){
     elm.bind(mode, function (event) {
       // No need to do that inside the cycle
       var metaPressed = !!(event.metaKey && !event.ctrlKey);
+      console.log('Meta Pressed: ' + metaPressed)
       var altPressed = !!event.altKey;
       var ctrlPressed = !!event.ctrlKey;
       var shiftPressed = !!event.shiftKey;
+      console.log('Event.which: ' + event.which)
       var keyCode = event.which || event.keyCode;
 
       // normalize keycodes
@@ -101,12 +92,16 @@ factory('keypressHelper', ['$parse', function keypress($parse){
         keyCode = keyCode + 32;
       }
 
+      console.log("Key Code: " + keyCode)
       // Iterate over prepared combinations
       angular.forEach(combinations, function (combination) {
 
-         var mainKeyPressed = (combination.keys[keysByCode[mode][keyCode]] || combination.keys[keyCode.toString()] || combination.keys[String.fromCharCode(keyCode)]) || false;
+
+        var mainKeyPressed = (combination.keys[keysByCode[mode][keyCode]] || combination.keys[keyCode.toString()] || combination.keys[String.fromCharCode(keyCode)]) || false;
 
         var metaRequired = !!combination.keys.meta;
+        console.log('Main Key Pressed: ' + mainKeyPressed)
+        console.log('Meta Required: ' + metaRequired)
         var altRequired = !!combination.keys.alt;
         var ctrlRequired = !!combination.keys.ctrl;
         var shiftRequired = !!combination.keys.shift;

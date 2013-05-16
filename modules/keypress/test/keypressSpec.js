@@ -59,8 +59,8 @@ describe('uiKeypress', function () {
 
   it('should handle meta key ("?" on OS X)', function () {
     var elm = createElement({'meta-83': 'event1=true'});
-
-    elm.trigger(createKeyEvent(83, false, false, false, true));
+    
+    elm.trigger(createKeyEvent(115, false, false, false, true)); // 115 is keypress code for s
     expect($scope.event1).toBe(true);
   });
 
