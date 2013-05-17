@@ -1,6 +1,6 @@
 /**
  * angular-ui-utils - Swiss-Army-Knife of AngularJS tools (with no external dependencies!)
- * @version v0.0.2 - 2013-05-13
+ * @version v0.0.3 - 2013-05-17
  * @link http://angular-ui.github.com
  * @license MIT License, http://www.opensource.org/licenses/MIT
  */
@@ -16,17 +16,18 @@
  */
 angular.module('ui.event',[]).directive('uiEvent', ['$parse',
   function ($parse) {
-    return function (scope, elm, attrs) {
-      var events = scope.$eval(attrs.uiEvent);
+    return function ($scope, elm, attrs) {
+      var events = $scope.$eval(attrs.uiEvent);
       angular.forEach(events, function (uiEvent, eventName) {
         var fn = $parse(uiEvent);
         elm.bind(eventName, function (evt) {
           var params = Array.prototype.slice.call(arguments);
           //Take out first paramater (event object);
           params = params.splice(1);
-          scope.$apply(function () {
-            fn(scope, {$event: evt, $params: params});
-          });
+          fn($scope, {$event: evt, $params: params});
+          if (!$scope.$$phase) {
+            $scope.$apply();
+          }
         });
       });
     };
@@ -89,45 +90,6 @@ angular.module('ui.highlight',[]).filter('highlight', function () {
   };
 });
 
-/*
- * Defines the ui-if tag. This removes/adds an element from the dom depending on a condition
- * Originally created by @tigbro, for the @jquery-mobile-angular-adapter
- * https://github.com/tigbro/jquery-mobile-angular-adapter
- */
-angular.module('ui.if',[]).directive('uiIf', [function () {
-  return {
-    transclude: 'element',
-    priority: 1000,
-    terminal: true,
-    restrict: 'A',
-    compile: function (element, attr, transclude) {
-      return function (scope, element, attr) {
-
-        var childElement;
-        var childScope;
- 
-        scope.$watch(attr['uiIf'], function (newValue) {
-          if (childElement) {
-            childElement.remove();
-            childElement = undefined;
-          }
-          if (childScope) {
-            childScope.$destroy();
-            childScope = undefined;
-          }
-
-          if (newValue) {
-            childScope = scope.$new();
-            transclude(childScope, function (clone) {
-              childElement = clone;
-              element.after(clone);
-            });
-          }
-        });
-      };
-    }
-  };
-}]);
 /**
  * Converts variable-esque naming conventions to something presentational, capitalized words separated by space.
  * @param {String} value The value to be parsed and prettified.
@@ -1139,7 +1101,6 @@ angular.module('ui.utils',  [
   "ui.event",
   "ui.format",
   "ui.highlight",
-  "ui.if",
   "ui.inflector",
   "ui.jq",
   "ui.keypress",
