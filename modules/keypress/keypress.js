@@ -55,6 +55,18 @@ factory('keypressHelper', ['$parse', function keypress($parse){
     return string.charAt(0).toUpperCase() + string.slice(1);
   };
 
+  var normalizeKeyCode = function (keyCode) {
+      if (!isNaN(parseInt(keyCode))) {
+        keyCode = parseInt(keyCode);
+
+        if (keyCode >= 65 && keyCode <= 90) {
+          keyCode = keyCode + 32;
+        }
+      }
+
+      return keyCode;
+  };
+
   return function(mode, scope, elm, attrs) {
     var params, combinations = [];
     params = scope.$eval(attrs['ui'+capitaliseFirstLetter(mode)]);
@@ -70,7 +82,7 @@ factory('keypressHelper', ['$parse', function keypress($parse){
           keys: {}
         };
         angular.forEach(variation.split('-'), function (value) {
-          combination.keys[value.toLowerCase()] = true;
+          combination.keys[normalizeKeyCode(value.toLowerCase())] = true;
         });
         combinations.push(combination);
       });
@@ -80,27 +92,19 @@ factory('keypressHelper', ['$parse', function keypress($parse){
     elm.bind(mode, function (event) {
       // No need to do that inside the cycle
       var metaPressed = !!(event.metaKey && !event.ctrlKey);
-      console.log('Meta Pressed: ' + metaPressed)
       var altPressed = !!event.altKey;
       var ctrlPressed = !!event.ctrlKey;
       var shiftPressed = !!event.shiftKey;
       var keyCode = event.which || event.keyCode;
 
-      // normalize keycodes
-      if (keyCode >= 65 && keyCode <= 90) {
-        keyCode = keyCode + 32;
-      }
+      keyCode = normalizeKeyCode(keyCode);
 
-      console.log("Key Code: " + keyCode)
       // Iterate over prepared combinations
       angular.forEach(combinations, function (combination) {
-
 
         var mainKeyPressed = (combination.keys[keysByCode[mode][keyCode]] || combination.keys[keyCode.toString()] || combination.keys[String.fromCharCode(keyCode)]) || false;
 
         var metaRequired = !!combination.keys.meta;
-        console.log('Main Key Pressed: ' + mainKeyPressed)
-        console.log('Meta Required: ' + metaRequired)
         var altRequired = !!combination.keys.alt;
         var ctrlRequired = !!combination.keys.ctrl;
         var shiftRequired = !!combination.keys.shift;

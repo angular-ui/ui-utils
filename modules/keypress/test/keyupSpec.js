@@ -74,9 +74,30 @@ describe('uiKeyup', function () {
     expect($scope.event2.keyCode).toBe(13);
   });
 
+  it('should support an ascii code for a text character', function() {
+    var elm = createElement({'97': 'event=true'}).trigger(createKeyEvent(97));
+    expect($scope.event).toBe(true);
+  });
+
   it('should support pressing a text character', function() {
 
-    var elm = createElement({'a': 'event=true'}).trigger(createKeyEvent(65)); // 65 is IE/Mozilla key code for a
+    var elm = createElement({'a': 'event=true'}).trigger(createKeyEvent(97)); // 97 is keypress code for a
+    expect($scope.event).toBe(true);
+  });
+
+  it('should support an ascii code for a capital text character', function() {
+    var elm = createElement({'65': 'event=true'}).trigger(createKeyEvent(65,false,false,false));
+    expect($scope.event).toBe(true);
+  });
+
+  it('should support pressing shift and a text character', function() {
+
+    var elm = createElement({'shift-a': 'event=true'}).trigger(createKeyEvent(65,false,false,true)); // 65 is keypress code for A
+    expect($scope.event).toBe(true);
+  });
+
+  it('should support an ascii code for a non-text keyboard character', function() {
+    var elm = createElement({'188': 'event=true'}).trigger(createKeyEvent(188));
     expect($scope.event).toBe(true);
   });
 

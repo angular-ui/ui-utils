@@ -1,11 +1,9 @@
-
 describe('uiKeypress', function () {
 
   var $scope, $compile;
 
   var createKeyEvent = function (mainKey, alt, ctrl, shift, meta) {
     var keyEvent = jQuery.Event("keypress");
-
 
     keyEvent.which = mainKey;
     keyEvent.keyCode = mainKey;
@@ -58,10 +56,10 @@ describe('uiKeypress', function () {
     expect($scope.event2).toBe(true);
   });
 
-  it('should handle meta key ("?" on OS X)', function () {
-    var elm = createElement({'meta-s': 'event1=true'});
-    
-    elm.trigger(createKeyEvent(115, false, false, false, true)); // 115 is keypress code for s
+
+  it('should handle meta key ("⌘" on OS X)', function () {
+    var elm = createElement({'meta-83': 'event1=true'});
+    elm.trigger(createKeyEvent(83, false, false, false, true));
     expect($scope.event1).toBe(true);
   });
 
@@ -76,10 +74,20 @@ describe('uiKeypress', function () {
     expect($scope.event2.keyCode).toBe(13);
   });
 
+  it('should support an ascii code for a text character', function() {
+    var elm = createElement({'97': 'event=true'}).trigger(createKeyEvent(97));
+    expect($scope.event).toBe(true);
+  });
 
   it('should support pressing a text character', function() {
 
     var elm = createElement({'a': 'event=true'}).trigger(createKeyEvent(97)); // 97 is keypress code for a
+    expect($scope.event).toBe(true);
+  });
+
+
+  it('should support an ascii code for a capital text character', function() {
+    var elm = createElement({'65': 'event=true'}).trigger(createKeyEvent(65,false,false,false));
     expect($scope.event).toBe(true);
   });
 
@@ -89,8 +97,12 @@ describe('uiKeypress', function () {
     expect($scope.event).toBe(true);
   });
 
-  it('should support pressing a non-text keyboard character', function() {
+  it('should support an ascii code for a non-text keyboard character', function() {
+    var elm = createElement({'44': 'event=true'}).trigger(createKeyEvent(44));
+    expect($scope.event).toBe(true);
+  });
 
+  it('should support pressing a non-text keyboard character', function() {
     var elm = createElement({',': 'event=true'}).trigger(createKeyEvent(44)); // 44 is keypress code for ,
     expect($scope.event).toBe(true);
   });
