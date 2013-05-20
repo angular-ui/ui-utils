@@ -56,8 +56,8 @@ factory('keypressHelper', ['$parse', function keypress($parse){
   };
 
   var normalizeKeyCode = function (keyCode) {
-      if (!isNaN(parseInt(keyCode))) {
-        keyCode = parseInt(keyCode);
+      if (!isNaN(parseInt(keyCode, 10))) {
+        keyCode = parseInt(keyCode, 10);
 
         if (keyCode >= 65 && keyCode <= 90) {
           keyCode = keyCode + 32;
