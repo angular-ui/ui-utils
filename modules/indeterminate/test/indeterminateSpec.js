@@ -20,12 +20,12 @@ describe('uiIndeterminate', function () {
 
   it('should do nothing if not attached to input[type=checkbox]', function(){
     elm = $compile('<input ui-indeterminate="isUnknown" />')($scope);
-    expect(elm[0].indeterminate).toBeUndefined();
+    expect(elm[0].indeterminate).toBeFalsy();
     $scope.isUnknown = true;
     $scope.$apply();
-    expect(elm[0].indeterminate).toBeUndefined();
+    expect(elm[0].indeterminate).toBeFalsy();
     $scope.isUnknown = false;
     $scope.$apply();
-    expect(elm[0].indeterminate).toBeUndefined();
+    expect(elm[0].indeterminate).toBeFalsy();
   });
 });
