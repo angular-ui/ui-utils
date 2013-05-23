@@ -12,6 +12,7 @@ before_script: out/.travis/before_script.sh
 after_success: out/.travis/after_success.sh
 branches:
   only:
+  - develop
   - master
 script: grunt
 env:
