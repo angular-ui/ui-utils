@@ -3,12 +3,13 @@
  *
  * @example <input type="checkbox" ui-indeterminate="isUnkown">
  */
-angular.module('ui.indeterminate',[]).directive('uiIndeterminate', [,
+angular.module('ui.indeterminate',[]).directive('uiIndeterminate', [
   function () {
     return {
       compile: function(tElm, tAttrs) {
-        if (!tAttrs.type || tAttrs.toLowercase() !== 'checkbox')
+        if (!tAttrs.type || tAttrs.toLowercase() !== 'checkbox') {
           return angular.noop;
+        }
 
         return function ($scope, elm, attrs) {
           $scope.$watch(attrs.uiIndeterminate, function(newVal, oldVal) {
