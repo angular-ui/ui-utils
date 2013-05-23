@@ -1,6 +1,6 @@
 /**
  * angular-ui-utils - Swiss-Army-Knife of AngularJS tools (with no external dependencies!)
- * @version v0.0.3 - 2013-05-17
+ * @version v0.0.3 - 2013-05-23
  * @link http://angular-ui.github.com
  * @license MIT License, http://www.opensource.org/licenses/MIT
  */
@@ -89,6 +89,28 @@ angular.module('ui.highlight',[]).filter('highlight', function () {
     }
   };
 });
+
+/**
+ * Provides an easy way to toggle a checkboxes indeterminate property
+ *
+ * @example <input type="checkbox" ui-indeterminate="isUnkown">
+ */
+angular.module('ui.indeterminate',[]).directive('uiIndeterminate', [
+  function () {
+    return {
+      compile: function(tElm, tAttrs) {
+        if (!tAttrs.type || tAttrs.type.toLowerCase() !== 'checkbox') {
+          return angular.noop;
+        }
+
+        return function ($scope, elm, attrs) {
+          $scope.$watch(attrs.uiIndeterminate, function(newVal, oldVal) {
+            elm[0].indeterminate = !!newVal;
+          });
+        };
+      }
+    };
+  }]);
 
 /**
  * Converts variable-esque naming conventions to something presentational, capitalized words separated by space.
@@ -1101,6 +1123,7 @@ angular.module('ui.utils',  [
   "ui.event",
   "ui.format",
   "ui.highlight",
+  "ui.indeterminate",
   "ui.inflector",
   "ui.jq",
   "ui.keypress",
