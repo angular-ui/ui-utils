@@ -7,7 +7,7 @@ angular.module('ui.indeterminate',[]).directive('uiIndeterminate', [
   function () {
     return {
       compile: function(tElm, tAttrs) {
-        if (!tAttrs.type || tAttrs.type.toLowercase() !== 'checkbox') {
+        if (!tAttrs.type || tAttrs.type.toLowerCase() !== 'checkbox') {
           return angular.noop;
         }
 
