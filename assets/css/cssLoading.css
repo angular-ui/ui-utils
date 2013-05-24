@@ -1,11 +1,11 @@
-#loadingAnimation {
+.loadingAnimation {
     margin: auto;
     position: relative;
     width: 128px;
     height: 128px;
 }
 
-#bowl_ringG {
+.bowl_ringG {
     position: absolute;
     width: 128px;
     height: 128px;

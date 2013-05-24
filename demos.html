@@ -1,6 +1,7 @@
-<!-- Le content - v0.0.3 - 2013-05-23
+<!-- Le content - v0.0.3 - 2013-05-24
 ================================================== -->
-<script>
+<script>requirejs(["core/demo.js"]);</script>
+<div id="utils" ng-non-bindable><script>
   function EventCtrl($scope) {
     $scope.blurCallback = function () {
       alert('Goodbye');
@@ -822,4 +823,4 @@ Bar rule passes: {{!!myForm.myInput.$error.bar}}
 </pre>
     </div>
   </div>
-</section>
+</section></div>

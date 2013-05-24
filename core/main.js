@@ -1,6 +1,26 @@
 (function () {
   var _ = "assets/vendor/";
 
+  /* =Require css
+   -----------------------------------------------------------------------------*/
+  window.requireCss = (function () {
+    var registry = {}, loadCss;
+
+    loadCss = function (url) {
+      var link = document.createElement("link");
+      link.type = "text/css";
+      link.rel = "stylesheet";
+      link.href = url;
+      document.getElementsByTagName("head")[0].appendChild(link);
+    };
+
+    return function (url) {
+      if (registry[url]) return;
+      registry[url] = true;
+      loadCss(url);
+    };
+  })();
+
   /* =Launcher
    -----------------------------------------------------------------------------*/
   requirejs(
@@ -13,15 +33,15 @@
         'angular': _ + 'angular.min'
       },
       shim: {
-        'build/angular-ui-utils': { deps: ['angular'] },
         'core/prettifyDirective': { deps: ['prettyPrint', 'angular'] },
         'twitter-bootstrap': { deps: ['jquery'] }
-      }
+      },
+      waitSeconds: 15
     },
-    ['twitter-bootstrap', 'core/prettifyDirective', 'build/angular-ui-utils'],
+    ['twitter-bootstrap', 'core/prettifyDirective'],
     function () {
 
-      angular.module('x', ['prettifyDirective', 'ui.utils'])
+      angular.module('x', ['prettifyDirective'])
         .controller('MainCtrl', [
           '$scope', function ($scope) {
 
