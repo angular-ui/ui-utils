@@ -1,0 +1,9 @@
+{
+  "name": "angular-ui-docs",
+  "version": "0.0.0",
+  "commit": "062479e80ce46f67ab5d83c353cbb231577d268a",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/angular-ui/angular-ui-docs.git"
+  }
+}
