@@ -68,7 +68,7 @@ angular.module('ui.route', []).directive('uiRoute', ['$location', '$parse', func
           watcher();
         });
 		
-		//Added for compatibility with ui-router
+	//Added for compatibility with ui-router
 	$scope.$on('$stateChangeSuccess', function(){
           watcher();
         });
