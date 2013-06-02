@@ -9,6 +9,7 @@ before_install:
 - npm install
 - bower install
 - env | grep TRAVIS
+
 before_script: components/angular-ui-docs/.travis/before_script.sh
 after_success: components/angular-ui-docs/.travis/after_success.sh
 script: grunt
