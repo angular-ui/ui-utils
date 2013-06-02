@@ -24,6 +24,7 @@ module.exports = function (grunt) {
 
   // Project configuration.
   grunt.initConfig({
+    dist : 'components/angular-ui-docs',
     pkg: grunt.file.readJSON('package.json'),
     meta: {
       banner: ['/**',
@@ -37,7 +38,7 @@ module.exports = function (grunt) {
         humaName : "UI Utils",
         repoName : "ui-utils"
       },
-      destName : 'out/build/<%= meta.view.repoName %>'
+      destName : '<%= dist %>/build/<%= meta.view.repoName %>'
     },
     watch: {
       karma: {
@@ -59,7 +60,7 @@ module.exports = function (grunt) {
         ].join('\n'),
         footer : '</div>'},
         src: [ 'modules/**/demo/index.html'],
-        dest: 'out/demos.html'
+        dest: '<%= dist %>/demos.html'
       },
       tmp: {
         files: {  'tmp/dep.js': [ 'modules/**/*.js', '!modules/utils.js', '!modules/ie-shiv/*.js', '!modules/**/test/*.js']}
@@ -102,7 +103,7 @@ module.exports = function (grunt) {
     copy: {
       main: {
         files: [
-          {src: ['demo/demo.js'], dest: 'out/core/demo.js', filter: 'isFile'}
+          {src: ['demo/demo.js'], dest: '<%= dist %>/core/demo.js', filter: 'isFile'}
         ]
       },
       template : {
@@ -110,7 +111,7 @@ module.exports = function (grunt) {
           return grunt.template.process(content);
         }},
         files: [
-          {src: ['out/.tmpl/index.tmpl'], dest: 'out/index.html'}
+          {src: ['<%= dist %>/.tmpl/index.tmpl'], dest: '<%= dist %>/index.html'}
         ]
       }
     }
