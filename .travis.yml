@@ -10,9 +10,6 @@ before_install:
 - bower install
 before_script: components/angular-ui-docs/.travis/before_script.sh
 after_success: components/angular-ui-docs/.travis/after_success.sh
-branches:
-  only:
-  - master
 script: grunt
 env:
   global:
