@@ -1,6 +1,6 @@
 /**
  * angular-ui-utils - Swiss-Army-Knife of AngularJS tools (with no external dependencies!)
- * @version v0.0.3 - 2013-06-02
+ * @version v0.0.3 - 2013-06-03
  * @link http://angular-ui.github.com
  * @license MIT License, http://www.opensource.org/licenses/MIT
  */
@@ -879,6 +879,11 @@ angular.module('ui.route', []).directive('uiRoute', ['$location', '$parse', func
         }
 
         $scope.$on('$routeChangeSuccess', function(){
+          watcher();
+        });
+		
+        //Added for compatibility with ui-router
+        $scope.$on('$stateChangeSuccess', function(){
           watcher();
         });
       };
