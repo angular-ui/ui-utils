@@ -16,6 +16,12 @@ describe('uiRoute', function () {
     scope.$apply();
   }
 
+  function setPathWithStateChange(path) {
+    $location.path(path);
+    scope.$broadcast('$stateChangeSuccess');
+    scope.$apply();
+  }
+
   describe('model is null', function() {
     runTests();
   });
@@ -95,5 +101,18 @@ describe('uiRoute', function () {
       setPath('/bar');
       expect(elm.scope()[modelProp]).toBe(false);
     });
+
+
+    it('should update model on state change', function(){
+      setPathWithStateChange('/bar');
+      compileRoute('<div ui-route="/foo">');
+      expect(elm.scope()[modelProp]).toBeFalsy();
+      setPathWithStateChange('/foo');
+      expect(elm.scope()[modelProp]).toBe(true);
+      setPathWithStateChange('/bar');
+      expect(elm.scope()[modelProp]).toBe(false);
+    });
+
+
   }
 });
