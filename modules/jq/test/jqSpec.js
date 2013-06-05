@@ -33,7 +33,7 @@ describe('uiJq', function () {
       var length;
       jQuery.fn.bar = function() {
         length = angular.element(this).children().length;
-        console.log(length);
+//        console.log(length);
       };
       scope.$apply('items=[1, 2]');
       compile("<ul ui-jq='bar'><li ng-repeat='item in items'></li></ul>")(scope);
