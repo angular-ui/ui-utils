@@ -1,6 +1,6 @@
 /**
  * angular-ui-utils - Swiss-Army-Knife of AngularJS tools (with no external dependencies!)
- * @version v0.0.3 - 2013-06-05
+ * @version v0.0.3 - 2013-06-08
  * @link http://angular-ui.github.com
  * @license MIT License, http://www.opensource.org/licenses/MIT
  */
@@ -1084,7 +1084,7 @@ angular.module('ui.validate',[]).directive('uiValidate', function () {
       angular.forEach(validateExpr, function (exprssn, key) {
         validateFn = function (valueToValidate) {
           var expression = scope.$eval(exprssn, { '$value' : valueToValidate });
-          if (angular.isFunction(expression.then)) {
+          if (angular.isObject(expression) && angular.isFunction(expression.then)) {
             // expression is a promise
             expression.then(function(){
               ctrl.$setValidity(key, true);
