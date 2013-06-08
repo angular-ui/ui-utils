@@ -32,7 +32,7 @@ angular.module('ui.validate',[]).directive('uiValidate', function () {
       angular.forEach(validateExpr, function (exprssn, key) {
         validateFn = function (valueToValidate) {
           var expression = scope.$eval(exprssn, { '$value' : valueToValidate });
-          if (agular.isObject(expression) && angular.isFunction(expression.then)) {
+          if (angular.isObject(expression) && angular.isFunction(expression.then)) {
             // expression is a promise
             expression.then(function(){
               ctrl.$setValidity(key, true);
