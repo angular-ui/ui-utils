@@ -3,6 +3,40 @@
         height: 200px;
     }
 </style>
+<script>
+    angular.module('ui.scroll')
+    .factory('datasource', [
+        '$log', '$timeout', '$rootScope', function(console, $timeout, $rootScope) {
+            var current, get, loading, revision;
+            get = function(index, count, success) {
+                return $timeout(function() {
+                    var i, result, _i, _ref;
+                    result = [];
+                    for (i = _i = index, _ref = index + count - 1; index <= _ref ? _i <= _ref : _i >= _ref; i = index <= _ref ? ++_i : --_i) {
+                        result.push("item r" + current + " #" + i);
+                    }
+                    return success(result);
+                }, 100);
+            };
+            loading = function(value) {
+                return $rootScope.loading = value;
+            };
+            current = 0;
+            $rootScope.update = function() {
+                return current += 1;
+            };
+            revision = function() {
+                return current;
+            };
+            return {
+                get: get,
+                loading: loading,
+                revision: revision
+            };
+        }
+    ]);
+
+</script>
 <section id="showhide">
     <div class="page-header">
         <h1>Scroll till you drop</h1>
