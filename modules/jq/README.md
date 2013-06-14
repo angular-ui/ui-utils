@@ -76,19 +76,17 @@ Since all jQuery methods take arguments (such as the options for datepicker or t
 $('input').datepicker(options) === $linkElement.datepicker(uiOptions)
 ```
 
-Since there's a good chance you'll use the same options for a plugin across your entire app as defaults, we allow you to declare them inside [ui.config](http://angular-ui.github.com/#defaults). Just remember to use the `jq` key and the `pluginName` subkey:
+Since there's a good chance you'll use the same options for a plugin across your entire app as defaults, we allow you to declare them inside `uiJqConfig`. Just remember to use the `pluginName` subkey:
 
 ```js
-myApp.value('ui.config', {
-  jq: {
-    datepicker: {
-      // default datepicker options go here
-    }
+myApp.value('uiJqConfig', {
+  datepicker: {
+    // default datepicker options go here
   }
 })
 ```
 
-Because we're awesome, if your `ui.config` options is an object and your `ui-options` is also an object, we'll merge them together for you with `ui-options` taking priority! If `ui-options` is a primitive the defaults will be ignored.
+Because we're awesome, if your `uiJqConfig` options is an object and your `ui-options` is also an object, we'll merge them together for you with `ui-options` taking priority! If `ui-options` is a primitive the defaults will be ignored.
 
 ## uiRefresh
 
