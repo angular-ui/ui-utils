@@ -9,6 +9,7 @@ angular.module('ui.utils',  [
   "ui.mask",
   "ui.reset",
   "ui.route",
+  "ui.scroll",
   "ui.scrollfix",
   "ui.showhide",
   "ui.unique",
