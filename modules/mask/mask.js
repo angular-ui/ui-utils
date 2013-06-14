@@ -265,7 +265,7 @@ angular.module('ui.mask',[])
             // of the maskable char gets deleted, we'll still be able to strip
             // it in the unmaskValue() preprocessing.
             maskComponents = maskPlaceholder.replace(/[_]+/g, '_').replace(/([^_]+)([a-zA-Z0-9])([^_])/g, '$1$2_$3').split('_');
-            maskProcessed = !!(maskCaretMap.length > 1);
+            maskProcessed = maskCaretMap.length > 1 ? true : false;
           }
 
           function blurHandler(){
