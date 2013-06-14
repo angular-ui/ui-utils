@@ -45,7 +45,7 @@
   </p>
 
   <p>Use the directive name <code>jq</code> for namespacing inside
-    <code>ui.config</code>. Then sub-namespace options for each function by the name of that function (exactly as it is passed to
+    <code>uiJqConfig</code>. Then sub-namespace options for each function by the name of that function (exactly as it is passed to
     <code>ui-jq</code>) so that you don't have to pass options every time you call the directive.</p>
 <pre class="prettyprint">
 &lt;a title=&quot;Easiest. Binding. Ever!&quot; ui-jq=&quot;tooltip&quot;&gt;Hover over me for static Tooltip&lt;/a&gt;
@@ -54,14 +54,11 @@
 &lt;input type=&quot;text&quot; ng-model=&quot;tooltip&quot; placeholder=&quot;Tooltip Content&quot;&gt;
 
 &lt;script&gt;
-    myModule.value('ui.config', {
-        // The ui-jq directive namespace
-        jq: {
-            // The Tooltip namespace
-            tooltip: {
-                 // Tooltip options. This object will be used as the defaults
-                placement: 'right'
-            }
+    myModule.value('uiJqConfig', {
+        // The Tooltip namespace
+        tooltip: {
+             // Tooltip options. This object will be used as the defaults
+            placement: 'right'
         }
     });
 &lt;/script&gt;
