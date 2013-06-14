@@ -2,12 +2,13 @@ describe('uiMask', function () {
 
   var formHtml  = "<form name='test'><input name='input' ng-model='x' ui-mask='{{mask}}'></form>";
   var inputHtml = "<input name='input' ng-model='x' ui-mask='{{mask}}'>";
-  var compileElement, scope;
+  var compileElement, scope, config;
 
   beforeEach(module('ui.mask'));
-  beforeEach(inject(function ($rootScope, $compile) {
+  beforeEach(inject(function ($rootScope, $compile, uiMaskConfig) {
     c = console.log;
-    scope = $rootScope;
+    scope = $rootScope; 
+    config = uiMaskConfig;
     compileElement = function(html) {
       return $compile(html)(scope);
     };
@@ -19,7 +20,7 @@ describe('uiMask', function () {
       var input = compileElement(inputHtml);
       scope.$apply("x = 'abc123'");
       expect(input.val()).toBe('abc123');
-      scope.$apply("mask = '()_abc123'");
+      scope.$apply("mask = '()_bcd---'");
       expect(input.val()).toBe('abc123');
     });
 
@@ -105,7 +106,7 @@ describe('uiMask', function () {
       input.triggerHandler('change'); // Because IE8 and below are terrible
       expect(scope.x).toBeUndefined();
     });
-
+    
     it("should not set model to an empty mask", function() {
       var form  = compileElement(formHtml);
       var input = form.find('input');
@@ -127,6 +128,227 @@ describe('uiMask', function () {
       expect(scope.test.input.$viewValue).not.toBeDefined();
       scope.$apply("x = 'abc123'");
       expect(scope.test.input.$viewValue).toBe('(a) b 1');
+    });
+  });
+  
+  describe('default mask definitions', function () {
+    it("should accept optional mask after '?'", function (){
+      var input = compileElement(inputHtml);
+
+      scope.$apply("x = ''");
+      scope.$apply("mask = '**?9'");
+
+      input.val('aa').triggerHandler('input');
+      input.triggerHandler('blur');
+      expect(input.val()).toBe('aa_');
+
+      input.val('99a').triggerHandler('input');
+      input.triggerHandler('blur');
+      expect(input.val()).toBe('99_');
+
+      input.val('992').triggerHandler('input');
+      input.triggerHandler('blur');
+      expect(input.val()).toBe('992');
+    });
+    
+    it("should set the correct value for mask 'a'", function() {
+      var input = compileElement(inputHtml);
+      scope.$apply("x = ''");
+      scope.$apply("mask = 'a-'");
+      input.val('z').triggerHandler('input');
+      input.triggerHandler('blur');
+      expect(input.val()).toBe('z-');
+      input.val('Z').triggerHandler('input');
+      input.triggerHandler('blur');
+      expect(input.val()).toBe('');
+    });
+    
+    it("should set the correct value for mask 'A'", function() {
+      var input = compileElement(inputHtml);
+      scope.$apply("x = ''");
+      scope.$apply("mask = 'A-'");
+      input.val('A').triggerHandler('input');
+      input.triggerHandler('blur');
+      expect(input.val()).toBe('A-');
+      input.val('a').triggerHandler('input');
+      input.triggerHandler('blur');
+      expect(input.val()).toBe('a-');
+    });
+    
+    it("should set the correct value for mask '9'", function() {
+      var input = compileElement(inputHtml);
+      scope.$apply("x = ''");
+      scope.$apply("mask = '9-'");
+      input.val('0').triggerHandler('input');
+      input.triggerHandler('blur');
+      expect(input.val()).toBe('0-');
+      input.val('9').triggerHandler('input');
+      input.triggerHandler('blur');
+      expect(input.val()).toBe('9-');
+      input.val('a').triggerHandler('input');
+      input.triggerHandler('blur');
+      expect(input.val()).toBe('');
+    });
+    
+    it("should set the correct value for mask '8'", function() {
+      var input = compileElement(inputHtml);
+      scope.$apply("x = ''");
+      scope.$apply("mask = '8-'");
+      input.val('0').triggerHandler('input');
+      input.triggerHandler('blur');
+      expect(input.val()).toBe('0-');
+      input.val('8').triggerHandler('input');
+      input.triggerHandler('blur');
+      expect(input.val()).toBe('8-');
+      input.val('9').triggerHandler('input');
+      input.triggerHandler('blur');
+      expect(input.val()).toBe('');
+    });
+    
+    it("should set the correct value for mask '7'", function() {
+      var input = compileElement(inputHtml);
+      scope.$apply("x = ''");
+      scope.$apply("mask = '7-'");
+      input.val('0').triggerHandler('input');
+      input.triggerHandler('blur');
+      expect(input.val()).toBe('0-');
+      input.val('7').triggerHandler('input');
+      input.triggerHandler('blur');
+      expect(input.val()).toBe('7-');
+      input.val('8').triggerHandler('input');
+      input.triggerHandler('blur');
+      expect(input.val()).toBe('');
+    });
+    
+    it("should set the correct value for mask '6'", function() {
+      var input = compileElement(inputHtml);
+      scope.$apply("x = ''");
+      scope.$apply("mask = '6-'");
+      input.val('0').triggerHandler('input');
+      input.triggerHandler('blur');
+      expect(input.val()).toBe('0-');
+      input.val('6').triggerHandler('input');
+      input.triggerHandler('blur');
+      expect(input.val()).toBe('6-');
+      input.val('7').triggerHandler('input');
+      input.triggerHandler('blur');
+      expect(input.val()).toBe('');
+    });
+    
+    it("should set the correct value for mask '5'", function() {
+      var input = compileElement(inputHtml);
+      scope.$apply("x = ''");
+      scope.$apply("mask = '5-'");
+      input.val('0').triggerHandler('input');
+      input.triggerHandler('blur');
+      expect(input.val()).toBe('0-');
+      input.val('5').triggerHandler('input');
+      input.triggerHandler('blur');
+      expect(input.val()).toBe('5-');
+      input.val('6').triggerHandler('input');
+      input.triggerHandler('blur');
+      expect(input.val()).toBe('');
+    });
+    
+    it("should set the correct value for mask '4'", function() {
+      var input = compileElement(inputHtml);
+      scope.$apply("x = ''");
+      scope.$apply("mask = '4-'");
+      input.val('0').triggerHandler('input');
+      input.triggerHandler('blur');
+      expect(input.val()).toBe('0-');
+      input.val('4').triggerHandler('input');
+      input.triggerHandler('blur');
+      expect(input.val()).toBe('4-');
+      input.val('5').triggerHandler('input');
+      input.triggerHandler('blur');
+      expect(input.val()).toBe('');
+    });
+    
+    it("should set the correct value for mask '3'", function() {
+      var input = compileElement(inputHtml);
+      scope.$apply("x = ''");
+      scope.$apply("mask = '3-'");
+      input.val('0').triggerHandler('input');
+      input.triggerHandler('blur');
+      expect(input.val()).toBe('0-');
+      input.val('3').triggerHandler('input');
+      input.triggerHandler('blur');
+      expect(input.val()).toBe('3-');
+      input.val('4').triggerHandler('input');
+      input.triggerHandler('blur');
+      expect(input.val()).toBe('');
+    });
+    
+    it("should set the correct value for mask '2'", function() {
+      var input = compileElement(inputHtml);
+      scope.$apply("x = ''");
+      scope.$apply("mask = '2-'");
+      input.val('0').triggerHandler('input');
+      input.triggerHandler('blur');
+      expect(input.val()).toBe('0-');
+      input.val('2').triggerHandler('input');
+      input.triggerHandler('blur');
+      expect(input.val()).toBe('2-');
+      input.val('3').triggerHandler('input');
+      input.triggerHandler('blur');
+      expect(input.val()).toBe('');
+    });
+    
+    it("should set the correct value for mask '1'", function() {
+      var input = compileElement(inputHtml);
+      scope.$apply("x = ''");
+      scope.$apply("mask = '1-'");
+      input.val('0').triggerHandler('input');
+      input.triggerHandler('blur');
+      expect(input.val()).toBe('0-');
+      input.val('1').triggerHandler('input');
+      input.triggerHandler('blur');
+      expect(input.val()).toBe('1-');
+      input.val('2').triggerHandler('input');
+      input.triggerHandler('blur');
+      expect(input.val()).toBe('');
+    });
+    
+    it("should set the correct value for mask '0'", function() {
+      var input = compileElement(inputHtml);
+      scope.$apply("x = ''");
+      scope.$apply("mask = '0-'");
+      input.val('0').triggerHandler('input');
+      input.triggerHandler('blur');
+      expect(input.val()).toBe('0-');
+      input.val('1').triggerHandler('input');
+      input.triggerHandler('blur');
+      expect(input.val()).toBe('');
+    });
+  });
+  
+  describe('configuration', function () {
+    it("should accept the new mask definition set globally", function() {
+      config.maskDefinitions['@'] = /[fz]/;
+      
+      var input = compileElement(inputHtml);
+      
+      scope.$apply("x = ''");
+      scope.$apply("mask = '@123'"); 
+      input.val('f012').triggerHandler('input');
+      input.triggerHandler('blur');
+      expect(input.val()).toBe('f012');
+    });
+    
+    it("should accept the new mask definition set per element", function() {
+      delete config.maskDefinitions['@'];
+
+      scope.input = {
+        options: {maskDefinitions: {'@': /[fz]/}}
+      };
+      
+      var input = compileElement('<input type="text" ng-model="x" ui-mask="{{mask}}" ui-options="input.options">');
+      scope.$apply("x = ''");
+      scope.$apply("mask = '@123'");
+      input.val('f111').triggerHandler('input');
+      input.triggerHandler('blur');
+      expect(input.val()).toBe('f111');
     });
   });
 
