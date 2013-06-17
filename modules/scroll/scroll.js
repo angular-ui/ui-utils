@@ -1,9 +1,18 @@
-/*global angular, $, document*/
-/**
- *
+/*
+ globals: angular, window
+
+ List of used element methods available in JQuery but not in JQuery Lite
+ in other words if you want to remove dependency on JQuery the following methods are to be implemented:
+
+ element.height()
+ element.outerHeight(true)
+ element.height(value) = only for Top/Bottom padding elements
+ element.scrollTop()
+ element.scrollTop(value)
+ element.offset()
  */
-angular.module('ui.scroll', [
-    ]).directive('ngScrollViewport', [
+
+angular.module('ui.scroll', []).directive('ngScrollViewport', [
         '$log', function(console) {
             return {
                 controller: [
@@ -35,7 +44,7 @@ angular.module('ui.scroll', [
                         var datasourceName, itemName, match;
                         match = $attr.ngScroll.match(/^\s*(\w+)\s+in\s+(\w+)\s*$/);
                         if (!match) {
-                            throw Error("Expected ngScroll in form of '_item_ in _datasource_' but got '" + $attr.ngScroll + "'");
+                            throw new Error("Expected ngScroll in form of '_item_ in _datasource_' but got '" + $attr.ngScroll + "'");
                         }
                         itemName = match[1];
                         datasourceName = match[2];
@@ -46,19 +55,6 @@ angular.module('ui.scroll', [
                                 bufferPadding = function() {
                                     return viewport.height() * Math.max(.2, +$attr.padding || .5);
                                 };
-                                /*
-
-                                 List of used element methods available in JQuery but not in JQuery Lite
-                                 in other words if you want to remove dependency on JQuery the following methods are to be implemented:
-
-                                 element.height()
-                                 element.outerHeight(true)
-                                 element.height(value) = only for Top/Bottom padding elements
-                                 element.scrollTop()
-                                 element.scrollTop(value)
-                                 element.offset()
-                                 */
-
                                 controller = null;
                                 linker(temp = $scope.$new(), function(template) {
                                     var bottomPadding, canvas, contents, topPadding, viewport;
@@ -68,15 +64,14 @@ angular.module('ui.scroll', [
                                     switch (template[0].localName) {
                                         case 'li':
                                             if (canvas[0] === viewport[0]) {
-                                                throw Error("element cannot be used as both viewport and canvas: " + canvas[0].outerHTML);
+                                                throw new Error("element cannot be used as both viewport and canvas: " + canvas[0].outerHTML);
                                             }
                                             topPadding = angular.element('<li/>');
                                             bottomPadding = angular.element('<li/>');
                                             break;
                                         case 'tr':
                                         case 'dl':
-                                            throw Error("ng-scroll directive does not support <" + template[0].localName + "> as a repeating tag: " + template[0].outerHTML);
-                                            break;
+                                            throw new Error("ng-scroll directive does not support <" + template[0].localName + "> as a repeating tag: " + template[0].outerHTML);
                                         default:
                                             if (canvas[0] === viewport[0]) {
                                                 contents = canvas.contents();
@@ -315,7 +310,6 @@ angular.module('ui.scroll', [
                                                     item = _ref[_i];
                                                     lastScope = insert(first--, item, true);
                                                 }
-                                                first -= result.length;
                                                 console.log("prepended " + result.length + " buffer size " + buffer.length + " first " + first + " next " + next);
                                                 finalize();
                                                 return lastScope.$watch('adjustBuffer', function() {
