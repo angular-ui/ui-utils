@@ -53,7 +53,7 @@ angular.module('ui.scroll', []).directive('ngScrollViewport', [
                                 var adjustBuffer, bof, buffer, bufferPadding, bufferSize, canvas, clipBottom, clipTop, controller, enqueueFetch, eof, fetch, finalize, first, insert, isLoading, loading, next, pending, reload, removeFromBuffer, shouldLoadBottom, shouldLoadTop, temp, viewport;
                                 bufferSize = Math.max(3, +$attr.bufferSize || 10);
                                 bufferPadding = function() {
-                                    return viewport.height() * Math.max(.2, +$attr.padding || .5);
+                                    return viewport.height() * Math.max(0.2, +$attr.padding || 0.5);
                                 };
                                 controller = null;
                                 linker(temp = $scope.$new(), function(template) {
