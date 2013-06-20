@@ -60,7 +60,7 @@ factory('keypressHelper', ['$parse', function keypress($parse){
       // Iterate over prepared combinations
       angular.forEach(combinations, function (combination) {
 
-        var mainKeyPressed = combination.keys[keysByCode[event.keyCode]] || combination.keys[event.keyCode.toString()];
+        var mainKeyPressed = combination.keys[keysByCode[keyCode]] || combination.keys[keyCode.toString()];
 
         var metaRequired = !!combination.keys.meta;
         var altRequired = !!combination.keys.alt;
