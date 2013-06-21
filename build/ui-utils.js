@@ -1,6 +1,6 @@
 /**
  * angular-ui-utils - Swiss-Army-Knife of AngularJS tools (with no external dependencies!)
- * @version v0.0.3 - 2013-06-14
+ * @version v0.0.3 - 2013-06-21
  * @link http://angular-ui.github.com
  * @license MIT License, http://www.opensource.org/licenses/MIT
  */
@@ -290,7 +290,7 @@ factory('keypressHelper', ['$parse', function keypress($parse){
       // Iterate over prepared combinations
       angular.forEach(combinations, function (combination) {
 
-        var mainKeyPressed = combination.keys[keysByCode[event.keyCode]] || combination.keys[event.keyCode.toString()];
+        var mainKeyPressed = combination.keys[keysByCode[keyCode]] || combination.keys[keyCode.toString()];
 
         var metaRequired = !!combination.keys.meta;
         var altRequired = !!combination.keys.alt;
