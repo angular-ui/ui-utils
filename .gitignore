@@ -2,3 +2,4 @@ node_modules
 components
 .rcs
 *.swp
+.idea

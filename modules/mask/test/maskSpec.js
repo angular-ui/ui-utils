@@ -2,12 +2,13 @@ describe('uiMask', function () {
 
   var formHtml  = "<form name='test'><input name='input' ng-model='x' ui-mask='{{mask}}'></form>";
   var inputHtml = "<input name='input' ng-model='x' ui-mask='{{mask}}'>";
-  var compileElement, scope;
+  var compileElement, scope, config;
 
   beforeEach(module('ui.mask'));
-  beforeEach(inject(function ($rootScope, $compile) {
+  beforeEach(inject(function ($rootScope, $compile, uiMaskConfig) {
     c = console.log;
-    scope = $rootScope;
+    scope = $rootScope; 
+    config = uiMaskConfig;
     compileElement = function(html) {
       return $compile(html)(scope);
     };
@@ -105,7 +106,7 @@ describe('uiMask', function () {
       input.triggerHandler('change'); // Because IE8 and below are terrible
       expect(scope.x).toBeUndefined();
     });
-
+    
     it("should not set model to an empty mask", function() {
       var form  = compileElement(formHtml);
       var input = form.find('input');
@@ -127,6 +128,56 @@ describe('uiMask', function () {
       expect(scope.test.input.$viewValue).not.toBeDefined();
       scope.$apply("x = 'abc123'");
       expect(scope.test.input.$viewValue).toBe('(a) b 1');
+    });
+  });
+  
+  describe('default mask definitions', function () {
+    it("should accept optional mask after '?'", function (){
+      var input = compileElement(inputHtml);
+
+      scope.$apply("x = ''");
+      scope.$apply("mask = '**?9'");
+
+      input.val('aa').triggerHandler('input');
+      input.triggerHandler('blur');
+      expect(input.val()).toBe('aa_');
+
+      input.val('99a').triggerHandler('input');
+      input.triggerHandler('blur');
+      expect(input.val()).toBe('99_');
+
+      input.val('992').triggerHandler('input');
+      input.triggerHandler('blur');
+      expect(input.val()).toBe('992');
+    });
+  });
+  
+  describe('configuration', function () {
+    it("should accept the new mask definition set globally", function() {
+      config.maskDefinitions['@'] = /[fz]/;
+      
+      var input = compileElement(inputHtml);
+      
+      scope.$apply("x = ''");
+      scope.$apply("mask = '@193'"); 
+      input.val('f123').triggerHandler('input');
+      input.triggerHandler('blur');
+      expect(input.val()).toBe('f123');
+    });
+    
+    it("should accept the new mask definition set per element", function() {
+      delete config.maskDefinitions['@'];
+
+      scope.input = {
+        options: {maskDefinitions: {'@': /[fz]/}}
+      };
+      
+      var input = compileElement('<input type="text" ng-model="x" ui-mask="{{mask}}" ui-options="input.options">');
+      scope.$apply("x = ''");
+      scope.$apply("mask = '@999'");
+      input.val('f111').triggerHandler('input');
+      input.triggerHandler('blur');
+      expect(input.val()).toBe('f111');
     });
   });
 
