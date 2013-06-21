@@ -1,25 +1,70 @@
 angular.module('ui.keypress',[]).
 factory('keypressHelper', ['$parse', function keypress($parse){
+   // keymaps from http://unixpapa.com/js/key.html
+  var keyupdownmap = {
+      8: 'backspace',
+      9: 'tab',
+      13: 'enter',
+      27: 'esc',
+      32: 'space',
+      33: 'pageup',
+      34: 'pagedown',
+      35: 'end',
+      36: 'home',
+      37: 'left',
+      38: 'up',
+      39: 'right',
+      40: 'down',
+      44: ',',
+      45: 'insert',
+      46: 'delete',
+      91: 'leftwindows',
+      92: 'rightwindows',
+      93: 'windowsmenu',
+      106: '*',
+      107: '+',
+      110: '.',
+      111: '/',
+      186: ';',
+      187: '=',
+      188: ',',
+      189: '-',
+      190: '.',
+      191: '/',
+      192: '`',
+      219: '[',
+      220: '\\',
+      221: ']',
+      222: '\'',
+      224: 'command'
+    };
+
   var keysByCode = {
-    8: 'backspace',
-    9: 'tab',
-    13: 'enter',
-    27: 'esc',
-    32: 'space',
-    33: 'pageup',
-    34: 'pagedown',
-    35: 'end',
-    36: 'home',
-    37: 'left',
-    38: 'up',
-    39: 'right',
-    40: 'down',
-    45: 'insert',
-    46: 'delete'
+    'keyup' : keyupdownmap,
+    'keydown': keyupdownmap,
+    'keypress' : {
+      8: 'backspace',
+      9: 'tab',
+      13: 'enter',
+      27: 'esc',
+      32: 'space'      
+    }
   };
 
   var capitaliseFirstLetter = function (string) {
     return string.charAt(0).toUpperCase() + string.slice(1);
+  };
+
+  var normalizeKeyCode = function (keyCode) {
+      if (!isNaN(parseInt(keyCode, 10))) {
+        keyCode = parseInt(keyCode, 10);
+
+        if (keyCode >= 65 && keyCode <= 90) {
+          keyCode = keyCode + 32;
+        }
+      }
+
+      return keyCode;
   };
 
   return function(mode, scope, elm, attrs) {
@@ -37,7 +82,7 @@ factory('keypressHelper', ['$parse', function keypress($parse){
           keys: {}
         };
         angular.forEach(variation.split('-'), function (value) {
-          combination.keys[value] = true;
+          combination.keys[normalizeKeyCode(value.toLowerCase())] = true;
         });
         combinations.push(combination);
       });
@@ -50,17 +95,14 @@ factory('keypressHelper', ['$parse', function keypress($parse){
       var altPressed = !!event.altKey;
       var ctrlPressed = !!event.ctrlKey;
       var shiftPressed = !!event.shiftKey;
-      var keyCode = event.keyCode;
+      var keyCode = event.which || event.keyCode;
 
-      // normalize keycodes
-      if (mode === 'keypress' && !shiftPressed && keyCode >= 97 && keyCode <= 122) {
-        keyCode = keyCode - 32;
-      }
+      keyCode = normalizeKeyCode(keyCode);
 
       // Iterate over prepared combinations
       angular.forEach(combinations, function (combination) {
 
-        var mainKeyPressed = combination.keys[keysByCode[event.keyCode]] || combination.keys[event.keyCode.toString()];
+        var mainKeyPressed = (combination.keys[keysByCode[mode][keyCode]] || combination.keys[keyCode.toString()] || combination.keys[String.fromCharCode(keyCode)]) || false;
 
         var metaRequired = !!combination.keys.meta;
         var altRequired = !!combination.keys.alt;
