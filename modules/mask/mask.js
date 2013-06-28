@@ -195,10 +195,10 @@ angular.module('ui.mask',[])
             return valueMasked;
           }
 
-          function isInSubstitutionToken(chr, str, i) {
+          function isNotInSubstitutionToken(chr, str, i) {
             // Left check
             if (chr === "{" && str[i+2] && str[i+2] === "}") {
-              return true;
+              return false;
             }
 
             // Middle check
@@ -208,15 +208,15 @@ angular.module('ui.mask',[])
               str[i-2] && linkOptions.maskDefinitions[str[i-2]] // And before the opening brace is a valid definition
             ) {
               maskTokens.push(chr);
-              return true;
+              return false;
             }
 
             // Right check
             if (chr === "}" && str[i-2] && str[i-2] === "{") {
-              return true;
+              return false;
             }
 
-            return false; // Not in sub token.
+            return true; // Not in sub token.
           }
 
           function getPlaceholderChar(chr, str, i) {
@@ -227,8 +227,19 @@ angular.module('ui.mask',[])
             }
           }
 
+          function getMaskComponents() {
+            var re, placeholder = maskPlaceholder;
+
+            if (maskTokens.length > 0) {
+              re = new RegExp("(" + maskTokens.join("|") + ")+", "g");
+              placeholder = placeholder.replace(re, "_")
+            }
+
+            return placeholder.replace(/[_]+/g, '_').replace(/([^_]+)([a-zA-Z0-9])([^_])/g, '$1$2_$3').split('_');
+          }
+
           function processRawMask(mask){
-            var re, characterCount = 0;
+            var characterCount = 0;
             maskCaretMap = [];
             maskPatterns = [];
             maskPlaceholder = '';
@@ -241,26 +252,25 @@ angular.module('ui.mask',[])
                   splitMask  = mask.split("");
 
               angular.forEach(splitMask, function (chr, i){
-                if (isInSubstitutionToken(chr, mask, i)) {
-                  // Do nothing. We are in a substitution.
-                }
-                else if (linkOptions.maskDefinitions[chr]) {
+                if (isNotInSubstitutionToken(chr, mask, i)) {
+                  if (linkOptions.maskDefinitions[chr]) {
 
-                  maskCaretMap.push(characterCount);
-                  maskPlaceholder += getPlaceholderChar(chr, mask, i);
-                  maskPatterns.push(linkOptions.maskDefinitions[chr]);
+                    maskCaretMap.push(characterCount);
+                    maskPlaceholder += getPlaceholderChar(chr, mask, i);
+                    maskPatterns.push(linkOptions.maskDefinitions[chr]);
 
-                  characterCount++;
-                  if (!isOptional) {
-                    minRequiredLength++;
+                    characterCount++;
+                    if (!isOptional) {
+                      minRequiredLength++;
+                    }
                   }
-                }
-                else if (chr === "?") {
-                  isOptional = true;
-                }
-                else {
-                  maskPlaceholder += chr;
-                  characterCount++;
+                  else if (chr === "?") {
+                    isOptional = true;
+                  }
+                  else {
+                    maskPlaceholder += chr;
+                    characterCount++;
+                  }
                 }
               });
             }
@@ -275,12 +285,7 @@ angular.module('ui.mask',[])
             // of the maskable char gets deleted, we'll still be able to strip
             // it in the unmaskValue() preprocessing.
 
-            if (maskTokens.length > 0) {
-              re = new RegExp("(" + maskTokens.join("|") + ")+", "g");
-              maskComponents = maskPlaceholder.replace(re, "_").replace(/[_]+/g, '_').replace(/([^_]+)([a-zA-Z0-9])([^_])/g, '$1$2_$3').split('_');
-            } else {
-              maskComponents = maskPlaceholder.replace(/[_]+/g, '_').replace(/([^_]+)([a-zA-Z0-9])([^_])/g, '$1$2_$3').split('_');
-            }
+            maskComponents = getMaskComponents();
 
             maskProcessed = maskCaretMap.length > 1 ? true : false;
           }
