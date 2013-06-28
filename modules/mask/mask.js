@@ -238,6 +238,8 @@ angular.module('ui.mask',[])
           function getMaskComponents() {
             var re, placeholder = maskPlaceholder;
 
+            // Remove any expression values from placeholder before splitting
+            // into components
             if (maskTokens.length > 0) {
               re = new RegExp("(" + maskTokens.join("|") + ")+", "g");
               placeholder = placeholder.replace(re, "_")
