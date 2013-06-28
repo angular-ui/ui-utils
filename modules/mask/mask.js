@@ -184,7 +184,7 @@ angular.module('ui.mask',[])
 
             angular.forEach(maskPlaceholder.split(''), function (chr, i){
               if (unmaskedValue.length && i === maskCaretMapCopy[0]) {
-                valueMasked += unmaskedValue.charAt(0) || '_';
+                valueMasked  += unmaskedValue.charAt(0) || '_';
                 unmaskedValue = unmaskedValue.substr(1);
                 maskCaretMapCopy.shift();
               }
@@ -227,6 +227,14 @@ angular.module('ui.mask',[])
             }
           }
 
+          // Generate array of mask components that will be stripped from a masked value
+          // before processing to prevent mask components from being added to the unmasked value.
+          // E.g., a mask pattern of '+7 9999' won't have the 7 bleed into the unmasked value.
+          // If a maskable char is followed by a mask char and has a mask
+          // char behind it, we'll split it into it's own component so if
+          // a user is aggressively deleting in the input and a char ahead
+          // of the maskable char gets deleted, we'll still be able to strip
+          // it in the unmaskValue() preprocessing.
           function getMaskComponents() {
             var re, placeholder = maskPlaceholder;
 
@@ -240,10 +248,11 @@ angular.module('ui.mask',[])
 
           function processRawMask(mask){
             var characterCount = 0;
-            maskCaretMap = [];
-            maskPatterns = [];
+
+            maskCaretMap    = [];
+            maskPatterns    = [];
             maskPlaceholder = '';
-            maskTokens   = [];
+            maskTokens      = [];
 
             if (typeof mask === 'string') {
               minRequiredLength = 0;
@@ -276,18 +285,9 @@ angular.module('ui.mask',[])
             }
             // Caret position immediately following last position is valid.
             maskCaretMap.push(maskCaretMap.slice().pop() + 1);
-            // Generate array of mask components that will be stripped from a masked value
-            // before processing to prevent mask components from being added to the unmasked value.
-            // E.g., a mask pattern of '+7 9999' won't have the 7 bleed into the unmasked value.
-            // If a maskable char is followed by a mask char and has a mask
-            // char behind it, we'll split it into it's own component so if
-            // a user is aggressively deleting in the input and a char ahead
-            // of the maskable char gets deleted, we'll still be able to strip
-            // it in the unmaskValue() preprocessing.
 
             maskComponents = getMaskComponents();
-
-            maskProcessed = maskCaretMap.length > 1 ? true : false;
+            maskProcessed  = maskCaretMap.length > 1 ? true : false;
           }
 
           function blurHandler(){
