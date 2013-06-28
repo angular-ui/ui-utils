@@ -153,7 +153,7 @@ describe('uiMask', function () {
   });
 
   describe('placeholders', function () {
-    it("should have default placeholder functionality", function () {
+    it("should have default placeholder functionality", function() {
       var input = compileElement(inputHtml);
 
       scope.$apply("x = ''");
@@ -162,7 +162,16 @@ describe('uiMask', function () {
       expect(input.attr("placeholder")).toBe("__/__/____");
     });
 
-    it("should have placeholder substitution functionality", function () {
+    it("should not placeholder tokenize malformed token expressions", function() {
+      var input = compileElement(inputHtml);
+
+      scope.$apply("x = ''");
+      scope.$apply("mask = '9{M}9{M}/9{D}9{D}/9{Y}9{Y}9{Y}9{Y'");
+
+      expect(input.attr("placeholder")).toBe("MM/DD/YYY_{Y");
+    });
+
+    it("should have placeholder substitution functionality", function() {
       var input = compileElement(inputHtml);
 
       scope.$apply("x = ''");
