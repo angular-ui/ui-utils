@@ -16,10 +16,10 @@ angular.module('ui.mask',[])
       restrict: 'A',
       compile: function uiMaskCompilingFunction(){
         var options = maskConfig;
-        
+
         return function uiMaskLinkingFunction(scope, iElement, iAttrs, controller){
           var maskProcessed = false, eventsBound = false,
-            maskCaretMap, maskPatterns, maskPlaceholder, maskComponents,
+            maskCaretMap, maskPatterns, maskPlaceholder, maskComponents, maskTokens,
           // Minimum required length of the value to be considered valid
             minRequiredLength,
             value, valueMasked, isValid,
@@ -71,10 +71,10 @@ angular.module('ui.mask',[])
           }
 
           var linkOptions = {};
-          
+
           if (iAttrs.uiOptions) {
             linkOptions = scope.$eval('[' + iAttrs.uiOptions + ']');
-            if (angular.isObject(linkOptions[0])) { 
+            if (angular.isObject(linkOptions[0])) {
               // we can't use angular.copy nor angular.extend, they lack the power to do a deep merge
               linkOptions = (function(original, current){
                 for(var i in original) {
@@ -180,11 +180,11 @@ angular.module('ui.mask',[])
 
           function maskValue(unmaskedValue){
             var valueMasked = '',
-              maskCaretMapCopy = maskCaretMap.slice();
-            
+                maskCaretMapCopy = maskCaretMap.slice();
+
             angular.forEach(maskPlaceholder.split(''), function (chr, i){
               if (unmaskedValue.length && i === maskCaretMapCopy[0]) {
-                valueMasked += unmaskedValue.charAt(0) || '_';
+                valueMasked  += unmaskedValue.charAt(0) || '_';
                 unmaskedValue = unmaskedValue.substr(1);
                 maskCaretMapCopy.shift();
               }
@@ -195,67 +195,101 @@ angular.module('ui.mask',[])
             return valueMasked;
           }
 
+          function isNotInSubstitutionToken(chr, str, i) {
+            // Left check
+            if (chr === "{" && str[i+2] && str[i+2] === "}") {
+              return false;
+            }
+
+            // Middle check
+            if (
+              str[i-1] && str[i-1] === "{" && // Left is a brace
+              str[i+1] && str[i+1] === "}" && // Right is a brace
+              str[i-2] && linkOptions.maskDefinitions[str[i-2]] // And before the opening brace is a valid definition
+            ) {
+              maskTokens.push(chr);
+              return false;
+            }
+
+            // Right check
+            if (chr === "}" && str[i-2] && str[i-2] === "{") {
+              return false;
+            }
+
+            return true; // Not in sub token.
+          }
+
+          function getPlaceholderChar(chr, str, i) {
+            if (str[i+1] && str[i+1] === "{" && str[i+3] && str[i+3] === "}") {
+              return str[i+2];
+            } else {
+              return "_";
+            }
+          }
+
+          // Generate array of mask components that will be stripped from a masked value
+          // before processing to prevent mask components from being added to the unmasked value.
+          // E.g., a mask pattern of '+7 9999' won't have the 7 bleed into the unmasked value.
+          // If a maskable char is followed by a mask char and has a mask
+          // char behind it, we'll split it into it's own component so if
+          // a user is aggressively deleting in the input and a char ahead
+          // of the maskable char gets deleted, we'll still be able to strip
+          // it in the unmaskValue() preprocessing.
+          function getMaskComponents() {
+            var re, placeholder = maskPlaceholder;
+
+            // Remove any expression values from placeholder before splitting
+            // into components
+            if (maskTokens.length > 0) {
+              re = new RegExp("(" + maskTokens.join("|") + ")+", "g");
+              placeholder = placeholder.replace(re, "_")
+            }
+
+            return placeholder.replace(/[_]+/g, '_').replace(/([^_]+)([a-zA-Z0-9])([^_])/g, '$1$2_$3').split('_');
+          }
+
           function processRawMask(mask){
             var characterCount = 0;
-            maskCaretMap = [];
-            maskPatterns = [];
-            maskPlaceholder = '';
 
-            // No complex mask support for now...
-            // if (mask instanceof Array) {
-            //   angular.forEach(mask, function(item, i) {
-            //     if (item instanceof RegExp) {
-            //       maskCaretMap.push(characterCount++);
-            //       maskPlaceholder += '_';
-            //       maskPatterns.push(item);
-            //     }
-            //     else if (typeof item == 'string') {
-            //       angular.forEach(item.split(''), function(chr, i) {
-            //         maskPlaceholder += chr;
-            //         characterCount++;
-            //       });
-            //     }
-            //   });
-            // }
-            // Otherwise it's a simple mask
-            // else
+            maskCaretMap    = [];
+            maskPatterns    = [];
+            maskPlaceholder = '';
+            maskTokens      = [];
 
             if (typeof mask === 'string') {
               minRequiredLength = 0;
-              var isOptional = false;
 
-              angular.forEach(mask.split(''), function (chr){
-                if (linkOptions.maskDefinitions[chr]) {
-                  maskCaretMap.push(characterCount);
-                  maskPlaceholder += '_';
-                  maskPatterns.push(linkOptions.maskDefinitions[chr]);
+              var isOptional = false,
+                  splitMask  = mask.split("");
 
-                  characterCount++;
-                  if (!isOptional) {
-                    minRequiredLength++;
+              angular.forEach(splitMask, function (chr, i){
+                if (isNotInSubstitutionToken(chr, mask, i)) {
+                  if (linkOptions.maskDefinitions[chr]) {
+
+                    maskCaretMap.push(characterCount);
+                    maskPlaceholder += getPlaceholderChar(chr, mask, i);
+                    maskPatterns.push(linkOptions.maskDefinitions[chr]);
+
+                    characterCount++;
+                    if (!isOptional) {
+                      minRequiredLength++;
+                    }
                   }
-                }
-                else if (chr === "?") {
-                  isOptional = true;
-                }
-                else {
-                  maskPlaceholder += chr;
-                  characterCount++;
+                  else if (chr === "?") {
+                    isOptional = true;
+                  }
+                  else {
+                    maskPlaceholder += chr;
+                    characterCount++;
+                  }
                 }
               });
             }
             // Caret position immediately following last position is valid.
             maskCaretMap.push(maskCaretMap.slice().pop() + 1);
-            // Generate array of mask components that will be stripped from a masked value
-            // before processing to prevent mask components from being added to the unmasked value.
-            // E.g., a mask pattern of '+7 9999' won't have the 7 bleed into the unmasked value.
-            // If a maskable char is followed by a mask char and has a mask
-            // char behind it, we'll split it into it's own component so if
-            // a user is aggressively deleting in the input and a char ahead
-            // of the maskable char gets deleted, we'll still be able to strip
-            // it in the unmaskValue() preprocessing.
-            maskComponents = maskPlaceholder.replace(/[_]+/g, '_').replace(/([^_]+)([a-zA-Z0-9])([^_])/g, '$1$2_$3').split('_');
-            maskProcessed = maskCaretMap.length > 1 ? true : false;
+
+            maskComponents = getMaskComponents();
+            maskProcessed  = maskCaretMap.length > 1 ? true : false;
           }
 
           function blurHandler(){
@@ -354,6 +388,7 @@ angular.module('ui.mask',[])
 
             // Update values
             valMasked = maskValue(valUnmasked);
+
             oldValue = valMasked;
             oldValueUnmasked = valUnmasked;
             iElement.val(valMasked);
