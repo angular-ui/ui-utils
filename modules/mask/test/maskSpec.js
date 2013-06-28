@@ -7,7 +7,7 @@ describe('uiMask', function () {
   beforeEach(module('ui.mask'));
   beforeEach(inject(function ($rootScope, $compile, uiMaskConfig) {
     c = console.log;
-    scope = $rootScope; 
+    scope = $rootScope;
     config = uiMaskConfig;
     compileElement = function(html) {
       return $compile(html)(scope);
@@ -106,7 +106,7 @@ describe('uiMask', function () {
       input.triggerHandler('change'); // Because IE8 and below are terrible
       expect(scope.x).toBeUndefined();
     });
-    
+
     it("should not set model to an empty mask", function() {
       var form  = compileElement(formHtml);
       var input = form.find('input');
@@ -130,7 +130,7 @@ describe('uiMask', function () {
       expect(scope.test.input.$viewValue).toBe('(a) b 1');
     });
   });
-  
+
   describe('default mask definitions', function () {
     it("should accept optional mask after '?'", function (){
       var input = compileElement(inputHtml);
@@ -151,27 +151,57 @@ describe('uiMask', function () {
       expect(input.val()).toBe('992');
     });
   });
-  
+
+  describe('placeholders', function () {
+    it("should have default placeholder functionality", function () {
+      var input = compileElement(inputHtml);
+
+      scope.$apply("x = ''");
+      scope.$apply("mask = '99/99/9999'");
+
+      expect(input.attr("placeholder")).toBe("__/__/____");
+    });
+
+    it("should have placeholder substitution functionality", function () {
+      var input = compileElement(inputHtml);
+
+      scope.$apply("x = ''");
+      scope.$apply("mask = '9{M}9{M}/9{D}9{D}/9{Y}9{Y}9{Y}9{Y}'");
+
+      expect(input.attr("placeholder")).toBe("MM/DD/YYYY");
+
+      input.val("12231997").triggerHandler("input");
+      input.triggerHandler("blur");
+
+      expect(input.val()).toBe("12/23/1997");
+
+      input.val("").triggerHandler("input");
+      input.triggerHandler("blur");
+
+      expect(input.attr("placeholder")).toBe("MM/DD/YYYY");
+    });
+  });
+
   describe('configuration', function () {
     it("should accept the new mask definition set globally", function() {
       config.maskDefinitions['@'] = /[fz]/;
-      
+
       var input = compileElement(inputHtml);
-      
+
       scope.$apply("x = ''");
-      scope.$apply("mask = '@193'"); 
+      scope.$apply("mask = '@193'");
       input.val('f123').triggerHandler('input');
       input.triggerHandler('blur');
       expect(input.val()).toBe('f123');
     });
-    
+
     it("should accept the new mask definition set per element", function() {
       delete config.maskDefinitions['@'];
 
       scope.input = {
         options: {maskDefinitions: {'@': /[fz]/}}
       };
-      
+
       var input = compileElement('<input type="text" ng-model="x" ui-mask="{{mask}}" ui-options="input.options">');
       scope.$apply("x = ''");
       scope.$apply("mask = '@999'");
