@@ -22,7 +22,7 @@ angular.module('ui.scrollfix',[]).directive('uiScrollfix', ['$window', function 
         }
       }
 
-      $target.bind('scroll.ui-scrollfix', function () {
+      $target.bind('scroll', function () {
         // if pageYOffset is defined use it, otherwise use other crap for IE
         var offset;
         if (angular.isDefined($window.pageYOffset)) {
