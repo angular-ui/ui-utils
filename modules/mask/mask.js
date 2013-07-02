@@ -1,7 +1,7 @@
 /*
  Attaches input mask onto input element
  */
-angular.module('ui.mask',[])
+angular.module('ui.mask', [])
   .value('uiMaskConfig', {
     'maskDefinitions': {
       '9': /\d/,
@@ -19,7 +19,7 @@ angular.module('ui.mask',[])
 
         return function uiMaskLinkingFunction(scope, iElement, iAttrs, controller){
           var maskProcessed = false, eventsBound = false,
-            maskCaretMap, maskPatterns, maskPlaceholder, maskComponents, maskTokens,
+            maskCaretMap, maskPatterns, maskPlaceholder, maskComponents,
           // Minimum required length of the value to be considered valid
             minRequiredLength,
             value, valueMasked, isValid,
@@ -223,7 +223,6 @@ angular.module('ui.mask',[])
             maskCaretMap    = [];
             maskPatterns    = [];
             maskPlaceholder = '';
-            maskTokens      = [];
 
             if (typeof mask === 'string') {
               minRequiredLength = 0;
