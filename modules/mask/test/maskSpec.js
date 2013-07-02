@@ -162,33 +162,21 @@ describe('uiMask', function () {
       expect(input.attr("placeholder")).toBe("__/__/____");
     });
 
-    it("should not placeholder tokenize malformed token expressions", function() {
-      var input = compileElement(inputHtml);
+    it("should allow mask substitutions via the placeholder attribute", function() {
+
+      var placeholderHtml = "<input name='input' ng-model='x' ui-mask='{{mask}}' placeholder='MM/DD/YYYY'>",
+          input           = compileElement(placeholderHtml);
 
       scope.$apply("x = ''");
-      scope.$apply("mask = '9{M}9{M}/9{D}9{D}/9{Y}9{Y}9{Y}9{Y'");
-
-      expect(input.attr("placeholder")).toBe("MM/DD/YYY_{Y");
-    });
-
-    it("should have placeholder substitution functionality", function() {
-      var input = compileElement(inputHtml);
-
-      scope.$apply("x = ''");
-      scope.$apply("mask = '9{M}9{M}/9{D}9{D}/9{Y}9{Y}9{Y}9{Y}'");
+      scope.$apply("mask = '99/99/9999'");
 
       expect(input.attr("placeholder")).toBe("MM/DD/YYYY");
 
-      input.val("12231997").triggerHandler("input");
-      input.triggerHandler("blur");
+      input.val("12").triggerHandler("input");
 
-      expect(input.val()).toBe("12/23/1997");
-
-      input.val("").triggerHandler("input");
-      input.triggerHandler("blur");
-
-      expect(input.attr("placeholder")).toBe("MM/DD/YYYY");
+      expect(input.val()).toBe('12/DD/YYYY');
     });
+
   });
 
   describe('configuration', function () {

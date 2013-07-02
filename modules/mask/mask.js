@@ -195,33 +195,11 @@ angular.module('ui.mask',[])
             return valueMasked;
           }
 
-          function isNotInSubstitutionToken(chr, str, i) {
-            // Left check
-            if (chr === "{" && str[i+2] && str[i+2] === "}") {
-              return false;
-            }
+          function getPlaceholderChar(i) {
+            var placeholder = iAttrs.placeholder;
 
-            // Middle check
-            if (
-              str[i-1] && str[i-1] === "{" && // Left is a brace
-              str[i+1] && str[i+1] === "}" && // Right is a brace
-              str[i-2] && linkOptions.maskDefinitions[str[i-2]] // And before the opening brace is a valid definition
-            ) {
-              maskTokens.push(chr);
-              return false;
-            }
-
-            // Right check
-            if (chr === "}" && str[i-2] && str[i-2] === "{") {
-              return false;
-            }
-
-            return true; // Not in sub token.
-          }
-
-          function getPlaceholderChar(chr, str, i) {
-            if (str[i+1] && str[i+1] === "{" && str[i+3] && str[i+3] === "}") {
-              return str[i+2];
+            if (typeof placeholder !== "undefined" && placeholder[i]) {
+              return placeholder[i];
             } else {
               return "_";
             }
@@ -236,16 +214,7 @@ angular.module('ui.mask',[])
           // of the maskable char gets deleted, we'll still be able to strip
           // it in the unmaskValue() preprocessing.
           function getMaskComponents() {
-            var re, placeholder = maskPlaceholder;
-
-            // Remove any expression values from placeholder before splitting
-            // into components
-            if (maskTokens.length > 0) {
-              re = new RegExp("(" + maskTokens.join("|") + ")+", "g");
-              placeholder = placeholder.replace(re, "_");
-            }
-
-            return placeholder.replace(/[_]+/g, '_').replace(/([^_]+)([a-zA-Z0-9])([^_])/g, '$1$2_$3').split('_');
+            return maskPlaceholder.replace(/[_]+/g, '_').replace(/([^_]+)([a-zA-Z0-9])([^_])/g, '$1$2_$3').split('_');
           }
 
           function processRawMask(mask){
@@ -263,25 +232,24 @@ angular.module('ui.mask',[])
                   splitMask  = mask.split("");
 
               angular.forEach(splitMask, function (chr, i){
-                if (isNotInSubstitutionToken(chr, mask, i)) {
-                  if (linkOptions.maskDefinitions[chr]) {
+                if (linkOptions.maskDefinitions[chr]) {
 
-                    maskCaretMap.push(characterCount);
-                    maskPlaceholder += getPlaceholderChar(chr, mask, i);
-                    maskPatterns.push(linkOptions.maskDefinitions[chr]);
+                  maskCaretMap.push(characterCount);
 
-                    characterCount++;
-                    if (!isOptional) {
-                      minRequiredLength++;
-                    }
+                  maskPlaceholder += getPlaceholderChar(i);
+                  maskPatterns.push(linkOptions.maskDefinitions[chr]);
+
+                  characterCount++;
+                  if (!isOptional) {
+                    minRequiredLength++;
                   }
-                  else if (chr === "?") {
-                    isOptional = true;
-                  }
-                  else {
-                    maskPlaceholder += chr;
-                    characterCount++;
-                  }
+                }
+                else if (chr === "?") {
+                  isOptional = true;
+                }
+                else {
+                  maskPlaceholder += chr;
+                  characterCount++;
                 }
               });
             }
