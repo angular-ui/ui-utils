@@ -42,6 +42,19 @@ angular.module('ui.mask', [])
             return true;
           }
 
+          function initPlaceholder(placeholderAttr) {
+            if(! angular.isDefined(placeholderAttr)) {
+              return;
+            }
+
+            maskPlaceholder = placeholderAttr;
+
+            // If the mask is processed, then we need to update the value
+            if (maskProcessed) {
+              eventHandler();
+            }
+          }
+
           function formatter(fromModelValue){
             if (!maskProcessed) {
               return fromModelValue;
@@ -94,6 +107,7 @@ angular.module('ui.mask', [])
           }
 
           iAttrs.$observe('uiMask', initialize);
+          iAttrs.$observe('placeholder', initPlaceholder);
           controller.$formatters.push(formatter);
           controller.$parsers.push(parser);
 
