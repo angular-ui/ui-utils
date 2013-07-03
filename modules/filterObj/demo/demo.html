@@ -1,0 +1,27 @@
+<script>
+  function FilterObjCtrl($scope) {
+    $scope.sentence = 'Hello :name, how is the :subject? Are you on the $0, $1 or $2?';
+    $scope.mode = 'string';
+    $scope.tokens = {
+      'string': 'Single',
+      'array': ['first', 'second', 'third'],
+      'object': {
+        'name': 'Bob',
+        'subject': 'wife'
+      }
+    };
+  }
+</script>
+<section id="filterObj" ng-controller="FilterObjCtrl">
+  <div class="page-header">
+    <h1>Filter Objects</h1>
+  </div>
+  <div class="row">
+    <div class="span6">
+      <h3>What?</h3>
+    </div>
+    <div class="span6">
+      <h3>Why?</h3>
+    </div>
+  </div>
+</section>
