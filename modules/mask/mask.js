@@ -1,7 +1,7 @@
 /*
  Attaches input mask onto input element
  */
-angular.module('ui.mask',[])
+angular.module('ui.mask', [])
   .value('uiMaskConfig', {
     'maskDefinitions': {
       '9': /\d/,
@@ -16,7 +16,7 @@ angular.module('ui.mask',[])
       restrict: 'A',
       compile: function uiMaskCompilingFunction(){
         var options = maskConfig;
-        
+
         return function uiMaskLinkingFunction(scope, iElement, iAttrs, controller){
           var maskProcessed = false, eventsBound = false,
             maskCaretMap, maskPatterns, maskPlaceholder, maskComponents,
@@ -40,6 +40,19 @@ angular.module('ui.mask',[])
             initializeElement();
             bindEventListeners();
             return true;
+          }
+
+          function initPlaceholder(placeholderAttr) {
+            if(! angular.isDefined(placeholderAttr)) {
+              return;
+            }
+
+            maskPlaceholder = placeholderAttr;
+
+            // If the mask is processed, then we need to update the value
+            if (maskProcessed) {
+              eventHandler();
+            }
           }
 
           function formatter(fromModelValue){
@@ -71,10 +84,10 @@ angular.module('ui.mask',[])
           }
 
           var linkOptions = {};
-          
+
           if (iAttrs.uiOptions) {
             linkOptions = scope.$eval('[' + iAttrs.uiOptions + ']');
-            if (angular.isObject(linkOptions[0])) { 
+            if (angular.isObject(linkOptions[0])) {
               // we can't use angular.copy nor angular.extend, they lack the power to do a deep merge
               linkOptions = (function(original, current){
                 for(var i in original) {
@@ -94,6 +107,7 @@ angular.module('ui.mask',[])
           }
 
           iAttrs.$observe('uiMask', initialize);
+          iAttrs.$observe('placeholder', initPlaceholder);
           controller.$formatters.push(formatter);
           controller.$parsers.push(parser);
 
@@ -180,11 +194,11 @@ angular.module('ui.mask',[])
 
           function maskValue(unmaskedValue){
             var valueMasked = '',
-              maskCaretMapCopy = maskCaretMap.slice();
-            
+                maskCaretMapCopy = maskCaretMap.slice();
+
             angular.forEach(maskPlaceholder.split(''), function (chr, i){
               if (unmaskedValue.length && i === maskCaretMapCopy[0]) {
-                valueMasked += unmaskedValue.charAt(0) || '_';
+                valueMasked  += unmaskedValue.charAt(0) || '_';
                 unmaskedValue = unmaskedValue.substr(1);
                 maskCaretMapCopy.shift();
               }
@@ -195,39 +209,47 @@ angular.module('ui.mask',[])
             return valueMasked;
           }
 
+          function getPlaceholderChar(i) {
+            var placeholder = iAttrs.placeholder;
+
+            if (typeof placeholder !== "undefined" && placeholder[i]) {
+              return placeholder[i];
+            } else {
+              return "_";
+            }
+          }
+
+          // Generate array of mask components that will be stripped from a masked value
+          // before processing to prevent mask components from being added to the unmasked value.
+          // E.g., a mask pattern of '+7 9999' won't have the 7 bleed into the unmasked value.
+          // If a maskable char is followed by a mask char and has a mask
+          // char behind it, we'll split it into it's own component so if
+          // a user is aggressively deleting in the input and a char ahead
+          // of the maskable char gets deleted, we'll still be able to strip
+          // it in the unmaskValue() preprocessing.
+          function getMaskComponents() {
+            return maskPlaceholder.replace(/[_]+/g, '_').replace(/([^_]+)([a-zA-Z0-9])([^_])/g, '$1$2_$3').split('_');
+          }
+
           function processRawMask(mask){
             var characterCount = 0;
-            maskCaretMap = [];
-            maskPatterns = [];
-            maskPlaceholder = '';
 
-            // No complex mask support for now...
-            // if (mask instanceof Array) {
-            //   angular.forEach(mask, function(item, i) {
-            //     if (item instanceof RegExp) {
-            //       maskCaretMap.push(characterCount++);
-            //       maskPlaceholder += '_';
-            //       maskPatterns.push(item);
-            //     }
-            //     else if (typeof item == 'string') {
-            //       angular.forEach(item.split(''), function(chr, i) {
-            //         maskPlaceholder += chr;
-            //         characterCount++;
-            //       });
-            //     }
-            //   });
-            // }
-            // Otherwise it's a simple mask
-            // else
+            maskCaretMap    = [];
+            maskPatterns    = [];
+            maskPlaceholder = '';
 
             if (typeof mask === 'string') {
               minRequiredLength = 0;
-              var isOptional = false;
 
-              angular.forEach(mask.split(''), function (chr){
+              var isOptional = false,
+                  splitMask  = mask.split("");
+
+              angular.forEach(splitMask, function (chr, i){
                 if (linkOptions.maskDefinitions[chr]) {
+
                   maskCaretMap.push(characterCount);
-                  maskPlaceholder += '_';
+
+                  maskPlaceholder += getPlaceholderChar(i);
                   maskPatterns.push(linkOptions.maskDefinitions[chr]);
 
                   characterCount++;
@@ -246,16 +268,9 @@ angular.module('ui.mask',[])
             }
             // Caret position immediately following last position is valid.
             maskCaretMap.push(maskCaretMap.slice().pop() + 1);
-            // Generate array of mask components that will be stripped from a masked value
-            // before processing to prevent mask components from being added to the unmasked value.
-            // E.g., a mask pattern of '+7 9999' won't have the 7 bleed into the unmasked value.
-            // If a maskable char is followed by a mask char and has a mask
-            // char behind it, we'll split it into it's own component so if
-            // a user is aggressively deleting in the input and a char ahead
-            // of the maskable char gets deleted, we'll still be able to strip
-            // it in the unmaskValue() preprocessing.
-            maskComponents = maskPlaceholder.replace(/[_]+/g, '_').replace(/([^_]+)([a-zA-Z0-9])([^_])/g, '$1$2_$3').split('_');
-            maskProcessed = maskCaretMap.length > 1 ? true : false;
+
+            maskComponents = getMaskComponents();
+            maskProcessed  = maskCaretMap.length > 1 ? true : false;
           }
 
           function blurHandler(){
@@ -354,6 +369,7 @@ angular.module('ui.mask',[])
 
             // Update values
             valMasked = maskValue(valUnmasked);
+
             oldValue = valMasked;
             oldValueUnmasked = valUnmasked;
             iElement.val(valMasked);
