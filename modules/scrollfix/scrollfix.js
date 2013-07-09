@@ -14,11 +14,11 @@ angular.module('ui.scrollfix',[]).directive('uiScrollfix', ['$window', function 
       if (!attrs.uiScrollfix) {
         attrs.uiScrollfix = top;
       } else {
-        // chartAt is generally faster than indexOf: http://jsperf.com/indexof-vs-chartat
-        if (attrs.uiScrollfix.charAt(0) === '-') {
-          attrs.uiScrollfix = top - attrs.uiScrollfix.substr(1);
-        } else if (attrs.uiScrollfix.charAt(0) === '+') {
-          attrs.uiScrollfix = top + parseFloat(attrs.uiScrollfix.substr(1));
+        // charAt is generally faster than indexOf: http://jsperf.com/indexof-vs-charat
+        if (attrs.uiScrollfix.toString().charAt(0) === '-') {
+          attrs.uiScrollfix = top - parseFloat(attrs.uiScrollfix.toString().substr(1));
+        } else if (attrs.uiScrollfix.toString().charAt(0) === '+') {
+          attrs.uiScrollfix = top + parseFloat(attrs.uiScrollfix.toString().substr(1));
         }
       }
 
