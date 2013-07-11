@@ -18,7 +18,7 @@ Add the specific modules to your dependencies, or add the entire lib by dependin
 ```javascript
 angular.module('myApp', ['ui.keypress', 'ui.event', ...])
 // or if ALL modules are loaded along with modules/utils.js
-angular.module('myApp', ['ui.utils'])
+angular.module('myApp', ['ui'])
 ```
 
 Each directive and filter is now it's own module and will have a relevant README.md in their respective folders
