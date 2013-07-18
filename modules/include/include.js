@@ -1,12 +1,12 @@
 // modeled after: angular-1.0.7/src/ng/directive/ngInclude.js
-angular.module('ui.includefragment',[])
-.directive('uiIncludeFragment', ['$http', '$templateCache', '$anchorScroll', '$compile',
+angular.module('ui.include',[])
+.directive('uiInclude', ['$http', '$templateCache', '$anchorScroll', '$compile',
                  function($http,   $templateCache,   $anchorScroll,   $compile) {
   return {
     restrict: 'ECA',
     terminal: true,
     compile: function(element, attr) {
-      var srcExp = attr.uiIncludeFragment || attr.src,
+      var srcExp = attr.uiInclude || attr.src,
           fragExp = attr.fragment || '',
           onloadExp = attr.onload || '',
           autoScrollExp = attr.autoscroll;

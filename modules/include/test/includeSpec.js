@@ -1,12 +1,12 @@
 // modeled after: angular.js/test/ng/directive/ngIncludeSpec.js
-describe('uiIncludeFragment', function() {
+describe('uiInclude', function() {
   var element;
 
   afterEach(function() {
     element.remove();
   });
 
-  beforeEach(module('ui.includefragment'));
+  beforeEach(module('ui.include'));
 
   function putIntoCache(url, content) {
     return function($templateCache) {
@@ -16,7 +16,7 @@ describe('uiIncludeFragment', function() {
 
   it('should include on external file', inject(putIntoCache('myUrl', '{{name}}'),
       function($rootScope, $compile) {
-    element = angular.element('<div ui-include-fragment src="url"></div>');
+    element = angular.element('<div ui-include src="url"></div>');
     angular.element(document.body).append(element);
     element = $compile(element)($rootScope);
     $rootScope.name = 'misko';
@@ -28,7 +28,7 @@ describe('uiIncludeFragment', function() {
 
   it('should work with a fragment selector', inject(putIntoCache('myUrl', '<a>foo {{name}}</a><b>bar {{name}}</b><c>baz {{name}}</c>'),
       function($rootScope, $compile) {
-    element = angular.element('<div ui-include-fragment="url" fragment="\'b\'"></div>');
+    element = angular.element('<div ui-include="url" fragment="\'b\'"></div>');
     angular.element(document.body).append(element);
     element = $compile(element)($rootScope);
     $rootScope.name = 'misko';
