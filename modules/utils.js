@@ -2,6 +2,7 @@ angular.module('ui.utils',  [
   "ui.event",
   "ui.format",
   "ui.highlight",
+  "ui.include",
   "ui.indeterminate",
   "ui.inflector",
   "ui.jq",
