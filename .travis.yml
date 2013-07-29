@@ -8,8 +8,8 @@ before_install:
 - npm install -g bower grunt-cli
 - npm install
 - bower install
-before_script: components/angular-ui-docs/.travis/before_script.sh
-after_success: components/angular-ui-docs/.travis/after_success.sh
+before_script: bower_components/angular-ui-docs/.travis/before_script.sh
+after_success: bower_components/angular-ui-docs/.travis/after_success.sh
 script: grunt
 env:
   global:
