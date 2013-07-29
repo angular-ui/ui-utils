@@ -1,5 +1,4 @@
-node_modules
-components
+bower_components/
+node_modules/
 .rcs
 *.swp
-.idea
