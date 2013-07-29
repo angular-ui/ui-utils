@@ -6,118 +6,935 @@
     <title>Angular UI ~ UI Utils Doc</title>
 
     <!-- Le css -->
-    <link href="assets/css/bootstrap.min.css" rel="stylesheet" type="text/css"/>
-    <link rel="stylesheet" href="assets/css/style.css">
-    <link rel="stylesheet" href="assets/css/cssLoading.css">
-    <link rel="stylesheet" href="assets/css/prettify.css">
+    <link rel="stylesheet" type="text/css" href="assets/css/bootstrap.min.css"/>
+    <link rel="stylesheet" type="text/css" href="assets/css/style.css"/>
+    <link rel="stylesheet" type="text/css" href="assets/css/prettify.css"/>
+
+
 
 </head>
 
 <body>
 
-<!-- Le navbar
-================================================== -->
-<div class="navbar navbar-fixed-top">
-    <div class="navbar-inner">
-        <div class="container">
-            <div class="dropdown pull-left">
-                <a class="brand dropdown-toggle" role="button" data-toggle="dropdown" href="#">
-                    UI Utils
-                    <b class="caret"></b>
-                </a>
-                <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
-                    <li><a href="https://github.com/angular-ui/"><strong>Related Projects:</strong></a></li>
-                    <li class="divider"></li>
-                    <li><a href="http://angular-ui.github.io/">AngularUI</a></li>
-                    <li><a href="http://angular-ui.github.io/bootstrap/">UI Bootstrap</a></li>
-                    <li><a href="http://angular-ui.github.io/ng-grid/">Grid</a></li>
-                    <li><a href="https://github.com/angular-ui/AngularJs.tmbundle">AngularJS.tmbundle</a></li>
-                    <li><a href="http://angular-ui.github.io/ui-router/sample/">Router <span class="label label-success">New!</span></a></li>
-                </ul>
-            </div>
-            <div class="nav-collapse pull-right">
-                <ul class="nav">
-                    <li class="dropdown" ng-show="!isLoading"  style="display: none">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">Modules <b class="caret"></b></a>
-                        <ul class="dropdown-menu">
-                            <li ng-repeat="s in sections"><a href="#{{s.id}}"> {{s.name}} </a></li>
-                        </ul>
-                    </li>
-
-                </ul>
-            </div>
-        </div>
-    </div>
-</div>
-<div style="margin: 32px;"></div>
-
-<!-- Le header
-================================================== -->
-<header class="hero-unit" id="overview">
-    <div class="container">
-
-        <h1>UI Utils</h1>
-
-        <p>Swiss-Army-Knife of AngularJS tools (with no external dependencies!)</p>
-
-        <p class="btn-group">
-            <a class="btn" href="https://github.com/angular-ui/ui-utils"><i class="icon-github"></i> Code on Github</a>
-            <a class="btn btn-primary" href="https://github.com/angular-ui/ui-utils/tree/gh-pages/build">
-                <i class="icon-download-alt icon-white"></i> Download <small>(0.0.4)</small>
-            </a>
-        </p>
-    </div>
-    <div class="bs-docs-social">
-        <div class="container">
-            <ul class="bs-docs-social-buttons">
-                <li>
-                    <iframe src="http://ghbtns.com/github-btn.html?user=angular-ui&amp;repo=ui-utils&amp;type=watch&amp;count=true" allowtransparency="true" frameborder="0" scrolling="0" width="110" height="20"></iframe>
-                </li>
-                <li>
-                    <iframe src="http://ghbtns.com/github-btn.html?user=angular-ui&amp;repo=ui-utils&amp;type=fork&amp;count=true" allowtransparency="true" frameborder="0" scrolling="0" width="95" height="20"></iframe>
-                </li>
-                <li>
-                    <!-- Place this tag where you want the +1 button to render. -->
-                    <div class="g-plusone" data-size="medium"></div>
-
-                    <!-- Place this tag after the last +1 button tag. -->
-                    <script type="text/javascript">
-                        (function () {
-                            var po = document.createElement('script');
-                            po.type = 'text/javascript';
-                            po.async = true;
-                            po.src = 'https://apis.google.com/js/plusone.js';
-                            var s = document.getElementsByTagName('script')[0];
-                            s.parentNode.insertBefore(po, s);
-                        })();
-                    </script>
-                </li>
-            </ul>
-        </div>
-    </div>
-</header>
-
-<!-- Le main
-================================================== -->
-<div class="container main ng-cloak" ng-controller="MainCtrl" ng-cloak>
-    <div ng-include src="'demos.html'" onload="makeNav()"></div>
-</div>
-
-<!-- Le loading
-================================================== -->
-
-<div class="loadingAnimation" ng-show="isLoading">
-  <div class="bowl_ringG">
-    <div class="ball_holderG">
-      <div class="ballG">
+  <!-- Le navbar
+  ================================================== -->
+  <div class="navbar navbar-fixed-top">
+      <div class="navbar-inner">
+          <div class="container">
+              <div class="dropdown pull-left">
+                  <a class="brand dropdown-toggle" role="button" data-toggle="dropdown" href="#">
+                      UI Utils
+                      <b class="caret"></b>
+                  </a>
+                  <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
+                      <li><a href="https://github.com/angular-ui/"><strong>Related Projects:</strong></a></li>
+                      <li class="divider"></li>
+                      <li><a href="http://angular-ui.github.io/">AngularUI</a></li>
+                      <li><a href="http://angular-ui.github.io/bootstrap/">UI Bootstrap</a></li>
+                      <li><a href="http://angular-ui.github.io/ng-grid/">Grid</a></li>
+                      <li><a href="https://github.com/angular-ui/AngularJs.tmbundle">AngularJS.tmbundle</a></li>
+                      <li><a href="http://angular-ui.github.io/ui-router/sample/">Router <span class="label label-success">New!</span></a></li>
+                  </ul>
+              </div>
+          </div>
       </div>
+  </div>
+  <div style="margin: 32px;"></div>
+
+  <!-- Le header
+  ================================================== -->
+  <header class="hero-unit" id="overview">
+      <div class="container">
+
+          <h1>UI Utils</h1>
+
+          <p>Swiss-Army-Knife of AngularJS tools (with no external dependencies!)</p>
+
+          <p class="btn-group">
+              <a class="btn" href="https://github.com/angular-ui/ui-utils"><i class="icon-github"></i> Code on Github</a>
+              <a class="btn btn-primary" href="https://github.com/angular-ui/ui-utils/tree/gh-pages/build">
+                  <i class="icon-download-alt icon-white"></i> Download <small>(0.0.4)</small>
+              </a>
+          </p>
+      </div>
+      <div class="bs-docs-social">
+          <div class="container">
+              <ul class="bs-docs-social-buttons">
+                  <li>
+                      <iframe src="http://ghbtns.com/github-btn.html?user=angular-ui&amp;repo=ui-utils&amp;type=watch&amp;count=true" allowtransparency="true" frameborder="0" scrolling="0" width="110" height="20"></iframe>
+                  </li>
+                  <li>
+                      <iframe src="http://ghbtns.com/github-btn.html?user=angular-ui&amp;repo=ui-utils&amp;type=fork&amp;count=true" allowtransparency="true" frameborder="0" scrolling="0" width="95" height="20"></iframe>
+                  </li>
+                  <li>
+                      <!-- Place this tag where you want the +1 button to render. -->
+                      <div class="g-plusone" data-size="medium"></div>
+
+                      <!-- Place this tag after the last +1 button tag. -->
+                      <script type="text/javascript">
+                          (function () {
+                              var po = document.createElement('script');
+                              po.type = 'text/javascript';
+                              po.async = true;
+                              po.src = 'https://apis.google.com/js/plusone.js';
+                              var s = document.getElementsByTagName('script')[0];
+                              s.parentNode.insertBefore(po, s);
+                          })();
+                      </script>
+                  </li>
+              </ul>
+          </div>
+      </div>
+  </header>
+
+  <!-- Le main
+  ================================================== -->
+  <div class="container">
+
+    <!-- Le content - v0.0.4 - 2013-07-29
+  ================================================== -->
+  <div id="utils" ng-app="doc.ui-utils">
+  <script>
+  function EventCtrl($scope) {
+    $scope.blurCallback = function () {
+      alert('Goodbye');
+    };
+  }
+</script>
+<section id="event" ng-controller="EventCtrl">
+  <div class="page-header">
+    <h1>Event Binder</h1>
+  </div>
+  <div class="row">
+    <div class="span6">
+      <h3>What?</h3>
+
+      <p>Bind a callback to any event not natively supported by Angular.</p>
+
+      <p class="well"><input value="Focus and then Blur this input" ui-event="{ blur : 'blurCallback()' } "></p>
+
+      <h3>Why?</h3>
+
+      <p>For Blurs, Focus, Double-Clicks or any other event you may choose that isn't built-in.</p>
+    </div>
+    <div class="span6">
+      <h3>How?</h3>
+
+      <p>You can alternatively pass multiple events as an object:</p>
+<pre class="prettyprint">
+&lt;input ui-event=&quot;{ blur : 'blurCallback()' }&quot;&gt;
+
+&lt;script&gt;
+$scope.blurCallback = function() {
+alert(&#x27;Goodbye&#x27;);
+};
+&lt;/script&gt;
+</pre>
     </div>
   </div>
-</div>
+</section>
+<script>
+  function FormatCtrl($scope) {
+    $scope.sentence = 'Hello :name, how is the :subject? Are you on the $0, $1 or $2?';
+    $scope.mode = 'string';
+    $scope.tokens = {
+      'string': 'Single',
+      'array': ['first', 'second', 'third'],
+      'object': {
+        'name': 'Bob',
+        'subject': 'wife'
+      }
+    };
+  }
+</script>
+<section id="format" ng-controller="FormatCtrl">
+  <div class="page-header">
+    <h1>Format</h1>
+  </div>
+  <div class="row">
+    <div class="span6">
+      <h3>What?</h3>
 
-<!-- Le javascript
-================================================== -->
-<script data-main="core/main.js" src="assets/vendor/require.min.js"></script>
+      <p>Replace tokens in a string in a variety of ways</p>
+
+      <div class="well">
+        <label><input ng-model="sentence" class="span5" type="text"></label>
+        <label>
+          <input type="radio" ng-model="mode" value="string">
+          Token (string):
+          <input ng-model="tokens.string" class="span3" type="text" placeholder="$0">
+        </label>
+        <label>
+          <input type="radio" ng-model="mode" value="array">
+          Token (array):
+          <input ng-model="tokens.array[0]" class="span1" type="text" placeholder="$0">
+          <input ng-model="tokens.array[1]" class="span1" type="text" placeholder="$1">
+          <input ng-model="tokens.array[2]" class="span1" type="text" placeholder="$2">
+        </label>
+        <label>
+          <input type="radio" ng-model="mode" value="object">
+          Token (object):
+          <input ng-model="tokens.object.name" class="span2" type="text" placeholder=":name">
+          <input ng-model="tokens.object.subject" class="span2" type="text" placeholder=":subject">
+        </label>
+
+        <p>{{ sentence | format : tokens[mode] }}</p>
+        <pre>Tokens: {{ tokens[mode] | json }}</pre>
+      </div>
+    </div>
+    <div class="span6">
+      <h3>Why?</h3>
+
+      <p>Most commonly, this filter is helpful for internationalization. However anywhere you need to do string replacement the format filter will come in handy.</p>
+
+      <h3>How?</h3>
+<pre class="prettyprint">
+{{ "Hello $0, how are you?" | format : &#39;Bob&#39; }}
+-- or --
+$scope.tokens = [&#39;first&#39;,&#39;second&#39;,'third&#39;];
+...
+{{ "Are you on the $0, $1 or $2?" | format : tokens }}
+-- or --
+$scope.tokens = { name:&#39;Bob&#39;, subject:&#39;wife&#39; };
+...
+{{ "Hey :name, how's the :subject?" | format : tokens }}
+</pre>
+    </div>
+  </div>
+</section>
+<style>
+  .ui-match {
+    background: yellow;
+  }
+</style>
+
+<section id="highlight">
+  <div class="page-header">
+    <h1>Highlight</h1>
+  </div>
+  <h3>What?</h3>
+
+  <p>Easily highlight some text in a block</p>
+
+  <div class="well">
+    <p><label><input type="checkbox" ng-model="caseSensitive"> Case Sensitive?</label></p>
+
+    <p><input placeholder="Enter some text to highlight" ng-model="highlightText"></p>
+
+    <p ng-bind-html-unsafe="'Hello there, how are you today? I\'m fine thank you.' | highlight:highlightText:caseSensitive"></p>
+  </div>
+
+  <h3>How?</h3>
+<pre class="prettyprint">
+&lt;label&gt;&lt;input type=&quot;checkbox&quot; ng-model=&quot;caseSensitive&quot;&gt; Case Sensitive?&lt;/label&gt;
+&lt;input placeholder=&quot;Enter some text to highlight&quot; value=&quot;you&quot; ng-model=&quot;highlightText&quot;&gt;
+&lt;p ng-bind-html-unsafe=&quot;&#x27;Hello there, how are you today? I\'m fine thank you.&#x27; | highlight:highlightText:caseSensitive&quot;&gt;&lt;/p&gt;
+
+&lt;style&gt;
+.ui-match { background: yellow; }
+&lt;/style&gt;
+</pre>
+</section>
+<section id="indeterminate">
+  <div class="page-header">
+    <h1>Indeterminate checkbox</h1>
+  </div>
+  <div class="row">
+    <div class="span6">
+      <h3>What?</h3>
+
+      <p>Provides an easy way to toggle a checkbox input's special 'indeterminate' property. This is a visual toggle only and in no way affects the model or value outside of native browser behavior at this time.</p>
+
+      <p class="well">
+        <label>Indeterminate: <input type="checkbox" ui-indeterminate="isKnown" readonly></label><br>
+        <label>Toggle indeterminate here: <input type="checkbox" ng-model="isKnown"></label>
+      </p>
+
+      <h3>Why?</h3>
+
+      <p>Convenience.</p>
+    </div>
+    <div class="span6">
+      <h3>How?</h3>
+
+<pre class="prettyprint">
+Indeterminate: &lt;input type=&quot;checkbox&quot; ui-indeterminate=&quot;isKnown&quot; readonly&gt;
+Toggle indeterminate here: &lt;input type=&quot;checkbox&quot; ng-model=&quot;isKnown&quot;&gt;
+</pre>
+    </div>
+  </div>
+</section>
+
+<section id="inflector">
+  <div class="page-header">
+    <h1>Inflector</h1>
+  </div>
+  <h3>What?</h3>
+
+  <p>Converts a string to an alternative format.</p>
+
+  <div class="well">
+    <p>
+      <label><input type="radio" value="humanize" ng-model="inflectorType"> Humanize (Default)</label>
+      <label><input type="radio" value="underscore" ng-model="inflectorType"> Underscore</label>
+      <label><input type="radio" value="variable" ng-model="inflectorType"> Variable</label>
+    </p>
+
+    <p><input placeholder="Enter some text to inflect" ng-model="inflectorText"></p>
+
+    <p>{{inflectorText|inflector:inflectorType}}</p>
+  </div>
+
+  <h3>How?</h3>
+<pre class="prettyprint">
+&lt;label&gt;&lt;input type=&quot;radio&quot; value=&quot;humanize&quot; ng-model=&quot;inflectorType&quot;&gt; Humanize (Default)&lt;/label&gt;
+&lt;label&gt;&lt;input type=&quot;radio&quot; value=&quot;underscore&quot; ng-model=&quot;inflectorType&quot;&gt; Underscore&lt;/label&gt;
+&lt;label&gt;&lt;input type=&quot;radio&quot; value=&quot;variable&quot; ng-model=&quot;inflectorType&quot;&gt; Variable&lt;/label&gt;
+
+&lt;input placeholder=&quot;Enter some text to inflect&quot; ng-model=&quot;inflectorText&quot;&gt;
+&lt;p&gt;{{inflectorText|inflector:inflectorType}}&lt;/p&gt;
+
+&lt;script&gt;
+$scope.inflectorText = &#x27;Here Is my_phoneNumber&#x27;;
+$scope.inflectorType = &#x27;humanize&#x27;;
+&lt;/script&gt;
+</pre>
+</section>
+<section id="jq">
+  <div class="page-header">
+    <h1>jQuery Passthrough</h1>
+  </div>
+  <div class="row">
+    <div class="span6">
+      <h3>What?</h3>
+
+      <p>Call the jQuery function or plugin specified on the element.</p>
+
+      <p>This example shows how to call
+        <a href="http://twitter.github.com/bootstrap/javascript.html#tooltips">the bootstrap tooltip</a> with almost no work:
+      </p>
+
+      <div class="well">
+        <p>
+          <a title="Easiest. Binding. Ever!" ui-jq="tooltip" ui-options="{placement:'right'}">Hover over me for static Tooltip</a>
+        </p>
+
+        <p>
+          <a data-original-title="{{tooltip}}" ui-jq="tooltip" ui-options="{placement:'right'}">Fill the input for a dynamic Tooltip:</a>
+          <input type="text" ng-model="tooltip" placeholder="Tooltip Content">
+        </p>
+      </div>
+    </div>
+    <div class="span6">
+      <h3>Why?</h3>
+
+      <p>Not every jQuery plugin requires creating a new directive just to use it. Instead, use the pass-through directive to rapidly port functionality. It is probably the best solution for 75% of the cases you will encounter.</p>
+
+      <p>If a plugin requires more robust integration with AngularJS then you may need to look into creating a custom directive instead, or
+        <a href="https://github.com/angular-ui/angular-ui/issues?sort=created&direction=desc&state=open">contact us</a> with a request.
+      </p>
+    </div>
+  </div>
+
+  <h3>How?</h3>
+
+  <p>To call something like <code>$.fn.tooltip()</code> simply do
+    <code>ui-jq="tooltip"</code>. Note that the name of the function must be identical. This also works for normal jQuery commands such as
+    <code>$.fn.slideUp()</code>.</p>
+
+  <p>To pass parameters use the <code>ui-options</code> attribute. The value will be evaluated in the
+    <code>$scope</code> context and passed to the function. If defaults are set, the passed options will extend them. If a string is passed, the default options will be ignored.
+  </p>
+
+  <p>Use the directive name <code>jq</code> for namespacing inside
+    <code>uiJqConfig</code>. Then sub-namespace options for each function by the name of that function (exactly as it is passed to
+    <code>ui-jq</code>) so that you don't have to pass options every time you call the directive.</p>
+<pre class="prettyprint">
+&lt;a title=&quot;Easiest. Binding. Ever!&quot; ui-jq=&quot;tooltip&quot;&gt;Hover over me for static Tooltip&lt;/a&gt;
+
+&lt;a data-original-title=&quot;{{tooltip}}&quot; ui-jq=&quot;tooltip&quot;&gt;Fill the input for a dynamic Tooltip:&lt;/a&gt;
+&lt;input type=&quot;text&quot; ng-model=&quot;tooltip&quot; placeholder=&quot;Tooltip Content&quot;&gt;
+
+&lt;script&gt;
+    myModule.value('uiJqConfig', {
+        // The Tooltip namespace
+        tooltip: {
+             // Tooltip options. This object will be used as the defaults
+            placement: 'right'
+        }
+    });
+&lt;/script&gt;
+</pre>
+</section>
+
+<script>
+  function KeypressCtrl($scope) {
+    $scope.keypressCallback = function ($event) {
+      alert('Voila!');
+      $event.preventDefault();
+    };
+  }
+</script>
+<section id="keypress" ng-controller="KeypressCtrl">
+  <div class="page-header">
+    <h1>Keypress</h1>
+  </div>
+  <div class="row">
+    <div class="span6">
+      <h3>What?</h3>
+
+      <p>Bind an event to a particular keypress</p>
+
+      <p><textarea ui-keypress="{13:'keypressCallback($event)'}">ui-keypress
+
+        Hit [Enter]. The $event here is different from keypress, but fires earlier.</textarea></p>
+
+      <p><textarea ui-keydown="{'enter alt-space':'keypressCallback($event)'}">ui-keydown
+
+        Hit [Enter] or [Alt]+[Space] and remember that this normally adds a new line if we don't $event.preventDefault()</textarea>
+      </p>
+
+      <p><textarea ui-keyup="{'enter':'keypressCallback($event)'}">ui-keyup
+
+        Hit [Enter]. Remember not to close the alert using [Enter] or it will refire keyup.</textarea></p>
+    </div>
+    <div class="span6">
+      <h3>Why?</h3>
+
+      <p>Cuz you feel like it? Maybe I should stop doing the 'Why' sections, running out of explanations...</p>
+
+      <h3>How?</h3>
+
+      <p>The directive takes a hash (object) with the key code as the key and the callback function to fire as the value. The callback function takes an 'event' param</p>
+
+      <p class="alert alert-info">Note that <strong>13</strong> represents the <code>RETURN</code> key code.</p>
+<pre class="prettyprint">
+&lt;textarea
+        ui-keypress=&quot;{13:'keypressCallback($event)'}&quot;&gt;
+&lt;/textarea&gt;
+&lt;textarea
+        ui-keydown=&quot;{'enter alt-space':'keypressCallback($event)'}&quot;&gt;
+&lt;/textarea&gt;
+&lt;textarea
+        ui-keyup=&quot;{'enter':'keypressCallback($event)'}&quot;&gt;
+&lt;/textarea&gt;
+
+&lt;script&gt;
+    $scope.keypressCallback = function($event) {
+        alert('Voila!');
+        $event.preventDefault();
+    };
+&lt;/script&gt;
+</pre>
+    </div>
+  </div>
+</section>
+<section id="mask">
+  <div class="page-header">
+    <h1>Mask</h1>
+  </div>
+  <div class="row">
+    <div class="span6">
+      <form name="demo" class="form-horizontal">
+        <div class="control-group">
+
+          <div class="controls">
+            <p class="lead" style="margin-top:60px">uiMask Directive Demo</p>
+          </div>
+
+          <label class="control-label">Masked Input:</label>
+
+          <div class="controls">
+            <input name="masked" ui-mask="{{y}}" ng-model="x" placeholder="Write a mask or click a button"
+                   class="input-large" style="vertical-align: top;">
+          <span class="help-inline">
+
+            <div ng-show="x.length">Model value: <code>{{ x }}</code></div>
+            <div ng-hide="x.length">Model value: <code>undefined</code></div>
+            <div ng-show="demo.masked.$viewValue.length">NgModelController.$viewValue: <code>{{ demo.masked.$viewValue
+              }}</code></div>
+            <div ng-hide="demo.masked.$viewValue.length">NgModelController.$viewValue: <code>undefined</code></div>
+          </span>
+          </div>
+        </div>
+        <div class="control-group">
+          <label class="control-label">Mask Definition:</label>
+
+          <div class="controls">
+            <input ng-model="y" class="input-large" style="vertical-align: top;">
+            <span class="help-inline"><code>A</code> Any letter.<br><code>9</code> Any number.<br><code>*</code> Any letter or number.</span>
+          </div>
+        </div>
+
+        <div class="control-group">
+          <label class="control-label">Masks:</label>
+
+          <div class="controls">
+            <p>
+              <button class="btn" ng-click="y = undefined">Set to undefined (uninitialize)</button>
+            </p>
+          </div>
+          <div class="controls">
+            <p>
+              <button class="btn" ng-click="y = '(999) 999-9999'">Set to (999) 999-9999</button>
+            </p>
+          </div>
+          <div class="controls">
+            <p>
+              <button class="btn" ng-click="y = '(999) 999-9999 ext. 999'">Set to (999) 999-9999 ext. 999</button>
+            </p>
+          </div>
+          <div class="controls">
+            <p>
+              <button class="btn" ng-click="y = '(**: AAA-999)'">Set to (**: AAA-999)</button>
+            </p>
+          </div>
+        </div>
+      </form>
+
+    </div>
+    <div class="span6">
+      <h3>How?</h3>
+
+      <p> TODO !!
+<pre class="prettyprint">
+</pre>
+    </div>
+  </div>
+</section>
+<style>
+
+    /* ui-reset */
+  .ui-resetwrap {
+    display: inline-block;
+    position: relative;
+  }
+
+  .ui-reset {
+    display: none;
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    right: 0;
+    z-index: 2;
+    height: 100%;
+  }
+
+  .ui-resetwrap:hover .ui-reset {
+    display: block;
+  }
+
+</style>
+<script>
+  function ResetCtrl($scope) {
+    $scope.resetModel = "Hover over";
+  }
+</script>
+<section id="reset" ng-controller="ResetCtrl">
+  <div class="page-header">
+    <h1>Reset</h1>
+  </div>
+  <div class="row">
+    <div class="span6">
+      <h3>What?</h3>
+
+      <p>Adds an icon or link that empties the input element</p>
+
+      <p>Resets to empty: &nbsp; &nbsp;<input ng-model="resetModel" ui-reset></p>
+
+      <p>Resets to "Empty": <input ng-model="resetModel" ui-reset=" 'Empty' "></p>
+
+      <p class="alert alert-info">
+        <i class="icon-info-sign"></i> Remember that you control the CSS. Make the icon always show by changing the CSS to match the
+        <code>:hover</code> state.</p>
+    </div>
+    <div class="span6">
+      <h3>How?</h3>
+
+      <p>You can set an app-wide reset value using <code>ui.config</code></p>
+<pre class="prettyprint">
+&lt;input ng-model=&quot;resetModel&quot; ui-reset&gt;
+&lt;input ng-model=&quot;resetModel&quot; ui-reset=&quot; 'Empty' &quot;&gt;
+
+&lt;script&gt;
+    $scope.resetModel = &#x27;Hover over me&#x27;;
+&lt;/script&gt;
+</pre>
+    </div>
+  </div>
+</section>
+<section id="routing">
+  <div class="page-header">
+    <h1>Route Checking</h1>
+  </div>
+
+  <div class="row">
+    <div class="span6">
+      <h3>What?</h3>
+
+      <p>Route Matching Magic. It matches your routes ... magically!</p>
+
+      <div class="well">
+        <p class="alert alert-info">Clicking
+          <strong>"Make Active"</strong> will reload the page. Pay attention to the routes.</p>
+        <ul>
+          <li ui-route="#/routing">uiRoute Info
+            <strong ui-if="$uiRoute">IS</strong>
+            <strong ui-if="!$uiRoute">is NOT</strong> active.
+          </li>
+          <li ng-repeat="route in routes" ui-route="#/route-{{ route }}">
+            Route {{ route }}
+            <strong ui-if="$uiRoute">IS</strong>
+            <strong ui-if="!$uiRoute">is NOT</strong> active.
+            <a ui-if="!$uiRoute" ng-click="reload($event, route)" href="#route-{{ route }}">Make Active</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="span6">
+      <h3>Why?</h3>
+
+      <p>It would be nice if your app knew what the address path was and acted accordingly, right? Right.</p>
+    </div>
+
+    <div class="span6">
+      <h3>Options</h3>
+      <ul>
+        <li>Out of the box this directive ships with a boolean to determine if the route matches or not:
+          <code>$uiRoute</code>.
+          <ul>
+            <li>Example Usage: <code>&lt;a ui-route="/page" ng-class="{active: $uiRoute}"&gt;link&lt;/a&gt;</code></li>
+          </ul>
+        </li>
+        <li>Using <code>ui-route</code> as an attribute with value supports the following:
+          <ul style="margin-top: 5px;">
+            <li>Static: <code>&lt;a ui-route="/page"&gt;</code></li>
+            <li>Regular Expression: <code>&lt;a ui-route="/page/[0-9]*"&gt;</code></li>
+            <li>Template Vars: <code>&lt;a ui-route="/page/{{ sample }}"&gt;</code></li>
+            <li>Template Vars && RegEx: <code>&lt;a ui-route="/page/{{ sample }}/[0-9]*"&gt;</code></li>
+          </ul>
+        </li>
+        <li>Using <code>ui-route</code> with <code>ng-href</code> attribute:
+          <ul style="margin-top: 5px;">
+            <li>Static: <code>&lt;a ui-route ng-href="/page"&gt;</code></li>
+            <li>Template Vars: <code>&lt;a ui-route ng-href="/page/{{ sample }}"&gt;</code></li>
+          </ul>
+        </li>
+        <li>Using <code>ui-route</code> with <code>href</code> attribute:
+          <ul style="margin-top: 5px;">
+            <li>Static Only: <code>&lt;a ui-route href="/page"&gt;</code></li>
+          </ul>
+        </li>
+        <li>You can also pass a model to <code>ui-route</code>. This model could then be used the same as
+          <code>$uiRoute</code>.
+          <ul style="margin-top: 5px;">
+            <li><code>&lt;li ui-route="/page/{{ sample }}" ng-model="current"&gt;</code></li>
+          </ul>
+        </li>
+      </ul>
+    </div>
+
+  </div>
+
+  <div class="row">
+    <div class="row span12">
+      <h3>How?</h3>
+<pre class="prettyprint">
+&lt;ul&gt;
+&lt;li ui-route=&quot;#/route-1&quot;&gt;Route 1
+&lt;strong ui-if=&quot;$uiRoute&quot;&gt;IS&lt;/strong&gt;
+&lt;strong ui-if=&quot;!$uiRoute&quot;&gt;is NOT&lt;/strong&gt; active.
+&lt;/li&gt;
+&lt;li ui-route=&quot;#/route-2&quot;&gt;Route 2
+&lt;strong ui-if=&quot;$uiRoute&quot;&gt;IS&lt;/strong&gt;
+&lt;strong ui-if=&quot;!$uiRoute&quot;&gt;is NOT&lt;/strong&gt; active.
+&lt;/li&gt;
+&lt;li ui-route=&quot;#/route-3&quot;&gt;Route 3
+&lt;strong ui-if=&quot;$uiRoute&quot;&gt;IS&lt;/strong&gt;
+&lt;strong ui-if=&quot;!$uiRoute&quot;&gt;is NOT&lt;/strong&gt; active.
+&lt;/li&gt;
+&lt;/ul&gt;
+</pre>
+    </div>
+
+  </div>
+</section>
+<section id="scrollfix">
+  <div class="page-header">
+    <h1>Scrollfix</h1>
+  </div>
+  <div class="row">
+    <div class="span6">
+      <h3>What?</h3>
+
+      <p>Add a 'ui-fixed' class to elements when the page scrolls past them</p>
+
+      <div id="scrollExample" class="well" ui-scrollfix="+200">
+        <p ui-scrollfix="-50">They see me scrollin...</p>
+        Try scrolling past the red text or changing the offset
+      </div>
+    </div>
+    <div class="span6">
+      <h3>Why?</h3>
+
+      <p>Make elements sticky, or simply appear different after scrolling past a certain point</p>
+
+      <p class="alert alert-info"><i class="icon-info-sign"></i> Remember that this directive
+        <strong>only</strong> adds a
+        <code>ui-scrollfix</code> class to the element. It is up to you to add the corresponding CSS rules, however it also gives you the ability to add other rules instead if you prefer.
+      </p>
+    </div>
+  </div>
+
+  <h3>How?</h3>
+  <pre class="prettyprint">&lt;p ui-scrollfix&gt;They see me scrollin...&lt;/p&gt;</pre>
+  <p>You can optionally pass a number to
+    <code>ui-scrollfix</code> which would override the detected y-offset of the element. Values can be either absolute
+    <code>600</code> or offset from the calculated value <code>-50</code> or <code>+100</code>.</p>
+</section>
+<style>
+  .ui-show {
+    color: blue;
+    transition: all 0.5s ease;
+  }
+
+  .ui-hide {
+    opacity: 0;
+    transition: all 0.5s ease;
+  }
+</style>
+<section id="showhide">
+  <div class="page-header">
+    <h1>Show, Hide and Toggle Alternatives</h1>
+  </div>
+  <div class="row">
+    <div class="span6">
+      <h3>What?</h3>
+
+      <p>Instead of doing <code>ng-show</code> and <code>ng-hide</code> which simply sets
+        <code>display:block/none</code> a <code>ui-show</code> and
+        <code>ui-hide</code> class will be added which can give you tighter control over how things appear or disappear.
+      </p>
+
+      <div class="well">
+        <p><a ng-click="showHideAn=!showHideAn">Toggle State: {{!!showHideAn}}</a></p>
+
+        <p class="animate">
+          <span ui-show="showHideAn">Show</span>
+          <span ui-hide="showHideAn">Hide</span>
+          <span ui-toggle="showHideAn">Toggle</span>
+        </p>
+      </div>
+    </div>
+    <div class="span6">
+      <h3>Why?</h3>
+
+      <p>CSS3 transitions of course! Applying a class means you can specify exactly how these two states behave. In addition, the show/hide variants do not enforce css rules when they are false (unless you use toggle), so the default CSS can still apply.</p>
+      <blockquote>But can't you just do <code>ng-class="{ ui-show : someExpression }"</code>?</blockquote>
+      <p>... shutup.</p>
+
+      <p>In all seriousness, this is just a convenience wrapper for using
+        <code>ng-class</code>. This way you can simply swap out instances of <strong>ng</strong> for
+        <strong>ui</strong> to immediately get your customized approach.</p>
+    </div>
+  </div>
+
+  <h3>How?</h3>
+<pre class="prettyprint">
+&lt;p&gt;&lt;a ng-click=&quot;showHide=!showHide&quot;&gt;Toggle State: {{!!showHide}}&lt;/a&gt;&lt;/p&gt;
+&lt;div ui-show=&quot;showHide&quot;&gt;Show&lt;/div&gt;
+&lt;div ui-hide=&quot;showHide&quot;&gt;Hide&lt;/div&gt;
+&lt;div ui-toggle=&quot;showHide&quot;&gt;Toggle&lt;/div&gt;
+
+&lt;style&gt;
+.ui-show {
+  color: blue;
+  transition: all 0.5s ease; /* You should probably browser-prefix this */
+}
+.ui-hide {
+  opacity: 0;
+  transition: all 0.5s ease; /* You should probably browser-prefix this */
+}
+&lt;/style&gt;
+</pre>
+  <p>Using <code>ui-show</code> or <code>ui-hide</code> will add a class of the same name when the expression is true.
+  </p>
+
+  <p>Use <code>ui-toggle</code> if you want to leverage both classes, as
+    <code>ui-show</code> will be added when true and <code>ui-hide</code> when false.</p>
+</section>
+<script>
+  function UniqueCtrl($scope) {
+    $scope.items = [
+      { firstName: 'Dean', lastName: 'Sofer',
+        id: 1, gender: 'Male' },
+      { firstName: 'Dean', lastName: 'Kuntz',
+        id: 2, gender: 'Male' },
+      { firstName: 'Peter', lastName: 'Piper',
+        id: 3, gender: 'Female' },
+      { firstName: 'Peter', lastName: 'Darwin',
+        id: 4, gender: 'Male' },
+      { firstName: 'Janet', lastName: 'Piper',
+        id: 5, gender: 'Female' },
+      { firstName: 'Dan', lastName: 'Doyon',
+        id: 6, gender: 'Male' },
+      { firstName: 'Andy', lastName: 'Joslin',
+        id: 1, gender: 'Male' },
+    ];
+  }
+</script>
+<section id="unique" ng-controller="UniqueCtrl">
+  <div class="page-header">
+    <h1>Unique</h1>
+  </div>
+  <div class="row">
+    <div class="span6">
+      <h3>What?</h3>
+
+      <p>Filters out all duplicate objects items from an array by checking the specified key</p>
+
+      <div class="well">
+        <p>Select an attribute to check for uniqueness</p>
+        <select ng-model="attribute">
+          <option value="">-- No Filter --</option>
+          <option>firstName</option>
+          <option>lastName</option>
+          <option>id</option>
+          <option>gender</option>
+        </select>
+        <pre>{{items | unique:attribute | json}}</pre>
+      </div>
+    </div>
+    <div class="span6">
+      <h3>How?</h3>
+
+      <p>The filter can take the name of the key to check for uniqueness or set to a non-string truthy value to check the entire object.</p>
+<pre class="prettyprint">
+&lt;select ng-model=&quot;attribute&quot;&gt;
+&lt;option value=&quot;&quot;&gt;-- No Filter --&lt;/option&gt;
+&lt;option&gt;firstName&lt;/option&gt;
+&lt;option&gt;lastName&lt;/option&gt;
+&lt;option&gt;id&lt;/option&gt;
+&lt;option&gt;gender&lt;/option&gt;
+&lt;/select&gt;
+&lt;pre&gt;{{items | unique:attribute | json}}&lt;/pre&gt;
+
+&lt;script&gt;
+$scope.items = [
+{ firstName: &#x27;Dean&#x27;, lastName: &#x27;Sofer&#x27;,
+id: 1, gender: &#x27;Male&#x27; },
+{ firstName: &#x27;Dean&#x27;, lastName: &#x27;Kuntz&#x27;,
+id: 2, gender: &#x27;Male&#x27; },
+{ firstName: &#x27;Peter&#x27;, lastName: &#x27;Piper&#x27;,
+id: 3, gender: &#x27;Female&#x27; },
+{ firstName: &#x27;Peter&#x27;, lastName: &#x27;Darwin&#x27;,
+id: 4, gender: &#x27;Male&#x27; },
+{ firstName: &#x27;Janet&#x27;, lastName: &#x27;Piper&#x27;,
+id: 5, gender: &#x27;Female&#x27; },
+{ firstName: &#x27;Dan&#x27;, lastName: &#x27;Doyon&#x27;,
+id: 6, gender: &#x27;Male&#x27; },
+{ firstName: &#x27;Andy&#x27;, lastName: &#x27;Joslin&#x27;,
+id: 1, gender: &#x27;Male&#x27; },
+];
+&lt;/script&gt;
+</pre>
+    </div>
+  </div>
+</section>
+<script>
+  function ValidateCtrl($scope) {
+    $scope.notBlackListed = function (value) {
+      var blacklist = ['bad@domain.com', 'verybad@domain.com'];
+      return blacklist.indexOf(value) === -1;
+    }
+  }
+</script>
+<section id="validate">
+  <div class="page-header">
+    <h1>Validate</h1>
+  </div>
+  <h3>What?</h3>
+
+  <div class="row">
+    <div class="span6">
+      <p>The <code>ui-validate</code> directive makes it very easy to create custom validator expressions.</p>
+
+      <div class="well" ng-controller="ValidateCtrl">
+        <form name="form">
+          <h3>e-mail</h3>
+          <input name="email" placeholder="email" type="email" required ng-model="email" ui-validate='{blacklist : notBlackListed}'>
+          <span ng-show='form.email.$error.blacklist'>This e-mail is black-listed!</span>
+          <br>is form valid: {{form.$valid}}
+          <br>email errors: {{form.email.$error | json}}
+
+          <h3>password</h3>
+          <input name="password" type="text" required ng-model="password" placeholder="password">
+          <input name="confirm_password" type="text" required ng-model="confirm_password" ui-validate=" '$value==password' " ui-validate-watch=" 'password' " placeholder="confirm password">
+          <span ng-show='form.confirm_password.$error.validator'>Passwords do not match!</span>
+          <br>is form valid: {{form.$valid}}
+          <br>password errors: {{form.confirm_password.$error | json}}
+        </form>
+      </div>
+      <h3>Why?</h3>
+
+      <p>AngularJS comes with several built-in validation mechanism for input fields (ngRequired, ngPattern etc.) but using an arbitrary validation function requires creation of custom formatters and / or parsers. The ui-validate directive makes it easy to use any function(s) defined in scope as a validator function(s).</p>
+    </div>
+    <div class="span6">
+<pre class="prettyprint">
+&lt;input name="email" ng-model="email"
+<strong>ui-validate</strong>='{blacklist : 'notBlackListed($value)' }'&gt;
+Is e-mail is black-listed? {{!!form.email.$error.blacklist}}
+
+&lt;input name=&quot;password&quot; required ng-model=&quot;password&quot;&gt;
+&lt;input name=&quot;confirm_password&quot;
+<strong>ui-validate</strong>=&quot; '$value==password' &quot;
+<strong>ui-validate-watch</strong>=&quot; 'password' &quot;&gt;
+Passwords match? {{!!form.confirm_password.$error.validator}}
+
+...
+
+$scope.notBlackListed = function(value) {
+var blacklist = ['bad@domain.com','verybad@domain.com'];
+return blacklist.indexOf(value) === -1;
+}
+</pre>
+      <h3>How?</h3>
+
+      <p>Create an expression inside a string. If it evaluates to
+        <code>true</code> the input is valid, the rule name will be <code>validator</code> by default.</p>
+<pre class="prettyprint">ui-validate=" 'validateFoo($value)' "
+Input is valid: {{!!myForm.myInput.$error.validator}}</pre>
+      <p>
+        <strong>Or</strong> define multiple rules by creating an object where the key is the rule name and the value is the expression string.
+      </p>
+<pre class="prettyprint">ui-validate="{foo:'valFoo($value)', bar:'$value == someVar'}"
+Foo rule passes: {{!!myForm.myInput.$error.foo}}
+Bar rule passes: {{!!myForm.myInput.$error.bar}}
+</pre>
+    </div>
+  </div>
+</section></div>
+
+  </div>
+
+  <!-- Le javascript
+  ================================================== -->
+
+  <script src="assets/vendor/jquery.min.js"></script>
+  <script src="assets/vendor/bootstrap.min.js"></script>
+
+  <script src="assets/vendor/prettify.js"></script>
+
+  <script src="assets/vendor/angular.min.js"></script>
+  <script src="core/prettifyDirective.js"></script>
+
+  <script src="build/ui-utils.min.js"></script>
+
+  <script>
+    
+angular.module('doc.ui-utils', ['ui.utils', 'prettifyDirective' ]);
+  </script>
 
 </body>
 
