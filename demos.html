@@ -770,7 +770,7 @@ id: 1, gender: &#x27;Male&#x27; },
       <div class="well" ng-controller="ValidateCtrl">
         <form name="form">
           <h3>e-mail</h3>
-          <input name="email" placeholder="email" type="email" required ng-model="email" ui-validate='{blacklist : notBlackListed}'>
+          <input name="email" placeholder="email" type="email" required ng-model="email" ui-validate="{blacklist : 'notBlackListed($value)'}">
           <span ng-show='form.email.$error.blacklist'>This e-mail is black-listed!</span>
           <br>is form valid: {{form.$valid}}
           <br>email errors: {{form.email.$error | json}}
@@ -790,7 +790,7 @@ id: 1, gender: &#x27;Male&#x27; },
     <div class="span6">
 <pre class="prettyprint">
 &lt;input name="email" ng-model="email"
-<strong>ui-validate</strong>='{blacklist : 'notBlackListed($value)' }'&gt;
+<strong>ui-validate</strong>="{blacklist : 'notBlackListed($value)' }"&gt;
 Is e-mail is black-listed? {{!!form.email.$error.blacklist}}
 
 &lt;input name=&quot;password&quot; required ng-model=&quot;password&quot;&gt;
@@ -821,4 +821,5 @@ Bar rule passes: {{!!myForm.myInput.$error.bar}}
 </pre>
     </div>
   </div>
-</section></div>
+</section>
+</div>
