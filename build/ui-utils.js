@@ -1,6 +1,6 @@
 /**
  * angular-ui-utils - Swiss-Army-Knife of AngularJS tools (with no external dependencies!)
- * @version v0.0.4 - 2013-07-29
+ * @version v0.0.4 - 2013-07-30
  * @link http://angular-ui.github.com
  * @license MIT License, http://www.opensource.org/licenses/MIT
  */
@@ -1247,6 +1247,7 @@ angular.module('ui.utils',  [
   "ui.event",
   "ui.format",
   "ui.highlight",
+  "ui.include",
   "ui.indeterminate",
   "ui.inflector",
   "ui.jq",
