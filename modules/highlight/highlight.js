@@ -12,6 +12,7 @@ angular.module('ui.highlight',[]).filter('highlight', function () {
       if (caseSensitive) {
         return text.split(search).join('<span class="ui-match">' + search + '</span>');
       } else {
+        search = search.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, "\\$&"); // escape RegExp
         return text.replace(new RegExp(search, 'gi'), '<span class="ui-match">$&</span>');
       }
     } else {
