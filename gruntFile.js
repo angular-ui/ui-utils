@@ -73,7 +73,7 @@ module.exports = function (grunt) {
             '<div id="utils" ng-app="doc.ui-utils">', ''
           ].join('\n  '),
           footer : '</div>'},
-        src: [ 'modules/**/demo/index.html'],
+        src: grunt.option('only') &&  'modules/' + grunt.option('only') + '/demo/index.html' || [ 'modules/**/demo/index.html'],
         dest: '<%= dist %>/demos.html'
       },
       tmp: {
