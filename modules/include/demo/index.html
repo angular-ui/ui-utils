@@ -31,11 +31,6 @@
   <div class="row">
     <div class="span12">
       <h3>Demo</h3>
-      <div style="display: none">
-        <fragment-1>Fragment 1</fragment-1>
-        <fragment-2>Fragment 2</fragment-2>
-        <fragment-3>Fragment 3</fragment-3>
-      </div>
       Choose fragment to load:
       <select ng-model="uiIncludeFragment">
         <option value="fragment-1">fragment-1</option>
@@ -45,7 +40,7 @@
       <br/>
       Fragment content <span ng-show="uiIncludeFragment">(<code>fragment="'{{uiIncludeFragment}}'"</code>)</span>:
       <div class="well">
-        <ui-include src="'demos.html'" fragment="uiIncludeFragment" ng-show="uiIncludeFragment"></ui-include>
+        <ui-include src="'assets/fragments.html'" fragment="uiIncludeFragment" ng-show="uiIncludeFragment"></ui-include>
       </div>
     </div>
   </div>

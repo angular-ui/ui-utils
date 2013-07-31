@@ -117,7 +117,10 @@ module.exports = function (grunt) {
     copy: {
       main: {
         files: [
-          {src: ['demo/demo.js'], dest: '<%= dist %>/core/demo.js', filter: 'isFile'}
+          {src: ['demo/demo.js'], dest: '<%= dist %>/core/demo.js', filter: 'isFile'},
+
+          // UI.Include needs a external html source.
+          {src: ['modules/include/demo/fragments.html'], dest: '<%= dist %>/assets/fragments.html', filter: 'isFile'}
         ]
       },
       template : {
