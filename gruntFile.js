@@ -103,7 +103,8 @@ module.exports = function (grunt) {
     copy: {
       main: {
         files: [
-          {src: ['demo/demo.js'], dest: '<%= dist %>/core/demo.js', filter: 'isFile'}
+          {src: ['demo/demo.js'], dest: '<%= dist %>/core/demo.js', filter: 'isFile'},
+          {src: ['modules/include/demo/include-partials.html'], dest: '<%= dist %>/include-partials.html', filter: 'isFile'}
         ]
       },
       template : {
