@@ -107,7 +107,7 @@ angular.module('ui.validate',[]).directive('uiValidate', function () {
                   }
               });
           }
-      };
+      }
       // Support for ui-validate-watch
       if (attrs.uiValidateWatch){
           apply_watch( scope.$eval(attrs.uiValidateWatch) );
