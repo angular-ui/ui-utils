@@ -55,11 +55,6 @@ angular.module('ui.validate',[]).directive('uiValidate', function () {
         ctrl.$parsers.push(validateFn);
       });
 
-        // Support for ui-validate-watch
-      if (attrs.uiValidateWatch){
-          apply_watch( scope.$eval(attrs.uiValidateWatch) );
-      }
-
       function apply_watch(watch)
       {
           //string - update all validators on expression change
@@ -110,9 +105,12 @@ angular.module('ui.validate',[]).directive('uiValidate', function () {
                           });
                       });
                   }
-
               });
           }
+      };
+      // Support for ui-validate-watch
+      if (attrs.uiValidateWatch){
+          apply_watch( scope.$eval(attrs.uiValidateWatch) );
       }
     }
   };
