@@ -14,7 +14,7 @@ describe('uiInclude', function() {
   }));
 
   function putIntoCache(url, content) {
-    $templateCache.put(url, [200, content, {}]);
+    $templateCache.put(url, content);
   }
 
   it('should include on external file', function () {
