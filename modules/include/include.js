@@ -13,7 +13,8 @@ angular.module('ui.include',[])
 
       return function(scope, element) {
         var changeCounter = 0,
-            childScope;
+            childScope,
+            cached_src;
 
         var clearContent = function() {
           if (childScope) {
@@ -21,45 +22,61 @@ angular.module('ui.include',[])
             childScope = null;
           }
 
+          cached_src = undefined;
+
           element.html('');
         };
 
-        function ngIncludeWatchAction() {
-          var thisChangeId = ++changeCounter;
-          var src = scope.$eval(srcExp);
-          var fragment = scope.$eval(fragExp);
+        function ngIncludeWatchFragmentAction(fragment) {
+          var cached_response = $templateCache.get(cached_src);
+          if (! cached_response){ return;}
+          var contents;
 
-          if (src) {
+          if (childScope) { childScope.$destroy(); }
+          childScope = scope.$new();
+
+          if (fragment) {
+            contents = angular.element('<div/>').html(cached_response).find(fragment);
+          }
+          else {
+            contents = angular.element('<div/>').html(cached_response).contents();
+          }
+
+          element.html(contents);
+          $compile(contents)(childScope);
+
+          childScope.$emit('$includeContentLoaded');
+          scope.$eval(onloadExp);
+
+          if (angular.isDefined(autoScrollExp) && (!autoScrollExp || scope.$eval(autoScrollExp))) {
+            $anchorScroll();
+          }
+
+        }
+
+        function ngIncludeWatchSourceAction(src) {
+          var thisChangeId = ++changeCounter;
+          if (src && angular.isString(src)) {
             $http.get(src, {cache: $templateCache}).success(function(response) {
               if (thisChangeId !== changeCounter) { return; }
 
-              if (childScope) { childScope.$destroy(); }
-              childScope = scope.$new();
+              cached_src = src;
+              ngIncludeWatchFragmentAction(scope.$eval(fragExp));
 
-              var contents;
-              if (fragment) {
-                contents = angular.element('<div/>').html(response).find(fragment);
-              }
-              else {
-                contents = angular.element('<div/>').html(response).contents();
-              }
-              element.html(contents);
-              $compile(contents)(childScope);
-
-              if (angular.isDefined(autoScrollExp) && (!autoScrollExp || scope.$eval(autoScrollExp))) {
-                $anchorScroll();
-              }
-
-              childScope.$emit('$includeContentLoaded');
-              scope.$eval(onloadExp);
             }).error(function() {
               if (thisChangeId === changeCounter) { clearContent(); }
             });
           } else { clearContent(); }
         }
 
-        scope.$watch(fragExp, ngIncludeWatchAction);
-        scope.$watch(srcExp, ngIncludeWatchAction);
+
+       if (srcExp && srcExp !== ''){
+         scope.$watch(srcExp, ngIncludeWatchSourceAction);
+
+         if (fragExp && fragExp !== ''){
+           scope.$watch(fragExp, ngIncludeWatchFragmentAction);
+         }
+       }
       };
     }
   };
