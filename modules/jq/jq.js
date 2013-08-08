@@ -32,7 +32,12 @@ angular.module('ui.jq',[]).
 
         // If ui-options are passed, merge (or override) them onto global defaults and pass to the jQuery method
         if (attrs.uiOptions) {
-          linkOptions = scope.$eval('[' + attrs.uiOptions + ']');
+
+          if (scope[attrs.uiOptions] == null) {
+            linkOptions = scope.$eval('[' + attrs.uiOptions + ']');
+          } else {
+            linkOptions = eval('[' + scope.$eval(attrs.uiOptions) + ']');
+          }
           if (angular.isObject(options) && angular.isObject(linkOptions[0])) {
             linkOptions[0] = angular.extend({}, options, linkOptions[0]);
           }
