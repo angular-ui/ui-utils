@@ -35,11 +35,11 @@ angular.module('ui.jq',[]).
 
           if (scope[attrs.uiOptions] == null) {
             linkOptions = scope.$eval('[' + attrs.uiOptions + ']');
+            if (angular.isObject(options) && angular.isObject(linkOptions[0])) {
+              linkOptions[0] = angular.extend({}, options, linkOptions[0]);
+            }
           } else {
             linkOptions = eval('[' + scope.$eval(attrs.uiOptions) + ']');
-          }
-          if (angular.isObject(options) && angular.isObject(linkOptions[0])) {
-            linkOptions[0] = angular.extend({}, options, linkOptions[0]);
           }
         } else if (options) {
           linkOptions = [options];
