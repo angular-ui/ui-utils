@@ -61,7 +61,7 @@ describe('uiJq', function () {
 
     it('should call jQuery.fn with list options when ui-options is apply on scope ', function() {
       spyOn(jQuery.fn, 'foo');
-      scope.$apply("opts = \"'highlight', {color: '#FFFFFF'}, 2000\"")
+      scope.$apply("opts = \"'highlight', {color: '#FFFFFF'}, 2000\"");
       compile('<div ui-jq="foo" ui-options="opts"></div>')(scope);
       timeout.flush();
       expect(jQuery.fn.foo.calls[0].args).toEqual(['highlight', {color: '#FFFFFF'}, 2000]);
