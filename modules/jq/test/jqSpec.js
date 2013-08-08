@@ -54,7 +54,7 @@ describe('uiJq', function () {
   describe('calling a jQuery element function with an list options', function() {
     it('should call jQuery.fn with list options when ui-options is direct insert ', function() {
       spyOn(jQuery.fn, 'foo');
-      compile('<div ui-jq="foo" ui-options="\'highlight\', {color: \'#808080\'}, 2000"></div><div ui-jq="foo" ui-options="{}"></div>')(scope);
+      compile('<div ui-jq="foo" ui-options="\'highlight\', {color: \'#808080\'}, 2000"></div>')(scope);
       timeout.flush();
       expect(jQuery.fn.foo.calls[0].args).toEqual(['highlight', {color: '#808080'}, 2000]);
     });
@@ -62,10 +62,9 @@ describe('uiJq', function () {
     it('should call jQuery.fn with list options when ui-options is apply on scope ', function() {
       spyOn(jQuery.fn, 'foo');
       scope.$apply("opts = \"'highlight', {color: '#FFFFFF'}, 2000\"")
-      compile('<div ui-jq="foo" ui-options="opts"></div><div ui-jq="foo" ui-options="{}"></div>')(scope);
+      compile('<div ui-jq="foo" ui-options="opts"></div>')(scope);
       timeout.flush();
       expect(jQuery.fn.foo.calls[0].args).toEqual(['highlight', {color: '#FFFFFF'}, 2000]);
-
     });
   });
 
