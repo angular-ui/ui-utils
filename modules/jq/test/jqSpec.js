@@ -51,6 +51,23 @@ describe('uiJq', function () {
       expect(jQuery.fn.foo.calls[1].args).toEqual([{}]);
     });
   });
+  describe('calling a jQuery element function with an list options', function() {
+    it('should call jQuery.fn with list options when ui-options is direct insert ', function() {
+      spyOn(jQuery.fn, 'foo');
+      compile('<div ui-jq="foo" ui-options="\'highlight\', {color: \'#808080\'}, 2000"></div>')(scope);
+      timeout.flush();
+      expect(jQuery.fn.foo.calls[0].args).toEqual(['highlight', {color: '#808080'}, 2000]);
+    });
+
+    it('should call jQuery.fn with list options when ui-options is apply on scope ', function() {
+      spyOn(jQuery.fn, 'foo');
+      scope.$apply("opts = \"'highlight', {color: '#FFFFFF'}, 2000\"");
+      compile('<div ui-jq="foo" ui-options="opts"></div>')(scope);
+      timeout.flush();
+      expect(jQuery.fn.foo.calls[0].args).toEqual(['highlight', {color: '#FFFFFF'}, 2000]);
+    });
+  });
+
   describe('using ui-refresh', function() {
     it('should execute exactly once if the expression is never set', function() {
       spyOn(jQuery.fn, 'foo');
