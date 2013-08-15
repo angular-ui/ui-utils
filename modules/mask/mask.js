@@ -430,6 +430,7 @@ angular.module('ui.mask', [])
             if (input.setSelectionRange) {
               input.focus();
               input.setSelectionRange(pos, pos);
+              input.blur();
             }
             else if (input.createTextRange) {
               // Curse you IE
