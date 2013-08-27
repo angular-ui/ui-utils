@@ -1,62 +1,69 @@
 // Karma configuration
 // Generated on Thu May 02 2013 23:29:14 GMT+0200 (CEST)
 
+module.exports = function(config) {
 
-// base path, that will be used to resolve files and exclude
-basePath = '..';
-
-
-// list of files / patterns to load in the browser
-files = [
-  JASMINE,
-  JASMINE_ADAPTER,
-  'bower_components/jquery/jquery.js',
-  'bower_components/angular/angular.js',
-  'bower_components/angular-mocks/angular-mocks.js',
-  'modules/*/*.js',
-  'modules/*/test/*Spec.js'
-];
+	config.set({
+		// base path, that will be used to resolve files and exclude
+		basePath: '..',
 
 
-// list of files to exclude
-exclude = [
-  
-];
+		// list of files / patterns to load in the browser
+		frameworks: [
+			'jasmine'
+		],
+
+		files: [
+			'bower_components/jquery/jquery.js',
+			'bower_components/angular/angular.js',
+			'bower_components/angular-mocks/angular-mocks.js',
+			'modules/*/*.js',
+			'modules/*/test/*Spec.js'
+		],
 
 
-// test results reporter to use
-// possible values: 'dots', 'progress', 'junit'
-reporters = ['dots'];
+		// list of files to exclude
+		exclude: [
+
+		],
 
 
-// enable / disable colors in the output (reporters and logs)
-colors = true;
+		// test results reporter to use
+		// possible values: 'dots', 'progress', 'junit'
+		reporters: ['dots'],
 
 
-// level of logging
-// possible values: LOG_DISABLE || LOG_ERROR || LOG_WARN || LOG_INFO || LOG_DEBUG
-logLevel = LOG_INFO;
+		// enable / disable colors in the output (reporters and logs)
+		colors: true,
 
 
-// enable / disable watching file and executing tests whenever any file changes
-autoWatch = false;
+		// level of logging
+		// possible values: LOG_DISABLE || LOG_ERROR || LOG_WARN || LOG_INFO || LOG_DEBUG
+		logLevel: LOG_INFO,
 
 
-// Start these browsers, currently available:
-// - Chrome
-// - ChromeCanary
-// - Firefox
-// - Opera
-// - Safari (only Mac)
-// - PhantomJS
-// - IE (only Windows)
-browsers = ['Chrome', 'Firefox'];
+		// enable / disable watching file and executing tests whenever any file changes
+		autoWatch: false,
 
 
-// If browser does not capture in given timeout [ms], kill it
-captureTimeout = 60000;
+		// Start these browsers, currently available:
+		// - Chrome
+		// - ChromeCanary
+		// - Firefox
+		// - Opera
+		// - Safari (only Mac)
+		// - PhantomJS
+		// - IE (only Windows)
+		browsers: ['Chrome', 'Firefox'],
 
 
-// Continuous Integration mode
-// if true, it capture browsers, run tests and exit
-singleRun = false;
+		// If browser does not capture in given timeout [ms], kill it
+		captureTimeout: 60000,
+
+
+		// Continuous Integration mode
+		// if true, it capture browsers, run tests and exit
+		singleRun: false,
+	});
+};
+
