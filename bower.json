@@ -12,5 +12,14 @@
     "angular-mocks": "~1.0.5",
     "jquery": ">=1.6",
     "angular-ui-docs": "angular-ui/angular-ui-docs"
-  }
+  },
+  "ignore": [
+    "**/.*",
+    "CONTRIBUTING.md",
+    "demo",
+    "gruntFile.js",
+    "test",
+    "modules/**/demo",
+    "modules/**/test"
+  ]
 }
