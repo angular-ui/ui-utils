@@ -1,6 +1,6 @@
 /**
  * angular-ui-utils - Swiss-Army-Knife of AngularJS tools (with no external dependencies!)
- * @version v0.0.4 - 2013-08-01
+ * @version v0.0.4 - 2013-08-28
  * @link http://angular-ui.github.com
  * @license MIT License, http://www.opensource.org/licenses/MIT
  */
@@ -564,7 +564,7 @@ angular.module('ui.mask', [])
             }
             iElement.bind('blur', blurHandler);
             iElement.bind('mousedown mouseup', mouseDownUpHandler);
-            iElement.bind('input keyup click', eventHandler);
+            iElement.bind('input keyup click focus', eventHandler);
             eventsBound = true;
           }
 
@@ -578,6 +578,7 @@ angular.module('ui.mask', [])
             iElement.unbind('input', eventHandler);
             iElement.unbind('keyup', eventHandler);
             iElement.unbind('click', eventHandler);
+            iElement.unbind('focus', eventHandler);
             eventsBound = false;
           }
 
