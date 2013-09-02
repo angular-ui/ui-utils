@@ -30,7 +30,8 @@
         Hit [Enter]. Remember not to close the alert using [Enter] or it will refire keyup.</textarea></p>
 
       <p>
-        <div style="outline: 0; border: 1px solid red;" tabindex="0" ui-keypress="{13:'keypressCallback($event)'}">
+        <div style="outline: 0;" class="well"
+            tabindex="0" ui-keypress="{13:'keypressCallback($event)'}">
           Click inside this div and hit [Enter]. You can make any element accept keyboard event by adding tabindex="0" attribute to the element.
         </div>
       </p>
