@@ -13,5 +13,6 @@ angular.module('ui.utils',  [
   "ui.scrollfix",
   "ui.showhide",
   "ui.unique",
-  "ui.validate"
+  "ui.validate",
+  "ui.pageslide"
 ]);
