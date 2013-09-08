@@ -1,0 +1,101 @@
+/*
+ * AngularJS Pageslide directive
+ */
+
+@back: #eee;
+@bc: #bbb;
+@w: 300px;
+@h: 200px;
+
+.ng-pageslide {
+    background-color: @back;
+    position: fixed;
+    z-index: 9;
+    transition-duration: 0.5s;
+  
+    &.ps-hidden{
+        transition-property: width, height;
+    }
+
+    &.ps-shown{
+        transition-property: width, height;
+    }
+
+    &.ps-right{
+        width: @w;
+        top: 0px;
+        bottom: 0px;
+        right: 0px;
+        border-left: 1px solid @bc;
+        overflow-x: hidden;
+
+        &.ps-hidden{
+            width: 0px; 
+                      
+        }
+
+        &.ps-shown{
+            width: @w;        
+                   }
+
+
+    }
+    
+    &.ps-left{
+        width: @w;
+        top: 0px;
+        bottom: 0px;
+        left: 0px;
+        border-right: 1px solid @bc;
+        overflow-x: hidden;
+
+
+        &.ps-hidden{
+            width: 0px; 
+        }
+
+        &.ps-shown{
+            width: @w;        
+        }
+
+    }
+
+     &.ps-top{
+        height: @h;
+        top: 0px;
+        right: 0px;
+        left: 0px;
+        border-bottom: 1px solid @bc;
+        overflow-y: hidden;
+
+        
+        &.ps-hidden{
+            height: 0px; 
+                      
+        }
+        
+        &.ps-shown{
+            height: @h;        
+        }
+    }
+
+     &.ps-bottom{
+        height: @h;
+        right: 0px;
+        bottom: 0px;
+        left: 0px;
+        border-top: 1px solid @bc;
+        overflow-y: hidden;
+
+        &.ps-hidden{
+            height: 0px; 
+        }
+        
+        &.ps-shown{
+            height: @h;        
+        }
+    }
+
+
+}
+
