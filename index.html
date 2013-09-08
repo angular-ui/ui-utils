@@ -91,7 +91,7 @@
   ================================================== -->
   <div class="container">
 
-    <!-- Le content - v0.0.4 - 2013-08-28
+    <!-- Le content - v0.0.4 - 2013-09-08
   ================================================== -->
   <div id="utils" ng-app="doc.ui-utils">
   <script>
@@ -455,12 +455,20 @@ $scope.inflectorType = &#x27;humanize&#x27;;
       <p><textarea ui-keyup="{'enter':'keypressCallback($event)'}">ui-keyup
 
         Hit [Enter]. Remember not to close the alert using [Enter] or it will refire keyup.</textarea></p>
+
+      <p>
+        <div style="outline: 0;" class="well"
+            tabindex="0" ui-keypress="{13:'keypressCallback($event)'}">
+          Click inside this div and hit [Enter]. You can make any element accept keyboard event by adding tabindex="0" attribute to the element.
+        </div>
+      </p>
     </div>
     <div class="span6">
       <h3>Why?</h3>
 
       <p>Cuz you feel like it? Maybe I should stop doing the 'Why' sections, running out of explanations...</p>
-
+    </div>
+    <div class="span12">
       <h3>How?</h3>
 
       <p>The directive takes a hash (object) with the key code as the key and the callback function to fire as the value. The callback function takes an 'event' param</p>
@@ -476,6 +484,9 @@ $scope.inflectorType = &#x27;humanize&#x27;;
 &lt;textarea
         ui-keyup=&quot;{'enter':'keypressCallback($event)'}&quot;&gt;
 &lt;/textarea&gt;
+&lt;div tabindex="0"
+    ui-keyup=&quot;{'enter':'keypressCallback($event)'}&quot;&gt;
+&lt;/div&gt;
 
 &lt;script&gt;
     $scope.keypressCallback = function($event) {
@@ -487,6 +498,7 @@ $scope.inflectorType = &#x27;humanize&#x27;;
     </div>
   </div>
 </section>
+
 <section id="mask">
   <div class="page-header">
     <h1>Mask</h1>
