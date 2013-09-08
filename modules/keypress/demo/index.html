@@ -28,12 +28,20 @@
       <p><textarea ui-keyup="{'enter':'keypressCallback($event)'}">ui-keyup
 
         Hit [Enter]. Remember not to close the alert using [Enter] or it will refire keyup.</textarea></p>
+
+      <p>
+        <div style="outline: 0;" class="well"
+            tabindex="0" ui-keypress="{13:'keypressCallback($event)'}">
+          Click inside this div and hit [Enter]. You can make any element accept keyboard event by adding tabindex="0" attribute to the element.
+        </div>
+      </p>
     </div>
     <div class="span6">
       <h3>Why?</h3>
 
       <p>Cuz you feel like it? Maybe I should stop doing the 'Why' sections, running out of explanations...</p>
-
+    </div>
+    <div class="span12">
       <h3>How?</h3>
 
       <p>The directive takes a hash (object) with the key code as the key and the callback function to fire as the value. The callback function takes an 'event' param</p>
@@ -49,6 +57,9 @@
 &lt;textarea
         ui-keyup=&quot;{'enter':'keypressCallback($event)'}&quot;&gt;
 &lt;/textarea&gt;
+&lt;div tabindex="0"
+    ui-keyup=&quot;{'enter':'keypressCallback($event)'}&quot;&gt;
+&lt;/div&gt;
 
 &lt;script&gt;
     $scope.keypressCallback = function($event) {
