@@ -12,7 +12,7 @@
 //    <script src="build/angular-ui-ieshiv.js"></script>
 // <![endif]-->
 
-(function (exports) {
+(function (window, document) {
 
   var debug = window.ieShivDebug || false,
       tags = [ "ngInclude", "ngPluralize", "ngView", "ngSwitch", "uiCurrency", "uiCodemirror", "uiDate", "uiEvent",
@@ -59,4 +59,4 @@
     }
   }
 
-})(window);
+})(window, document);
