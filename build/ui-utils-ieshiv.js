@@ -1,6 +1,6 @@
 /**
  * angular-ui-utils - Swiss-Army-Knife of AngularJS tools (with no external dependencies!)
- * @version v0.0.4 - 2013-09-08
+ * @version v0.0.4 - 2013-09-09
  * @link http://angular-ui.github.com
  * @license MIT License, http://www.opensource.org/licenses/MIT
  */
@@ -18,7 +18,7 @@
 //    <script src="build/angular-ui-ieshiv.js"></script>
 // <![endif]-->
 
-(function (exports) {
+(function (window, document) {
 
   var debug = window.ieShivDebug || false,
       tags = [ "ngInclude", "ngPluralize", "ngView", "ngSwitch", "uiCurrency", "uiCodemirror", "uiDate", "uiEvent",
@@ -65,4 +65,4 @@
     }
   }
 
-})(window);
+})(window, document);
