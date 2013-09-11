@@ -24,7 +24,7 @@ factory('keypressHelper', ['$parse', function keypress($parse){
 
   return function(mode, scope, elm, attrs) {
     var params, combinations = [];
-    params = scope.$eval(attrs['ui'+capitaliseFirstLetter(mode)]);
+    params = scope.$eval(attrs['ui' + capitaliseFirstLetter(mode)]);
 
     // Prepare combinations for simple checking
     angular.forEach(params, function (v, k) {
@@ -37,6 +37,10 @@ factory('keypressHelper', ['$parse', function keypress($parse){
           keys: {}
         };
         angular.forEach(variation.split('-'), function (value) {
+          // Normalize keycodes.
+          if (value >= 97 && value <= 122) {
+            value = value - 32;
+          }
           combination.keys[value] = true;
         });
         combinations.push(combination);
@@ -52,14 +56,13 @@ factory('keypressHelper', ['$parse', function keypress($parse){
       var shiftPressed = !!event.shiftKey;
       var keyCode = event.keyCode;
 
-      // normalize keycodes
+      // Normalize keycodes.
       if (mode === 'keypress' && !shiftPressed && keyCode >= 97 && keyCode <= 122) {
         keyCode = keyCode - 32;
       }
 
       // Iterate over prepared combinations
       angular.forEach(combinations, function (combination) {
-
         var mainKeyPressed = combination.keys[keysByCode[keyCode]] || combination.keys[keyCode.toString()];
 
         var metaRequired = !!combination.keys.meta;
