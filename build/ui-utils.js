@@ -956,7 +956,8 @@ angular.module('ui.route', []).directive('uiRoute', ['$location', '$parse', func
 
         // Used by href and ngHref
         function staticWatcher(newVal) {
-          if ((hash = newVal.indexOf('#')) > -1){
+          var hash = newVal.indexOf('#');
+          if (hash > -1){
             newVal = newVal.substr(hash + 1);
           }
           watcher = function watchHref() {
@@ -966,7 +967,8 @@ angular.module('ui.route', []).directive('uiRoute', ['$location', '$parse', func
         }
         // Used by uiRoute
         function regexWatcher(newVal) {
-          if ((hash = newVal.indexOf('#')) > -1){
+          var hash = newVal.indexOf('#');
+          if (hash > -1){
             newVal = newVal.substr(hash + 1);
           }
           watcher = function watchRegex() {
