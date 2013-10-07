@@ -14,14 +14,14 @@
           <strong>"Make Active"</strong> will reload the page. Pay attention to the routes.</p>
         <ul>
           <li ui-route="#/routing">uiRoute Info
-            <strong ui-if="$uiRoute">IS</strong>
-            <strong ui-if="!$uiRoute">is NOT</strong> active.
+            <strong ng-show="$uiRoute">IS</strong>
+            <strong ng-show="!$uiRoute">is NOT</strong> active.
           </li>
           <li ng-repeat="route in routes" ui-route="#/route-{{ route }}">
             Route {{ route }}
-            <strong ui-if="$uiRoute">IS</strong>
-            <strong ui-if="!$uiRoute">is NOT</strong> active.
-            <a ui-if="!$uiRoute" ng-click="reload($event, route)" href="#route-{{ route }}">Make Active</a>
+            <strong ng-show="$uiRoute">IS</strong>
+            <strong ng-show="!$uiRoute">is NOT</strong> active.
+            <a ng-show="!$uiRoute" ng-click="reload($event, route)" href="#route-{{ route }}">Make Active</a>
           </li>
         </ul>
       </div>
@@ -78,16 +78,16 @@
 <pre class="prettyprint">
 &lt;ul&gt;
 &lt;li ui-route=&quot;#/route-1&quot;&gt;Route 1
-&lt;strong ui-if=&quot;$uiRoute&quot;&gt;IS&lt;/strong&gt;
-&lt;strong ui-if=&quot;!$uiRoute&quot;&gt;is NOT&lt;/strong&gt; active.
+&lt;strong ng-show=&quot;$uiRoute&quot;&gt;IS&lt;/strong&gt;
+&lt;strong ng-show=&quot;!$uiRoute&quot;&gt;is NOT&lt;/strong&gt; active.
 &lt;/li&gt;
 &lt;li ui-route=&quot;#/route-2&quot;&gt;Route 2
-&lt;strong ui-if=&quot;$uiRoute&quot;&gt;IS&lt;/strong&gt;
-&lt;strong ui-if=&quot;!$uiRoute&quot;&gt;is NOT&lt;/strong&gt; active.
+&lt;strong ng-show=&quot;$uiRoute&quot;&gt;IS&lt;/strong&gt;
+&lt;strong ng-show=&quot;!$uiRoute&quot;&gt;is NOT&lt;/strong&gt; active.
 &lt;/li&gt;
 &lt;li ui-route=&quot;#/route-3&quot;&gt;Route 3
-&lt;strong ui-if=&quot;$uiRoute&quot;&gt;IS&lt;/strong&gt;
-&lt;strong ui-if=&quot;!$uiRoute&quot;&gt;is NOT&lt;/strong&gt; active.
+&lt;strong ng-show=&quot;$uiRoute&quot;&gt;IS&lt;/strong&gt;
+&lt;strong ng-show=&quot;!$uiRoute&quot;&gt;is NOT&lt;/strong&gt; active.
 &lt;/li&gt;
 &lt;/ul&gt;
 </pre>
