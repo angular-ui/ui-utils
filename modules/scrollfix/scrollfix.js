@@ -11,6 +11,7 @@ angular.module('ui.scrollfix',[]).directive('uiScrollfix', ['$window', function 
     link: function (scope, elm, attrs, uiScrollfixTarget) {
       var top = elm[0].offsetTop,
           $target = uiScrollfixTarget && uiScrollfixTarget.$element || angular.element($window);
+
       if (!attrs.uiScrollfix) {
         attrs.uiScrollfix = top;
       } else if (typeof(attrs.uiScrollfix) === 'string') {
@@ -22,7 +23,7 @@ angular.module('ui.scrollfix',[]).directive('uiScrollfix', ['$window', function 
         }
       }
 
-      $target.bind('scroll', function () {
+      function onScroll() {
         // if pageYOffset is defined use it, otherwise use other crap for IE
         var offset;
         if (angular.isDefined($window.pageYOffset)) {
@@ -36,6 +37,13 @@ angular.module('ui.scrollfix',[]).directive('uiScrollfix', ['$window', function 
         } else if (elm.hasClass('ui-scrollfix') && offset < attrs.uiScrollfix) {
           elm.removeClass('ui-scrollfix');
         }
+      }
+
+      $target.on('scroll', onScroll);
+
+      // Unbind scroll event handler when directive is removed
+      scope.$on('$destroy', function() {
+        $target.off('scroll', onScroll);
       });
     }
   };
