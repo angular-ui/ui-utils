@@ -130,7 +130,7 @@ describe('uiWaypoints', function () {
       expect(scope.g).toHaveBeenCalledWith('down', $fixture[0]);
     });
 
-it('should respect the offset parameter in the horizontal direction', function () {
+    it('should respect the offset parameter in the horizontal direction', function () {
       scope.g = function(){};
       spyOn(scope, 'g');
       scope.waypoints = {
@@ -155,6 +155,141 @@ it('should respect the offset parameter in the horizontal direction', function (
       angular.element($window).scrollLeft($fixture.offset().left - 99);
       angular.element($window).trigger('scroll');
       expect(scope.g).toHaveBeenCalledWith('right', $fixture[0]);
+    });
+
+    it('should assign the "addClass" class to the element when it is specified', function () {
+
+      // Test Fixture
+      var element = angular.element('<div style="height:1500px"></div><div id="test3" ui-waypoints="\'test-class\'"></div><div style="height:1500px">');
+      $container.append(element);
+      $compile($body.contents())(scope);
+      var $fixture = angular.element("#test3");
+
+      // Scroll past
+      angular.element($window).scrollTop($fixture.offset().top + 50);
+      angular.element($window).trigger('scroll');
+      expect(element.hasClass('test-class')).toBe(true);
+
+
+      // Scroll back before
+      angular.element($window).scrollTop($fixture.offset().top - 50);
+      angular.element($window).trigger('scroll');
+      expect(element.hasClass('test-class')).toBe(false);
+    });
+
+    it('should assign the "addClass" class to the element when it is specified using full options syntax', function () {
+      scope.waypoints = {
+        addClass: 'test-class2'
+      };
+
+      // Test Fixture
+      var element = angular.element('<div style="height:1500px"></div><div id="test3" ui-waypoints="waypoints"></div><div style="height:1500px">');
+      $container.append(element);
+      $compile($body.contents())(scope);
+      var $fixture = angular.element("#test3");
+
+      // Scroll past
+      angular.element($window).scrollTop($fixture.offset().top + 50);
+      angular.element($window).trigger('scroll');
+      expect(element.hasClass('test-class2')).toBe(true);
+
+
+      // Scroll back before
+      angular.element($window).scrollTop($fixture.offset().top - 50);
+      angular.element($window).trigger('scroll');
+      expect(element.hasClass('test-class2')).toBe(false);
+    });
+
+    it('should assign the "ui-scrollfix" class to the element when no arguments are passed to ', function () {
+      scope.waypoints = {
+        addClass: 'test-class2'
+      };
+
+      // Test Fixture
+      var element = angular.element('<div style="height:1500px"></div><div id="test3" ui-waypoints=""></div><div style="height:1500px">');
+      $container.append(element);
+      $compile($body.contents())(scope);
+      var $fixture = angular.element("#test3");
+
+      // Scroll past
+      angular.element($window).scrollTop($fixture.offset().top + 50);
+      angular.element($window).trigger('scroll');
+      expect(element.hasClass('ui-scrollfix')).toBe(true);
+
+
+      // Scroll back before
+      angular.element($window).scrollTop($fixture.offset().top - 50);
+      angular.element($window).trigger('scroll');
+      expect(element.hasClass('ui-scrollfix')).toBe(false);
+    });
+
+    it('should treat arguments that start with + as offset specification for ui-scrollfix functionality', function () {
+      scope.waypoints = {
+        addClass: 'test-class2'
+      };
+
+      // Test Fixture
+      var element = angular.element('<div style="height:1500px"></div><div id="test3" ui-waypoints="+100"></div><div style="height:1500px">');
+      $container.append(element);
+      $compile($body.contents())(scope);
+      var $fixture = angular.element("#test3");
+
+      // Scroll past
+      angular.element($window).scrollTop($fixture.offset().top + 101);
+      angular.element($window).trigger('scroll');
+      expect(element.hasClass('ui-scrollfix')).toBe(true);
+
+
+      // Scroll back before
+      angular.element($window).scrollTop($fixture.offset().top + 99);
+      angular.element($window).trigger('scroll');
+      expect(element.hasClass('ui-scrollfix')).toBe(false);
+    });
+
+    it('should treat arguments that start with - as offset specification for ui-scrollfix functionality', function () {
+      scope.waypoints = {
+        addClass: 'test-class2'
+      };
+
+      // Test Fixture
+      var element = angular.element('<div style="height:1500px"></div><div id="test3" ui-waypoints="-100"></div><div style="height:1500px">');
+      $container.append(element);
+      $compile($body.contents())(scope);
+      var $fixture = angular.element("#test3");
+
+      // Scroll past
+      angular.element($window).scrollTop($fixture.offset().top +101);
+      angular.element($window).trigger('scroll');
+      expect(element.hasClass('ui-scrollfix')).toBe(true);
+
+
+      // Scroll back before
+      angular.element($window).scrollTop($fixture.offset().top - 101);
+      angular.element($window).trigger('scroll');
+      expect(element.hasClass('ui-scrollfix')).toBe(false);
+    });
+
+    it('should treat numeric arguments as offset specification for ui-scrollfix functionality', function () {
+      scope.waypoints = {
+        addClass: 'test-class2'
+      };
+
+      // Test Fixture
+      var element = angular.element('<div style="height:1500px"></div><div id="test3" ui-waypoints="100"></div><div style="height:1500px">');
+      $container.append(element);
+      $compile($body.contents())(scope);
+      var $fixture = angular.element("#test3");
+
+      // Scroll past
+      angular.element($window).scrollTop($fixture.offset().top +101);
+      angular.element($window).trigger('scroll');
+      expect(element.hasClass('ui-scrollfix')).toBe(true);
+
+
+      // Scroll back before
+      angular.element($window).scrollTop($fixture.offset().top +99);
+      angular.element($window).trigger('scroll');
+      expect(element.hasClass('ui-scrollfix')).toBe(false);
     });
 
   });

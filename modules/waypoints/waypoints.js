@@ -90,29 +90,61 @@ angular.module('ui.waypoints',[]).directive('uiWaypoints', ['$window', "$parse",
       var options = {
         direction: 'vertical',
         reference: 'top',
+        offset: {
+          vertical: 0,
+          horizontal: 0
+        },
         enter: null,
         exit: null,
-        both: null
+        both: null,
+        addClass: null,
+        updateOffset: true
       };
       if(attrs.uiWaypoints == null) {
         throw new Error("ui-waypoints requires arguments");
       }
 
-      // Options are either an object, a function (enter callback), or an error
-      var getter = $parse(attrs.uiWaypoints);
-      var arg = getter(scope);
-      if(typeof(arg) === 'object') {
-        options = angular.extend(options,arg);
-      } else if(typeof(arg) === 'function') {
-        options.both = arg;
+      // Options are either an object, a function (enter callback), a string (class to assign), completely empty (ui-scrollfix) or an error
+      if(attrs.uiWaypoints === null || attrs.uiWaypoints === '') {
+        // no args, assume ui-scrollfix functionality
+        options.addClass = 'ui-scrollfix';
+        options.updateOffset = false;
+      } else if(attrs.uiWaypoints.charAt(0) === '+' || 
+                attrs.uiWaypoints.charAt(0) === '-' || 
+                !isNaN(parseInt(attrs.uiWaypoints, 10))) {
+        
+        // They may are trying to specify an offset for ui-scrollfix functionality
+        options.offset.vertical = attrs.uiWaypoints;// Covers string case
+
+        // Covers numeric case
+        if(!isNaN(parseInt(attrs.uiWaypoints, 10))) {
+          options.offset.vertical = parseInt(attrs.uiWaypoints, 10);
+        }
+        
+        options.addClass = 'ui-scrollfix';
       } else {
-        throw new Error("ui-waypoints requires an expression that evaluates to either a function or an object");
+        // User specified args
+        var getter = $parse(attrs.uiWaypoints);
+        var arg = getter(scope);
+        if(typeof(arg) === 'object') {
+          options = angular.extend(options,arg);
+        } else if(typeof(arg) === 'function') {
+          options.both = arg;
+        } else if(typeof(arg) === 'string') {
+          // They want to specify a class to assign
+          options.addClass = arg;
+          options.updateOffset = false;
+        } else {
+          throw new Error("ui-waypoints requires an expression that evaluates to either a function or an object");
+        }
       }
+      
 
       // Sanitize options
-      if(!options.offset) {
-        options.offset = {};
+      if(options.offset.vertical == null) {
         options.offset.vertical = 0;
+      }
+      if(options.offset.horizontal == null) { 
         options.offset.horizontal = 0;
       }
       if(options.verticalOffset) {
@@ -132,6 +164,8 @@ angular.module('ui.waypoints',[]).directive('uiWaypoints', ['$window', "$parse",
         "horizontal": true
       };
 
+      var offset = getTargetOffsets(elm, options);
+      var triggered = false;
       $target.bind('scroll', function () {
 
 
@@ -139,7 +173,12 @@ angular.module('ui.waypoints',[]).directive('uiWaypoints', ['$window', "$parse",
         var windowOffsets = getCurrentWindowOffsets();
 
         // Get the current offset
-        var offset = getTargetOffsets(elm, options);
+        // The triggered flag is necessary to make sure that we keep updating the location of
+        //   the subject until it is first encountered. This prevents jumping around of the
+        //   target offset location as the page/js is loading. Likely a better way to do this.
+        if(options.updateOffset || !triggered) {
+          offset = getTargetOffsets(elm, options);
+        }
 
         // Do callbacks
         var directions = ["vertical","horizontal"];
@@ -153,6 +192,7 @@ angular.module('ui.waypoints',[]).directive('uiWaypoints', ['$window', "$parse",
           var direction = null;
           if(above[activeDirection] && currentOffset > offset[activeDirection]) {
             direction = activeDirection === "vertical" ? "down" : "right";
+            triggered = true;
             if(options.enter) {
               options.enter(direction, elm[0]);
             }
@@ -160,16 +200,27 @@ angular.module('ui.waypoints',[]).directive('uiWaypoints', ['$window', "$parse",
             if(options.both) {
               options.both(direction, elm[0]);
             }
+
+            if(options.addClass) {
+              if(!elm.hasClass(options.addClass)) {
+                elm.addClass(options.addClass);
+              }
+            }
               
             above[activeDirection] = false;
           } else if(!above[activeDirection] && currentOffset < offset[activeDirection]) {
             direction = activeDirection === "vertical" ? "up" : "left";
+            triggered = true;
             if(options.exit) {
               options.exit(direction, elm[0]);
             }
               
             if(options.both){
               options.both(direction, elm[0]);
+            }
+
+            if(elm.hasClass(options.addClass)) {
+              elm.removeClass(options.addClass);
             }
             above[activeDirection] = true;
           }
