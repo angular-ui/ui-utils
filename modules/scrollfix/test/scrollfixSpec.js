@@ -11,11 +11,28 @@ describe('uiScrollfix', function () {
   }));
 
   describe('compiling this directive', function () {
-    it('should bind to window "scroll" event', function () {
-      spyOn($.fn, 'bind');
+    it('should bind and unbind to window "scroll" event in the absence of a uiScrollfixTarget', function () {
+      spyOn($.fn, 'on').andCallThrough();
       $compile('<div ui-scrollfix="100"></div>')(scope);
-      expect($.fn.bind).toHaveBeenCalled();
-      expect($.fn.bind.mostRecentCall.args[0]).toBe('scroll');
+      expect($.fn.on).toHaveBeenCalled();
+      expect($.fn.on.mostRecentCall.args[0]).toBe('scroll');
+      expect($._data($window, 'events')).toBeDefined();
+      expect($._data($window, 'events').scroll.length).toBe(1);
+      // Event must un-bind to prevent memory leaks
+      spyOn($.fn, 'off').andCallThrough();
+      scope.$destroy();
+      expect($.fn.off).toHaveBeenCalled();
+      expect($.fn.off.mostRecentCall.args[0]).toBe('scroll');
+      expect($._data($window, 'events')).toBeUndefined();
+    });
+    it('should bind and unbind to a parent uiScrollfixTarget element "scroll" event', function() {
+      var $elm = $compile('<div ui-scrollfix-target><div ui-scrollfix="100"></div></div>')(scope);
+      expect($._data($window, 'events')).toBeUndefined();
+      expect($._data($elm[0], 'events')).toBeDefined();
+      expect($._data($elm[0], 'events').scroll.length).toBe(1);
+      // Event must un-bind to prevent memory leaks
+      scope.$destroy();
+      expect($._data($elm[0], 'events')).toBeUndefined();
     });
   });
   describe('scrolling the window', function () {
