@@ -1,6 +1,6 @@
 {
   "name": "angular-ui-utils",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "Swiss-Army-Knife of AngularJS tools (with no external dependencies!)",
   "author": "https://github.com/angular-ui/ui-utils/graphs/contributors",
   "license": "MIT License, http://www.opensource.org/licenses/MIT",
@@ -14,7 +14,7 @@
     "grunt-contrib-jshint": "~0.5.4",
     "grunt-contrib-uglify": "~0.2.1",
     "grunt-contrib-watch": "~0.4.3",
-    "grunt-karma": "~0.4.4"
+    "grunt-karma": "~0.6.2"
   },
   "scripts": {},
   "repository": {

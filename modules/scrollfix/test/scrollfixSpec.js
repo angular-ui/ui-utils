@@ -11,28 +11,45 @@ describe('uiScrollfix', function () {
   }));
 
   describe('compiling this directive', function () {
-    it('should bind to window "scroll" event with a ui-scrollfix namespace', function () {
-      spyOn($.fn, 'bind');
+    it('should bind and unbind to window "scroll" event in the absence of a uiScrollfixTarget', function () {
+      spyOn($.fn, 'on').andCallThrough();
       $compile('<div ui-scrollfix="100"></div>')(scope);
-      expect($.fn.bind).toHaveBeenCalled();
-      expect($.fn.bind.mostRecentCall.args[0]).toBe('scroll.ui-scrollfix');
+      expect($.fn.on).toHaveBeenCalled();
+      expect($.fn.on.mostRecentCall.args[0]).toBe('scroll');
+      expect($._data($window, 'events')).toBeDefined();
+      expect($._data($window, 'events').scroll.length).toBe(1);
+      // Event must un-bind to prevent memory leaks
+      spyOn($.fn, 'off').andCallThrough();
+      scope.$destroy();
+      expect($.fn.off).toHaveBeenCalled();
+      expect($.fn.off.mostRecentCall.args[0]).toBe('scroll');
+      expect($._data($window, 'events')).toBeUndefined();
+    });
+    it('should bind and unbind to a parent uiScrollfixTarget element "scroll" event', function() {
+      var $elm = $compile('<div ui-scrollfix-target><div ui-scrollfix="100"></div></div>')(scope);
+      expect($._data($window, 'events')).toBeUndefined();
+      expect($._data($elm[0], 'events')).toBeDefined();
+      expect($._data($elm[0], 'events').scroll.length).toBe(1);
+      // Event must un-bind to prevent memory leaks
+      scope.$destroy();
+      expect($._data($elm[0], 'events')).toBeUndefined();
     });
   });
   describe('scrolling the window', function () {
     it('should add the ui-scrollfix class if the offset is greater than specified', function () {
       var element = $compile('<div ui-scrollfix="-100"></div>')(scope);
-      angular.element($window).trigger('scroll.ui-scrollfix');
+      angular.element($window).trigger('scroll');
       expect(element.hasClass('ui-scrollfix')).toBe(true);
     });
     it('should remove the ui-scrollfix class if the offset is less than specified (using absolute coord)', function () {
       var element = $compile('<div ui-scrollfix="100" class="ui-scrollfix"></div>')(scope);
-      angular.element($window).trigger('scroll.ui-scrollfix');
+      angular.element($window).trigger('scroll');
       expect(element.hasClass('ui-scrollfix')).toBe(false);
 
     });
     it('should remove the ui-scrollfix class if the offset is less than specified (using relative coord)', function () {
       var element = $compile('<div ui-scrollfix="+100" class="ui-scrollfix"></div>')(scope);
-      angular.element($window).trigger('scroll.ui-scrollfix');
+      angular.element($window).trigger('scroll');
       expect(element.hasClass('ui-scrollfix')).toBe(false);
     });
   });

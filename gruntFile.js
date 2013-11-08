@@ -1,5 +1,7 @@
 module.exports = function (grunt) {
 
+  var initConfig;
+
   // Loading external tasks
   grunt.loadNpmTasks('grunt-contrib-watch');
   grunt.loadNpmTasks('grunt-contrib-uglify');
@@ -9,10 +11,18 @@ module.exports = function (grunt) {
   grunt.loadNpmTasks('grunt-contrib-copy');
   grunt.loadNpmTasks('grunt-karma');
 
+
+  /**
+   * Custom task to inline a generated file at a certain moment...
+   */
+  grunt.registerTask('UGF', 'Use Generated Files.', function() {
+    initConfig.meta.view.demoHTML= grunt.file.read(  grunt.template.process("<%= dist %>/demos.html"));
+  });
+
   // Default task.
   grunt.registerTask('default', ['jshint', 'karma:unit']);
   grunt.registerTask('build', ['concat:tmp', 'concat:modules', 'clean:rm_tmp', 'uglify']);
-  grunt.registerTask('build-doc', ['build', 'concat:html_doc', 'copy']);
+  grunt.registerTask('build-doc', ['build', 'concat:html_doc', 'UGF', 'copy']);
   grunt.registerTask('server', ['karma:start']);
 
 
@@ -23,8 +33,9 @@ module.exports = function (grunt) {
   };
 
   // Project configuration.
-  grunt.initConfig({
-    dist : 'components/angular-ui-docs',
+  initConfig = {
+    bower: 'bower_components',
+    dist : '<%= bower %>/angular-ui-docs',
     pkg: grunt.file.readJSON('package.json'),
     meta: {
       banner: ['/**',
@@ -36,7 +47,11 @@ module.exports = function (grunt) {
         ''].join('\n'),
       view : {
         humaName : "UI Utils",
-        repoName : "ui-utils"
+        repoName : "ui-utils",
+        demoJS : grunt.file.read("demo/demo.js"),
+        js : [
+          'build/<%= meta.view.repoName %>.min.js'
+        ]
       },
       destName : '<%= dist %>/build/<%= meta.view.repoName %>'
     },
@@ -54,11 +69,10 @@ module.exports = function (grunt) {
       html_doc: {
         options: {
           banner: ['<!-- Le content - v<%= pkg.version %> - <%= grunt.template.today("yyyy-mm-dd") %>',
-          '================================================== -->',
-          '<script>requirejs(["core/demo.js"]);</script>',
-          '<div id="utils" ng-non-bindable>'
-        ].join('\n'),
-        footer : '</div>'},
+            '================================================== -->',
+            '<div id="utils" ng-app="doc.ui-utils">', ''
+          ].join('\n  '),
+          footer : '</div>'},
         src: [ 'modules/**/demo/index.html'],
         dest: '<%= dist %>/demos.html'
       },
@@ -103,7 +117,10 @@ module.exports = function (grunt) {
     copy: {
       main: {
         files: [
-          {src: ['demo/demo.js'], dest: '<%= dist %>/core/demo.js', filter: 'isFile'}
+          {src: ['demo/demo.js'], dest: '<%= dist %>/core/demo.js', filter: 'isFile'},
+
+          // UI.Include needs a external html source.
+          {src: ['modules/include/demo/fragments.html'], dest: '<%= dist %>/assets/fragments.html', filter: 'isFile'}
         ]
       },
       template : {
@@ -115,6 +132,7 @@ module.exports = function (grunt) {
         ]
       }
     }
-  });
+  };
+  grunt.initConfig(initConfig);
 
 };

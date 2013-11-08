@@ -2,12 +2,13 @@ describe('uiMask', function () {
 
   var formHtml  = "<form name='test'><input name='input' ng-model='x' ui-mask='{{mask}}'></form>";
   var inputHtml = "<input name='input' ng-model='x' ui-mask='{{mask}}'>";
-  var compileElement, scope;
+  var compileElement, scope, config;
 
   beforeEach(module('ui.mask'));
-  beforeEach(inject(function ($rootScope, $compile) {
+  beforeEach(inject(function ($rootScope, $compile, uiMaskConfig) {
     c = console.log;
     scope = $rootScope;
+    config = uiMaskConfig;
     compileElement = function(html) {
       return $compile(html)(scope);
     };
@@ -127,6 +128,104 @@ describe('uiMask', function () {
       expect(scope.test.input.$viewValue).not.toBeDefined();
       scope.$apply("x = 'abc123'");
       expect(scope.test.input.$viewValue).toBe('(a) b 1');
+    });
+  });
+
+  describe('default mask definitions', function () {
+    it("should accept optional mask after '?'", function (){
+      var input = compileElement(inputHtml);
+
+      scope.$apply("x = ''");
+      scope.$apply("mask = '**?9'");
+
+      input.val('aa').triggerHandler('input');
+      input.triggerHandler('blur');
+      expect(input.val()).toBe('aa_');
+
+      input.val('99a').triggerHandler('input');
+      input.triggerHandler('blur');
+      expect(input.val()).toBe('99_');
+
+      input.val('992').triggerHandler('input');
+      input.triggerHandler('blur');
+      expect(input.val()).toBe('992');
+    });
+  });
+
+  describe('placeholders', function () {
+    it("should have default placeholder functionality", function() {
+      var input = compileElement(inputHtml);
+
+      scope.$apply("x = ''");
+      scope.$apply("mask = '99/99/9999'");
+
+      expect(input.attr("placeholder")).toBe("__/__/____");
+    });
+
+    it("should allow mask substitutions via the placeholder attribute", function() {
+
+      var placeholderHtml = "<input name='input' ng-model='x' ui-mask='{{mask}}' placeholder='MM/DD/YYYY'>",
+          input           = compileElement(placeholderHtml);
+
+      scope.$apply("x = ''");
+      scope.$apply("mask = '99/99/9999'");
+
+      expect(input.attr("placeholder")).toBe("MM/DD/YYYY");
+
+      input.val("12").triggerHandler("input");
+
+      expect(input.val()).toBe('12/DD/YYYY');
+    });
+
+    it("should update mask substitutions via the placeholder attribute", function() {
+
+      var placeholderHtml = "<input name='input' ng-model='x' ui-mask='{{mask}}' placeholder='{{placeholder}}'>",
+          input           = compileElement(placeholderHtml);
+
+      scope.$apply("x = ''");
+      scope.$apply("mask = '99/99/9999'");
+      scope.$apply("placeholder = 'DD/MM/YYYY'");
+      expect(input.attr("placeholder")).toBe("DD/MM/YYYY");
+
+      input.val("12").triggerHandler("input");
+      expect(input.val()).toBe("12/MM/YYYY");
+
+      scope.$apply("placeholder = 'MM/DD/YYYY'");
+      expect(input.val()).toBe("12/DD/YYYY");
+
+      input.triggerHandler("blur");
+      expect(input.attr("placeholder")).toBe("MM/DD/YYYY");
+    });
+
+
+  });
+
+  describe('configuration', function () {
+    it("should accept the new mask definition set globally", function() {
+      config.maskDefinitions['@'] = /[fz]/;
+
+      var input = compileElement(inputHtml);
+
+      scope.$apply("x = ''");
+      scope.$apply("mask = '@193'");
+      input.val('f123').triggerHandler('input');
+      input.triggerHandler('blur');
+      expect(input.val()).toBe('f123');
+    });
+
+    it("should accept the new mask definition set per element", function() {
+      delete config.maskDefinitions['@'];
+
+      scope.input = {
+        options: {maskDefinitions: {'@': /[fz]/}}
+      };
+
+      var input = compileElement('<input type="text" ng-model="x" ui-mask="{{mask}}" ui-options="input.options">');
+      scope.$apply("x = ''");
+      scope.$apply("mask = '@999'");
+      input.val('f111').triggerHandler('input');
+      input.triggerHandler('blur');
+      expect(input.val()).toBe('f111');
     });
   });
 
