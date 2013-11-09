@@ -117,7 +117,7 @@ angular.module('ui.mask', [])
           scope.$watch(iAttrs.ngModel, function(val) { 
             if(modelViewValue && val) {
               var model = $parse(iAttrs.ngModel);
-              model.assign(scope.$parent, controller.$viewValue);
+              model.assign(scope, controller.$viewValue);
             }
           });
           controller.$formatters.push(formatter);
