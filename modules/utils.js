@@ -10,9 +10,9 @@ angular.module('ui.utils',  [
   "ui.mask",
   "ui.reset",
   "ui.route",
+  "ui.scrollfix",
   "ui.scroll",
   "ui.scroll.jqlite",
-  "ui.scrollfix",
   "ui.showhide",
   "ui.unique",
   "ui.validate"
