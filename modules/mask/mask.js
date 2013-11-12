@@ -9,7 +9,7 @@ angular.module('ui.mask', [])
       '*': /[a-zA-Z0-9]/
     }
   })
-  .directive('uiMask', ['uiMaskConfig', function (maskConfig) {
+  .directive('uiMask', ['uiMaskConfig', '$parse', function (maskConfig, $parse) {
     return {
       priority: 100,
       require: 'ngModel',
@@ -108,6 +108,18 @@ angular.module('ui.mask', [])
 
           iAttrs.$observe('uiMask', initialize);
           iAttrs.$observe('placeholder', initPlaceholder);
+          var modelViewValue = false;
+          iAttrs.$observe('modelViewValue', function(val) {
+            if(val === "true") {
+              modelViewValue = true;
+            }
+          });
+          scope.$watch(iAttrs.ngModel, function(val) { 
+            if(modelViewValue && val) {
+              var model = $parse(iAttrs.ngModel);
+              model.assign(scope, controller.$viewValue);
+            }
+          });
           controller.$formatters.push(formatter);
           controller.$parsers.push(parser);
 
