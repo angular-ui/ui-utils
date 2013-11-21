@@ -30,7 +30,7 @@ angular.module('ui.scroll', []).directive('ngScrollViewport', [
 				terminal: true,
 				compile: function(element, attr, linker) {
 					return function($scope, $element, $attr, controllers) {
-						var adapter, adjustBuffer, adjustRowHeight, bof, bottomVisiblePos, buffer, bufferPadding, bufferSize, clipBottom, clipTop, datasource, datasourceName, enqueueFetch, eof, eventListener, fetch, finalize, first, insert, isDatasource, isLoading, itemName, loading, match, next, pending, reload, removeFromBuffer, scrollHeight, shouldLoadBottom, shouldLoadTop, tempScope, topVisiblePos, viewport;
+						var adapter, adjustBuffer, adjustRowHeight, bof, bottomVisiblePos, buffer, bufferPadding, bufferSize, clipBottom, clipTop, datasource, datasourceName, enqueueFetch, eof, eventListener, fetch, finalize, first, insert, isDatasource, isLoading, itemName, loading, match, next, pending, reload, removeFromBuffer, resizeHandler, scrollHandler, scrollHeight, shouldLoadBottom, shouldLoadTop, tempScope, topVisiblePos, viewport;
 						match = $attr.ngScroll.match(/^\s*(\w+)\s+in\s+(\w+)\s*$/);
 						if (!match) {
 							throw new Error("Expected ngScroll in form of '_item_ in _datasource_' but got '" + $attr.ngScroll + "'");
@@ -217,11 +217,14 @@ angular.module('ui.scroll', []).directive('ngScrollViewport', [
 							var itemScope, toBeAppended, wrapper;
 							itemScope = $scope.$new();
 							itemScope[itemName] = item;
-							itemScope.$index = index - 1;
+							toBeAppended = index > first;
+							itemScope.$index = index;
+							if (toBeAppended) {
+								itemScope.$index--;
+							}
 							wrapper = {
 								scope: itemScope
 							};
-							toBeAppended = index > first;
 							linker(itemScope, function(clone) {
 								wrapper.element = clone;
 								if (toBeAppended) {
@@ -342,18 +345,20 @@ angular.module('ui.scroll', []).directive('ngScrollViewport', [
 								}
 							}
 						};
-						viewport.bind('resize', function() {
+						resizeHandler = function() {
 							if (!$rootScope.$$phase && !isLoading) {
 								adjustBuffer(false);
 								return $scope.$apply();
 							}
-						});
-						viewport.bind('scroll', function() {
+						};
+						viewport.bind('resize', resizeHandler);
+						scrollHandler = function() {
 							if (!$rootScope.$$phase && !isLoading) {
 								adjustBuffer(true);
 								return $scope.$apply();
 							}
-						});
+						};
+						viewport.bind('scroll', scrollHandler);
 						$scope.$watch(datasource.revision, function() {
 							return reload();
 						});
@@ -363,7 +368,9 @@ angular.module('ui.scroll', []).directive('ngScrollViewport', [
 							eventListener = $scope.$new();
 						}
 						$scope.$on('$destroy', function() {
-							return eventListener.$destroy();
+							eventListener.$destroy();
+							viewport.unbind('resize', resizeHandler);
+							return viewport.unbind('scroll', scrollHandler);
 						});
 						eventListener.$on("update.items", function(event, locator, newItem) {
 							var wrapper, _fn, _i, _len, _ref;
