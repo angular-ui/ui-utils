@@ -1,40 +1,10 @@
 <style>
     .my-viewport {
         height: 200px;
+        border: solid 1px;
     }
 </style>
 <script>
-    angular.module('ui.scroll')
-    .factory('datasource', [
-        '$log', '$timeout', '$rootScope', function(console, $timeout, $rootScope) {
-            var current, get, loading, revision;
-            get = function(index, count, success) {
-                return $timeout(function() {
-                    var i, result, _i, _ref;
-                    result = [];
-                    for (i = _i = index, _ref = index + count - 1; index <= _ref ? _i <= _ref : _i >= _ref; i = index <= _ref ? ++_i : --_i) {
-                        result.push("item r" + current + " #" + i);
-                    }
-                    return success(result);
-                }, 100);
-            };
-            loading = function(value) {
-                return $rootScope.loading = value;
-            };
-            current = 0;
-            $rootScope.update = function() {
-                return current += 1;
-            };
-            revision = function() {
-                return current;
-            };
-            return {
-                get: get,
-                loading: loading,
-                revision: revision
-            };
-        }
-    ]);
 
 </script>
 <section id="scroll">
@@ -50,8 +20,8 @@
                 Items can be of any complexity and can vary in any possible way. They are dynamically instantiated as they become visible and $destroyed as they are scrolled out of view.
             </p>
 
-            <div class="well my-viewport" ng-scroll-viewport>
-                <div ng-scroll="item in datasource">{{item}}</div>
+            <div class="my-viewport" ng-scroll-viewport>
+                <div ng-scroll="item in datasource">{{$index + ' ' + item}}</div>
             </div>
         </div>
         <div class="span6">
