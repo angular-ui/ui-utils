@@ -11,6 +11,8 @@ angular.module('ui.utils',  [
   "ui.reset",
   "ui.route",
   "ui.scrollfix",
+  "ui.scroll",
+  "ui.scroll.jqlite",
   "ui.showhide",
   "ui.unique",
   "ui.validate"
