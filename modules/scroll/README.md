@@ -30,8 +30,8 @@ try to pull the entire content of the datasource.
 
 ### Dependencies
 
-To use the directive make sure the ui-scroll.js (as transpiled from ui-scroll.coffee) is loaded in your page. You also have to include
-module name 'ui.scroll' on the list of your application module dependencies.
+To use the directive make sure the ui-scroll.js (as transpiled from [ui-scroll.coffee](https://github.com/Hill30/NGScroller/tree/v0.0.2)) is loaded in your page. You also have to include
+module name 'ui.scroll' on the list of your application module dependencies. 
 
 The code in this file relies on a few DOM element methods of jQuery which are currently not implemented in jQlite, namely
 * before(elem)
