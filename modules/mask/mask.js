@@ -78,7 +78,7 @@ angular.module('ui.mask', [])
             controller.$viewValue = value.length ? maskValue(value) : '';
             controller.$setValidity('mask', isValid);
             if (value === '' && controller.$error.required !== undefined) {
-              controller.$setValidity('required', false);
+                controller.$setValidity('required', !controller.$error.required);
             }
             return isValid ? value : undefined;
           }
