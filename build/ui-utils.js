@@ -4,6 +4,20 @@
  * @link http://angular-ui.github.com
  * @license MIT License, http://www.opensource.org/licenses/MIT
  */
+angular.module('ui.alias', []).config(['$compileProvider', 'uiAliasConfig', function($compileProvider, uiAliasConfig){
+  uiAliasConfig = uiAliasConfig || {};
+  angular.forEach(uiAliasConfig, function(config, alias){
+    if (angular.isString(config)) {
+      config = {
+        replace: true,
+        template: config
+      };
+    }
+    $compileProvider.directive(alias, function(){
+      return config;
+    });
+  });
+}]);
 /**
  * General-purpose Event binding. Bind any event not natively supported by Angular
  * Pass an object with keynames for events to ui-event
