@@ -1756,9 +1756,9 @@ angular.module('ui.scrollfix',[]).directive('uiScrollfix', ['$window', function 
 }]).directive('uiScrollfixTarget', [function () {
   'use strict';
   return {
-    controller: function($element) {
+    controller: ['$element', function($element) {
       this.$element = $element;
-    }
+    }]
   };
 }]);
 
