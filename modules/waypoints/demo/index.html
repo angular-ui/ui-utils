@@ -1,0 +1,105 @@
+<section id="waypoints">
+  <div class="page-header">
+    <h1>Waypoints</h1>
+  </div>
+  <div class="row">
+    <div class="span6">
+      <h3>What?</h3>
+
+      <p>Call provided functions when the specified elements transition from above the current window to above the current window, or from left to right.</p>
+
+      <script type="text/javascript">
+        function WaypointsExampleCtrl($scope) {
+          $scope.callback = function(direction, element) {
+            $scope.direction = direction;
+          }
+        }
+      </script>
+      <style>
+        .a-class {
+          position:fixed;
+          top:50%;
+          left:0px;
+          font-weight: bold;
+          color: red;
+          background-color: grey;
+          transform:rotate(-90deg);
+          -ms-transform:rotate(-90deg); /* IE 9 */
+          -webkit-transform:rotate(-90deg); /* Safari and Chrome */
+        }
+      </style>
+
+      <div id="waypointsExample" class="well" ng-controller="WaypointsExampleCtrl" style="height:500px">
+        <p style="height: 100px">Try scrolling past the red text or changing the offset</p>
+        <p ui-waypoints="callback" style="color: red; height: 100px">They see me scrollin...</p>
+        <p ui-waypoints="'a-class'" style="100px">When you scroll past me, 'a-class' will be added to my list of classes</p>
+        <p id="waypointsOutput" ng-hide="direction == null">You scrolled {{direction}} past the message</p>
+      </div>
+    </div>
+    <div class="span6">
+      <h3>Why?</h3>
+
+      <p>Trigger class changes on different menu elements (e.g. in a sticky navbar) when key elements are passed, trigger animations based on page position</p>
+
+    </div>
+  </div>
+
+  <h3>How?</h3>
+
+  <h4>Define your callback function</h4>
+  <pre class="prettyprint">$scope.callback = function(direction, element) {
+    $scope.callback = function(direction, element) {
+      $scope.direction = direction;
+    };
+  }
+  </pre>
+
+  <h4>Configure ui-waypoints</h4>
+  <pre class="prettyprint">
+    &lt;p ui-waypoints="callback"&gt;They see me scrollin...&lt;/p&gt;
+    &lt;p id="waypointsOutput" ng-hide="direction == null"&gt;You scrolled {{direction}} past the message&lt;/p&gt;
+  </pre>
+  <p>The argument to ui-waypoints should be one of the following:
+    <ul>
+      <li>Blank/empty</li>
+      <li>an expression that evaluates to either an object or a function.</li>
+      <li>A string of the form '+123', '-123'</li>
+      <li>An integer</li>
+      <li>A free-form string</li>
+    </ul>
+  </p>
+  <p>If the argument is blank, the class 'ui-scrollfix' will be assigned to the element whenever it is scrolled past, and removed whenever it is scrolled past in the other direction.</p>
+  <p>If it is an expression that evaluates to a function, the function will be called with the arguments (direction, element),
+   where direction is a string that is one of "up", "down", "left", or "right". The element
+   will be the element that triggered the callback.</p>
+  </p>
+  <p>
+      If it's an integer, or a string of the form "+123"/"-123", the class "ui-scrollfix" will be assigned to the element after the offset specified is passed. The +/- syntax implies a relative shift in the offset (more details below).
+  </p>
+  <p>If it is a string, the string will be used as the classname to assign whenever the target is scrolled past. I.e., if you provide ui-waypoints="'a-class'", 'a-class' will be added to the list of classes for the target element whenever it is scrolled past (and removed when the direction is reversed).
+  </p>
+  <p>Expressions which evaluate to objects are treated as an options object. The following options are valid:
+    <table>
+      <tr><th>Attribute</th><th>Description</th></tr>
+      <tr>
+        <td><code> enter </code></td><td> function | Default null | Called when transition from above to below or left to right. Passed the direction (down, right), and the element. </td>
+      </tr>
+      <tr>
+        <td><code> exit </code></td><td> function | Default null | Called when transitioning from below to above or right to left. Passed the direction (up, left), and the element.</td>
+      </tr>
+      <tr>
+        <td><code> both </code></td><td> function | Default null | Called when transitioning in either directionPassed the direction (left, right up, down), and the element. </td>
+      </tr>
+      <tr>
+        <td><code> offset </code></td><td> object | Default {vertical: 0, horizontal: 0} | Specifies the the detected y-offset of the element. Should be an object that looks like <code>{"vertical": 10, "horizontal":15}</code>. Values can be either absolute
+    <code>600</code> or offset from the calculated value -50 or +100. In the latter case, they should be strings, and in the former, numbers.</td>
+      </tr>
+      <tr>
+        <td><code> addClass </code></td><td> string | Default null | Specifies a class to add to an element after it has been scrolled past. You may also simply specify this as the main argument to ui-waypoints, i.e., <code>&lt;p ui-waypoints="'class-name'"&gt;...&lt;/p&gt;</code> (note the extra quotes there... this can be any expression that evaluates to a string)</td>
+      </tr>
+      <tr>
+        <td><code> updateOffset </code></td><td> boolean | Default true (caveat, see description) | When true, the offset for the target element will be updated each time a scroll event occurs. Otherwise, the offset will stay fixed at the first place which the element was encountered. The default is usually true, unless you specify a classname as the primary argument (e.g., ui-waypoints="'a-class'"). This is to prevent unexpected behavior if you are using this functionality to apply position: fixed to an element.</td>
+      </tr>
+    </table>
+    </p>
+</section>
