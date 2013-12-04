@@ -10,6 +10,7 @@ module.exports = function (grunt) {
   grunt.loadNpmTasks('grunt-contrib-jshint');
   grunt.loadNpmTasks('grunt-contrib-copy');
   grunt.loadNpmTasks('grunt-karma');
+  grunt.loadNpmTasks('grunt-conventional-changelog');
 
 
   /**
@@ -130,6 +131,11 @@ module.exports = function (grunt) {
         files: [
           {src: ['<%= dist %>/.tmpl/index.tmpl'], dest: '<%= dist %>/index.html'}
         ]
+      }
+    },
+    changelog: {
+      options: {
+        dest: 'CHANGELOG.md'
       }
     }
   };
