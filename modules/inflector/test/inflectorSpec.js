@@ -28,6 +28,11 @@ describe('inflector', function () {
       expect(inflectorFilter(testPhrase, 'underscore')).toEqual('here_is_my_phone_number');
     });
   });
+  describe('dash', function () {
+    it('should lowercase everything and separate words with a dash', function () {
+      expect(inflectorFilter(testPhrase, 'dash')).toEqual('here-is-my-phone-number');
+    });
+  });
   describe('variable', function () {
     it('should remove all separators and camelHump the phrase', function () {
       expect(inflectorFilter(testPhrase, 'variable')).toEqual('hereIsMyPhoneNumber');

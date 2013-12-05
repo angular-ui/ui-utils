@@ -27,6 +27,13 @@ angular.module('ui.inflector',[]).filter('inflector', function () {
     underscore: function (value) {
       return value.substr(0, 1).toLowerCase() + breakup(value.substr(1), '_').toLowerCase().split(' ').join('_');
     },
+    dash: function (value) {
+      value = value.substr(0, 1).toLowerCase() + breakup(value.substr(1), '-').toLowerCase();
+      value = value.replace(/[ _]+/g, function (match) {
+        return '-';
+      });
+      return value.split(/(\s+|_+)/).join('-');
+    },
     variable: function (value) {
       value = value.substr(0, 1).toLowerCase() + ucwords(value.split('_').join(' ')).substr(1).split(' ').join('');
       return value;
