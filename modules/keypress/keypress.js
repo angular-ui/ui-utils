@@ -1,6 +1,9 @@
-angular.module('ui.keypress',[]).
-factory('keypressHelper', ['$parse', function keypress($parse){
-  var keysByCode = {
+(function() {
+
+var keysByCode;
+
+function defineKeysByCode() {
+  keysByCode = {
     8: 'backspace',
     9: 'tab',
     13: 'enter',
@@ -17,10 +20,18 @@ factory('keypressHelper', ['$parse', function keypress($parse){
     45: 'insert',
     46: 'delete'
   };
+}
 
-  var capitaliseFirstLetter = function (string) {
-    return string.charAt(0).toUpperCase() + string.slice(1);
-  };
+var capitaliseFirstLetter = function (string) {
+  return string.charAt(0).toUpperCase() + string.slice(1);
+};
+
+angular.module('ui.keypress',[]).
+factory('keypressHelper', ['$parse', function keypress($parse){
+  // Lazily initialize the keys-by-code map
+  if (!keysByCode) {
+    defineKeysByCode();
+  }
 
   return function(mode, scope, elm, attrs) {
     var params, combinations = [];
@@ -112,3 +123,5 @@ angular.module('ui.keypress').directive('uiKeyup', ['keypressHelper', function(k
     }
   };
 }]);
+
+}());
