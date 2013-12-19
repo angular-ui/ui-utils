@@ -20,6 +20,11 @@ function defineKeysByCode() {
     45: 'insert',
     46: 'delete'
   };
+
+  // Provide named entries for `a` through `z`
+  for (var i = 65; i <= 90; i++) {
+    keysByCode[i] = String.fromCharCode(i + 32);
+  }
 }
 
 var capitaliseFirstLetter = function (string) {

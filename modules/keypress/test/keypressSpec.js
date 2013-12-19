@@ -35,6 +35,11 @@ describe('uiKeypress', function () {
     expect($scope.event).toBe(true);
   });
 
+  it('should support nmaed key press', function() {
+    createElement({'j': 'event=true'}).trigger(createKeyEvent(74));
+    expect($scope.event).toBe(true);
+  });
+
   it('should support combined key press', function () {
     createElement({'ctrl-shift-13': 'event=true'}).trigger(createKeyEvent(13, false, true, true, false));
     expect($scope.event).toBe(true);
