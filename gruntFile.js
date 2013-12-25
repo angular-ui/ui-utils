@@ -5,16 +5,8 @@ module.exports = function (grunt) {
   // Loading external tasks
   require('load-grunt-tasks')(grunt);
 
-  /**
-   * Custom task to inline a generated file at a certain moment...
-   */
-  grunt.registerTask('UGF', 'Use Generated Files.', function() {
-    initConfig.meta.view.demoHTML= grunt.file.read(grunt.template.process("<%= dist %>/demos.html"));
-  });
-
   // Default task.
   grunt.registerTask('default', ['jshint', 'karma:unit']);
-  grunt.registerTask('build-doc', ['build', 'concat:html_doc', 'UGF', 'copy']);
   grunt.registerTask('server', ['karma:start']);
   grunt.registerTask('dist', ['concat:tmp', 'concat:modules', 'clean:rm_tmp', 'uglify', 'concat:html_doc', 'copy']);
 
@@ -55,16 +47,7 @@ module.exports = function (grunt) {
         ' * @link <%= pkg.homepage %>',
         ' * @license <%= pkg.license %>',
         ' */',
-        ''].join('\n'),
-      view : {
-        humaName : "UI Utils",
-        repoName : "ui-utils",
-        demoJS : grunt.file.read("demo/demo.js"),
-        js : [
-          'build/<%= meta.view.repoName %>.min.js'
-        ]
-      },
-      destName : '<%= dist %>/build/<%= meta.view.repoName %>'
+        ''].join('\n')
     },
     watch: {
       karma: {
