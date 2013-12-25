@@ -9,15 +9,33 @@ module.exports = function (grunt) {
    * Custom task to inline a generated file at a certain moment...
    */
   grunt.registerTask('UGF', 'Use Generated Files.', function() {
-    initConfig.meta.view.demoHTML= grunt.file.read(  grunt.template.process("<%= dist %>/demos.html"));
+    initConfig.meta.view.demoHTML= grunt.file.read(grunt.template.process("<%= dist %>/demos.html"));
   });
 
   // Default task.
   grunt.registerTask('default', ['jshint', 'karma:unit']);
-  grunt.registerTask('build', ['concat:tmp', 'concat:modules', 'clean:rm_tmp', 'uglify']);
   grunt.registerTask('build-doc', ['build', 'concat:html_doc', 'UGF', 'copy']);
   grunt.registerTask('server', ['karma:start']);
+  grunt.registerTask('dist', ['concat:tmp', 'concat:modules', 'clean:rm_tmp', 'uglify', 'concat:html_doc', 'copy']);
 
+  // HACK TO ACCESS TO THE COMPONENT-PUBLISHER
+  function fakeTargetTask(prefix){
+    return function(){
+
+      if (this.args.length !== 1) return grunt.log.fail('Just give the name of the ' + prefix + ' you want like :\ngrunt ' + prefix + ':bower');
+
+      var done = this.async();
+      var spawn = require('child_process').spawn;
+      spawn('./node_modules/.bin/gulp', [ prefix, '--branch='+this.args[0] ].concat(grunt.option.flags()), {
+        cwd : './node_modules/component-publisher',
+        stdio: 'inherit'
+      }).on('close', done);
+    };
+  }
+
+  grunt.registerTask('build', fakeTargetTask('build'));
+  grunt.registerTask('publish', fakeTargetTask('publish'));
+  //
 
   var testConfig = function(configFile, customOptions) {
     var options = { configFile: configFile, singleRun: true };
@@ -67,7 +85,7 @@ module.exports = function (grunt) {
           ].join('\n  '),
           footer : '</div>'},
         src: [ 'modules/**/demo/index.html'],
-        dest: '<%= dist %>/demos.html'
+        dest: 'demo/demos.html'
       },
       tmp: {
         files: {  'tmp/dep.js': [ 'modules/**/*.js', '!modules/utils.js', '!modules/ie-shiv/*.js', '!modules/**/test/*.js']}
@@ -75,8 +93,8 @@ module.exports = function (grunt) {
       modules: {
         options: {banner: '<%= meta.banner %>'},
         files: {
-          '<%= meta.destName %>.js': ['tmp/dep.js', 'modules/utils.js'],
-          '<%= meta.destName %>-ieshiv.js' : ['modules/ie-shiv/*.js']
+          'dist/main/ui-utils.js': ['tmp/dep.js', 'modules/utils.js'],
+          'dist/main/ui-utils-ieshiv.js' : ['modules/ie-shiv/*.js']
         }
       }
     },
@@ -84,8 +102,8 @@ module.exports = function (grunt) {
       options: {banner: '<%= meta.banner %>'},
       build: {
         files: {
-          '<%= meta.destName %>.min.js': ['<%= meta.destName %>.js'],
-          '<%= meta.destName %>-ieshiv.min.js': ['<%= meta.destName %>-ieshiv.js']
+          'dist/main/ui-utils.min.js': ['dist/main/ui-utils.js'],
+          'dist/main/ui-utils-ieshiv.min.js': ['dist/main/ui-utils-ieshiv.js']
         }
       }
     },
@@ -110,18 +128,8 @@ module.exports = function (grunt) {
     copy: {
       main: {
         files: [
-          {src: ['demo/demo.js'], dest: '<%= dist %>/core/demo.js', filter: 'isFile'},
-
           // UI.Include needs a external html source.
-          {src: ['modules/include/demo/fragments.html'], dest: '<%= dist %>/assets/fragments.html', filter: 'isFile'}
-        ]
-      },
-      template : {
-        options : {processContent : function(content){
-          return grunt.template.process(content);
-        }},
-        files: [
-          {src: ['<%= dist %>/.tmpl/index.tmpl'], dest: '<%= dist %>/index.html'}
+          {src: ['modules/include/demo/fragments.html'], dest: 'demo/fragments.html', filter: 'isFile'}
         ]
       }
     }
