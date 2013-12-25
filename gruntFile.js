@@ -8,7 +8,7 @@ module.exports = function (grunt) {
   // Default task.
   grunt.registerTask('default', ['jshint', 'karma:unit']);
   grunt.registerTask('server', ['karma:start']);
-  grunt.registerTask('dist', ['concat:tmp', 'concat:modules', 'clean:rm_tmp', 'uglify', 'concat:html_doc', 'copy']);
+  grunt.registerTask('dist', ['concat:tmp', 'concat:modules', 'clean:rm_tmp', 'ngmin', 'uglify', 'concat:html_doc', 'copy']);
 
   // HACK TO ACCESS TO THE COMPONENT-PUBLISHER
   function fakeTargetTask(prefix){
