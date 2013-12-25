@@ -6,16 +6,12 @@ var fs = require('fs');
 
 module.exports = function() {
 
-  //var modulesName = grunt.file.expand({ cwd: "modules" }, ["*","!utils.js"]);
-  var modulesName = fs.readdirSync(__dirname + '/modules');
+  var modulesName = fs.readdirSync(__dirname + '/dist/sub');
 
   function makingComponentData(memo, name){
-    if(name === 'utils.js') return memo;
-
-     memo[name] = {
-      fullName : 'angular-ui-' + name,
-      main :     './ui-' + name + '.js',
-      src :       name + '.js'
+    memo[name] = {
+      name: 'angular-ui-' + name,
+      main: './' + name + '.js'
     };
 
     return memo;
@@ -38,7 +34,7 @@ module.exports = function() {
 
 
     // The sub-components
-    subcomponent : modulesName.reduce(makingComponentData, {}),
+    subcomponents : modulesName.reduce(makingComponentData, {}),
     // HACK...
     sub_dist_dir: 'sub'
   };
