@@ -1,0 +1,48 @@
+<section id="hoverintent">
+  <script type="text/javascript">
+    function HoverIntentDemoController($scope){
+		$scope.showMessage = function(){
+			alert('Hi there!');
+		}
+	}
+  </script>
+  <div class="page-header">
+    <h1>HoverIntent</h1>
+  </div>
+  <h3>Delayed hover event handlers.</h3>
+
+  <p>Only trigger the event handler when the user intents to hover the element.</p>
+  <p>Hover the diffent lines below to see the effect.</p>
+
+  <div class="well" ng-controller="HoverIntentDemoController">
+    <p>
+		<a ng-mouseover="showMessage();">ngMouseOver, immediate.</a>
+	</p>
+    <p>
+		<a ui-hoverintent="showMessage();">ngHoverintent, 500ms (default delay).</a>
+    </p>
+	<p>
+	  <a ui-hoverintent="showMessage();" ui-hoverintent-delay="5000">ngHoverintent, 5 seconds delay.</a>
+	</p>
+    <p>
+	  <a ui-hoverintent="showMessage();" ui-hoverintent-delay="5000" ui-hoverintent-resetonclick>ngHoverintent, 5 seconds delay. Delay reset when clicked.</a>
+	</p>
+
+  </div>
+
+  <h3>How?</h3>
+<pre class="prettyprint">
+  &lt;p&gt;
+    &lt;a ng-mouseover=&quot;showMessage();&quot;&gt;ngMouseOver, immediate.&lt;/a&gt;
+  &lt;/p&gt;
+  &lt;p&gt;
+    &lt;a ui-hoverintent=&quot;showMessage();&quot;&gt;ngHoverintent, 500ms (default delay).&lt;/a&gt;
+  &lt;/p&gt;
+  &lt;p&gt;
+    &lt;a ui-hoverintent=&quot;showMessage();&quot; ui-hoverintent-delay=&quot;5000&quot;&gt;ngHoverintent, 5 seconds delay.&lt;/a&gt;
+  &lt;/p&gt;
+  &lt;p&gt;
+    &lt;a ui-hoverintent=&quot;showMessage();&quot; ui-hoverintent-delay=&quot;5000&quot; ui-hoverintent-resetonclick&gt;ngHoverintent, 5 seconds delay. Delay reset when clicked.&lt;/a&gt;
+  &lt;/p&gt;
+</pre>
+</section>
