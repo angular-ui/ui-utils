@@ -434,7 +434,7 @@ angular.module('ui.scroll', []).directive('ngScrollViewport', [
 											insert(index, newItem);
 											return next++;
 										};
-										if (isArray(newItems)) {
+										if (angular.isArray(newItems)) {
 											_results = [];
 											for (j = _k = 0, _len2 = newitems.length; _k < _len2; j = ++_k) {
 												item = newitems[j];
