@@ -6,7 +6,10 @@ var fs = require('fs');
 
 module.exports = function() {
 
-  var modulesName = fs.readdirSync(__dirname + '/dist/sub');
+  var modulesName = [];
+  if (fs.existsSync(__dirname + '/dist/sub')){
+    modulesName = fs.readdirSync(__dirname + '/dist/sub');
+  }
 
   function makingComponentData(memo, name){
     memo[name] = {
