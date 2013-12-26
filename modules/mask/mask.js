@@ -1,3 +1,5 @@
+'use strict';
+
 /*
  Attaches input mask onto input element
  */
@@ -297,11 +299,13 @@ angular.module('ui.mask', [])
           iElement.bind('mousedown mouseup', mouseDownUpHandler);
 
           function mouseoutHandler(){
+            /*jshint validthis: true */
             oldSelectionLength = getSelectionLength(this);
             iElement.unbind('mouseout', mouseoutHandler);
           }
 
           function eventHandler(e){
+            /*jshint validthis: true */
             e = e || {};
             // Allows more efficient minification
             var eventWhich = e.which,
@@ -455,7 +459,6 @@ angular.module('ui.mask', [])
           // https://developer.mozilla.org/en-US/docs/JavaScript/Reference/Global_Objects/Array/indexOf
           if (!Array.prototype.indexOf) {
             Array.prototype.indexOf = function (searchElement /*, fromIndex */){
-              "use strict";
               if (this === null) {
                 throw new TypeError();
               }

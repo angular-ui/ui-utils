@@ -1,5 +1,5 @@
+'use strict';
 /*
- globals: angular, window
 
  List of used element methods available in JQuery but not in JQuery Lite
 
@@ -52,8 +52,7 @@ angular.module('ui.scroll', []).directive('ngScrollViewport', [
 							return viewport.height() * Math.max(0.1, +$attr.padding || 0.1);
 						};
 						scrollHeight = function(elem) {
-							var _ref;
-							return (_ref = elem[0].scrollHeight) != null ? _ref : elem[0].document.documentElement.scrollHeight;
+							return elem[0].scrollHeight || elem[0].document.documentElement.scrollHeight;
 						};
 						adapter = null;
 						linker(tempScope = $scope.$new(), function(template) {

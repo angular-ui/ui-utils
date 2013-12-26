@@ -1,3 +1,5 @@
+'use strict';
+
 /**
  * Provides an easy way to toggle a checkboxes indeterminate property
  *

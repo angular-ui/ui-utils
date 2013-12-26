@@ -1,3 +1,5 @@
+'use strict';
+
 angular.module('ui.keypress',[]).
 factory('keypressHelper', ['$parse', function keypress($parse){
   var keysByCode = {

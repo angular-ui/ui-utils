@@ -1,3 +1,4 @@
+'use strict';
 
 /**
  * A replacement utility for internationalization very similar to sprintf.

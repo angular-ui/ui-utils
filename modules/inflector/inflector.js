@@ -1,3 +1,5 @@
+'use strict';
+
 /**
  * Converts variable-esque naming conventions to something presentational, capitalized words separated by space.
  * @param {String} value The value to be parsed and prettified.

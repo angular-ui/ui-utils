@@ -13,6 +13,7 @@
 // <![endif]-->
 
 (function (window, document) {
+  "use strict";
 
   var debug = window.ieShivDebug || false,
       tags = [ "ngInclude", "ngPluralize", "ngView", "ngSwitch", "uiCurrency", "uiCodemirror", "uiDate", "uiEvent",

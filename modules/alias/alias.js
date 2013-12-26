@@ -1,3 +1,5 @@
+'use strict';
+
 angular.module('ui.alias', []).config(['$compileProvider', 'uiAliasConfig', function($compileProvider, uiAliasConfig){
   uiAliasConfig = uiAliasConfig || {};
   angular.forEach(uiAliasConfig, function(config, alias){
