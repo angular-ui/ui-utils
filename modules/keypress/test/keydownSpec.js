@@ -4,7 +4,7 @@ describe('uiKeydown', function () {
   var $scope, $compile;
 
   var createKeyEvent = function (mainKey, alt, ctrl, shift, meta) {
-    var keyEvent = jQuery.Event("keydown");
+    var keyEvent = jQuery.Event('keydown');
 
     keyEvent.keyCode = mainKey;
     keyEvent.altKey = alt;
@@ -17,7 +17,7 @@ describe('uiKeydown', function () {
 
   var createElement = function (elementDef) {
     var elementStr = angular.isString(elementDef) ? elementDef : angular.toJson(elementDef);
-    return $compile("<span ui-keydown='" + elementStr + "'></span>")($scope);
+    return $compile('<span ui-keydown=\'' + elementStr + '\'></span>')($scope);
   };
 
   beforeEach(module('ui.keypress'));

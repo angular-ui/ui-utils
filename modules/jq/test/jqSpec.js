@@ -20,14 +20,14 @@ describe('uiJq', function () {
   describe('function or plugin isn\'t found', function () {
     it('should throw an error', function () {
       expect(function () {
-        compile("<div ui-jq='failure'></div>")(scope);
+        compile('<div ui-jq="failure"></div>')(scope);
       }).toThrow();
     });
   });
   describe('calling a jQuery element function', function () {
     it('should just like, sort of work and junk', function () {
       spyOn(jQuery.fn, 'foo');
-      compile("<div ui-jq='foo'></div>")(scope);
+      compile('<div ui-jq="foo"></div>')(scope);
       timeout.flush();
       expect(jQuery.fn.foo).toHaveBeenCalled();
     });
@@ -38,7 +38,7 @@ describe('uiJq', function () {
 //        console.log(length);
       };
       scope.$apply('items=[1, 2]');
-      compile("<ul ui-jq='bar'><li ng-repeat='item in items'></li></ul>")(scope);
+      compile('<ul ui-jq="bar"><li ng-repeat="item in items"></li></ul>')(scope);
       scope.$apply();
       timeout.flush();
       expect(length).toBe(2);

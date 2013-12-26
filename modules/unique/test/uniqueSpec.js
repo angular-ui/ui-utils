@@ -73,11 +73,11 @@ describe('unique', function () {
   });
 
   it('should work correctly for arrays of mixed elements and object equality', function () {
-    expect(uniqueFilter([1, {key: 'value'}, 1, {key: 'value'}, 2, "string", 3])).toEqual([1, {key: 'value'}, 2, "string", 3]);
+    expect(uniqueFilter([1, {key: 'value'}, 1, {key: 'value'}, 2, 'string', 3])).toEqual([1, {key: 'value'}, 2, 'string', 3]);
   });
 
   it('should work correctly for arrays of mixed elements and a key specified', function () {
-    expect(uniqueFilter([1, {key: 'value'}, 1, {key: 'value'}, 2, "string", 3], 'key')).toEqual([1, {key: 'value'}, 2, "string", 3]);
+    expect(uniqueFilter([1, {key: 'value'}, 1, {key: 'value'}, 2, 'string', 3], 'key')).toEqual([1, {key: 'value'}, 2, 'string', 3]);
   });
 
   it('should return unmodified object if not array', function () {
