@@ -416,6 +416,7 @@ angular.module('ui.mask', [])
           function isValidCaretPosition(pos){ return maskCaretMap.indexOf(pos) > -1; }
 
           function getCaretPosition(input){
+            if (!input) return 0;
             if (input.selectionStart !== undefined) {
               return input.selectionStart;
             } else if (document.selection) {
@@ -429,6 +430,7 @@ angular.module('ui.mask', [])
           }
 
           function setCaretPosition(input, pos){
+            if (!input) return 0;
             if (input.offsetWidth === 0 || input.offsetHeight === 0) {
               return; // Input's hidden
             }
@@ -447,6 +449,7 @@ angular.module('ui.mask', [])
           }
 
           function getSelectionLength(input){
+            if (!input) return 0;
             if (input.selectionStart !== undefined) {
               return (input.selectionEnd - input.selectionStart);
             }
