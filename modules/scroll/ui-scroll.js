@@ -12,7 +12,7 @@
  */
 
 angular.module('ui.scroll', []).directive('ngScrollViewport', [
-		'$log', function(console) {
+		'$log', function() {
 			return {
 				controller: [
 					'$scope', '$element', function(scope, element) {
@@ -127,7 +127,7 @@ angular.module('ui.scroll', []).directive('ngScrollViewport', [
 						pending = [];
 						eof = false;
 						bof = false;
-						loading = datasource.loading || function(value) {};
+						loading = datasource.loading || function() {};
 						isLoading = false;
 						removeFromBuffer = function(start, stop) {
 							var i, _i;
@@ -431,7 +431,7 @@ angular.module('ui.scroll', []).directive('ngScrollViewport', [
 									var j, newItems, _k, _len2, _results;
 									if (newItems = locator(wrapper.scope)) {
 										insert = function(index, newItem) {
-											insert(index, item);
+											insert(index, newItem);
 											return next++;
 										};
 										if (isArray(newItems)) {

@@ -4,7 +4,7 @@ angular.module('doc.ui-utils', ['ui.utils', 'prettifyDirective' ]);
 
 angular.module('ui.scroll')
     .factory('datasource', [
-    '$log', '$timeout', '$rootScope', function(console, $timeout, $rootScope) {
+    '$log', '$timeout', function(console, $timeout) {
         var get = function(index, count, success) {
             return $timeout(function() {
                 var i, result, _i, _ref;

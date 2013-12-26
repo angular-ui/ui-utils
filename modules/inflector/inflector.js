@@ -35,7 +35,7 @@ angular.module('ui.inflector',[]).filter('inflector', function () {
     }
   };
 
-  return function (text, inflector, separator) {
+  return function (text, inflector) {
     if (inflector !== false && angular.isString(text)) {
       inflector = inflector || 'humanize';
       return inflectors[inflector](text);
