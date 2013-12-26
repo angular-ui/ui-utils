@@ -1,3 +1,4 @@
+/* global $: false*/
 describe('\njqLite: testing against jQuery\n', function () {
 	'use strict';
 
