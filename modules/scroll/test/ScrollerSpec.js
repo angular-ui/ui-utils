@@ -4,9 +4,8 @@ describe('uiScroll', function () {
 
 	angular.module('ui.scroll.test', [])
 		.factory('myEmptyDatasource', [
-			'$log', '$timeout', '$rootScope', function(console, $timeout, $rootScope) {
-				var current, get, loading, revision;
-				get = function(index, count, success) {
+			function() {
+				var get = function(index, count, success) {
 					success([]);
 				};
 
@@ -17,9 +16,8 @@ describe('uiScroll', function () {
 		])
 
 		.factory('myOnePageDatasource', [
-			'$log', '$timeout', '$rootScope', function(console, $timeout, $rootScope) {
-				var current, get, loading, revision;
-				get = function(index, count, success) {
+			function() {
+				var get = function(index, count, success) {
 					if (index === 1) {
 						success(['one', 'two', 'three']);
 					} else {
@@ -34,9 +32,8 @@ describe('uiScroll', function () {
 		])
 
 		.factory('myMultipageDatasource', [
-			'$log', '$timeout', '$rootScope', function(console, $timeout, $rootScope) {
-				var current, get, loading, revision;
-				get = function(index, count, success) {
+			function() {
+				var get = function(index, count, success) {
 					var result = [];
 					for (var i = index; i<index+count; i++) {
 						if (i>0 && i<=20) {
@@ -51,8 +48,6 @@ describe('uiScroll', function () {
 				};
 			}
 		]);
-
-	var sandbox = angular.element('<div/>');
 
 	beforeEach(module('ui.scroll'));
 	beforeEach(module('ui.scroll.test'));
@@ -209,7 +204,7 @@ describe('uiScroll', function () {
 				spy = spyOn(myMultipageDatasource, 'get').andCallThrough();
 			});
 			runTest(html,
-				function($window, sandbox) {
+				function() {
 					expect(spy.calls.length).toBe(3);
 
 					expect(spy.calls[0].args[0]).toBe(1);

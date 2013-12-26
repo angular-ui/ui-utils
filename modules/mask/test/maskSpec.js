@@ -43,7 +43,6 @@ describe("uiMask", function () {
     });
 
     it("should not change the model value", function() {
-      var input = compileElement(inputHtml);
       scope.$apply("x = 'abc123'");
       scope.$apply("mask = '(A) * 9'");
       expect(scope.x).toBe("abc123");
@@ -52,8 +51,7 @@ describe("uiMask", function () {
     });
 
     it("should set ngModelController.$viewValue to match input value", function() {
-      var form  = compileElement(formHtml);
-      var input = form.find("input");
+      compileElement(formHtml);
       scope.$apply("x = 'abc123'");
       scope.$apply("mask = '(A) * 9'");
       expect(scope.test.input.$viewValue).toBe("(a) b 1");
@@ -119,8 +117,7 @@ describe("uiMask", function () {
 
   describe("changes from the model", function () {
     it("should set the correct ngModelController.$viewValue", function() {
-      var form  = compileElement(formHtml);
-      var input = form.find("input");
+      compileElement(formHtml);
       scope.$apply("mask = '(A) * 9'");
       scope.$apply("x = ''");
       expect(scope.test.input.$viewValue).not.toBeDefined();
