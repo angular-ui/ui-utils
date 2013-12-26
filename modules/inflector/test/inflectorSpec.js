@@ -1,4 +1,6 @@
 describe('inflector', function () {
+  'use strict';
+
   var inflectorFilter, testPhrase = 'here isMy_phone_number';
 
   beforeEach(module('ui.inflector'));

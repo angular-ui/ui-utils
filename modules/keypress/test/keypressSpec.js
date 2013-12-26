@@ -1,5 +1,5 @@
-
 describe('uiKeypress', function () {
+  'use strict';
 
   var $scope, $compile;
 
@@ -39,7 +39,7 @@ describe('uiKeypress', function () {
     createElement({'ctrl-shift-13': 'event=true'}).trigger(createKeyEvent(13, false, true, true, false));
     expect($scope.event).toBe(true);
   });
-  
+
   it('should support alternative combinations', function () {
     $scope.event = 0;
     createElement({'ctrl-shift-14 ctrl-shift-13': 'event=event+1'}).trigger(createKeyEvent(13, false, true, true, false)).trigger(createKeyEvent(14, false, true, true, false));

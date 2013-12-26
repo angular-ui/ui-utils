@@ -1,4 +1,6 @@
 describe('uiJq', function () {
+  'use strict';
+
   var scope, compile, timeout;
   scope = null;
   beforeEach(module('ui.jq'));

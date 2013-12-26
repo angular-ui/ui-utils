@@ -1,4 +1,5 @@
 describe('uiMask', function () {
+  'use strict';
 
   var formHtml  = "<form name='test'><input name='input' ng-model='x' ui-mask='{{mask}}'></form>";
   var inputHtml = "<input name='input' ng-model='x' ui-mask='{{mask}}'>";
@@ -6,7 +7,6 @@ describe('uiMask', function () {
 
   beforeEach(module('ui.mask'));
   beforeEach(inject(function ($rootScope, $compile, uiMaskConfig) {
-    c = console.log;
     scope = $rootScope;
     config = uiMaskConfig;
     compileElement = function(html) {

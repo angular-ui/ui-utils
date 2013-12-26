@@ -1,5 +1,7 @@
 // modeled after: angular.js/test/ng/directive/ngIncludeSpec.js
 describe('uiInclude', function() {
+  'use strict';
+
   var scope, $compile, $templateCache, element;
 
   afterEach(function() {

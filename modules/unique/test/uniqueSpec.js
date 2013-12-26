@@ -1,4 +1,6 @@
 describe('unique', function () {
+  'use strict';
+
   var uniqueFilter;
 
   beforeEach(module('ui.unique'));
