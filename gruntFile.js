@@ -118,18 +118,32 @@ module.exports = function (grunt) {
       rm_tmp: {src: ['tmp']}
     },
     jshint: {
-      files:['modules/**/*.js', 'gruntFile.js', 'test/**/*Spec.js', 'demo/**/*.js'],
-      options: {
-        curly: true,
-        eqeqeq: true,
-        immed: true,
-        latedef: true,
-        newcap: true,
-        noarg: true,
-        sub: true,
-        boss: true,
-        eqnull: true,
-        globals: {}
+      src: {
+        files:{ src : ['modules/**/*.js', '!modules/**/test/*Spec.js','demo/**/*.js'] },
+        options: { jshintrc: '.jshintrc' }
+      },
+      test: {
+        files:{ src : [ 'modules/**/test/*Spec.js', 'gruntFile.js'] },
+        options: grunt.util._.extend({}, grunt.file.readJSON('.jshintrc'), {
+          node: true,
+          globals: {
+            angular: false,
+            inject: false,
+            jQuery: false,
+
+            jasmine: false,
+            afterEach: false,
+            beforeEach: false,
+            ddescribe: false,
+            describe: false,
+            expect: false,
+            iit: false,
+            it: false,
+            spyOn: false,
+            xdescribe: false,
+            xit: false
+          }
+        })
       }
     },
     copy: {
