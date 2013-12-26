@@ -7,7 +7,7 @@ module.exports = function (grunt) {
 
   // Default task.
   grunt.registerTask('default', ['jshint', 'karma:unit']);
-  grunt.registerTask('server', ['karma:start']);
+  grunt.registerTask('serve', [ 'karma:continuous', 'dist', 'build:gh-pages', 'connect:continuous', 'watch']);
   grunt.registerTask('dist', ['concat:tmp', 'concat:modules', 'clean:rm_tmp', 'ngmin', 'uglify', 'concat:html_doc', 'copy']);
 
   // HACK TO ACCESS TO THE COMPONENT-PUBLISHER
@@ -66,16 +66,43 @@ module.exports = function (grunt) {
         ' */',
         ''].join('\n')
     },
+
     watch: {
-      karma: {
-        files: ['modules/**/*.js'],
-        tasks: ['karma:unit:run'] //NOTE the :run flag
+
+      src: {
+        files: ['modules/**/*.js', '!modules/**/test/*Spec.js', 'demo/**/*.js'],
+        tasks: ['jshint:src', 'karma:unit:run', 'dist', 'build:gh-pages']
+      },
+      test: {
+        files: ['modules/**/test/*Spec.js'],
+        tasks: ['jshint:test', 'karma:unit:run']
+      },
+      demo: {
+        files: ['modules/**/demo/*'],
+        tasks: ['jshint:src', 'concat:html_doc', 'copy', 'build:gh-pages']
+      },
+      livereload: {
+        files: ['out/built/gh-pages/**/*'],
+        options: { livereload: true }
       }
     },
+
+    connect: {
+      options: {
+        base : 'out/built/gh-pages',
+        open: true,
+        livereload: true
+      },
+      server: { options: { keepalive: true } },
+      continuous: { options: { keepalive: false } }
+    },
+
     karma: {
       unit: testConfig('test/karma.conf.js'),
-      start: {configFile: 'test/karma.conf.js'}
+      server: {configFile: 'test/karma.conf.js'},
+      continuous: {configFile: 'test/karma.conf.js',  background: true }
     },
+
     concat: {
       html_doc: {
         options: {
