@@ -175,7 +175,7 @@ angular.module('ui.scroll.jqlite', ['ui.scroll']).service('jqLiteExtras', [
               if (value === void 0) {
                 return self;
               } else {
-                return setOffset;
+                return value;
 
               }
             }
