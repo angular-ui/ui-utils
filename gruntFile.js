@@ -1,6 +1,6 @@
-module.exports = function (grunt) {
+'use strict';
 
-  var initConfig;
+module.exports = function (grunt) {
 
   // Loading external tasks
   require('load-grunt-tasks')(grunt);
@@ -9,6 +9,7 @@ module.exports = function (grunt) {
   grunt.registerTask('default', ['jshint', 'karma:unit']);
   grunt.registerTask('serve', [ 'karma:continuous', 'dist', 'build:gh-pages', 'connect:continuous', 'watch']);
   grunt.registerTask('dist', ['concat:tmp', 'concat:modules', 'clean:rm_tmp', 'ngmin', 'uglify', 'concat:html_doc', 'copy']);
+
 
   // HACK TO ACCESS TO THE COMPONENT-PUBLISHER
   function fakeTargetTask(prefix){
@@ -30,7 +31,7 @@ module.exports = function (grunt) {
   //
 
 
-  //
+  // HACK TO LIST ALL THE MODULE NAMES
   var moduleNames = grunt.file.expand({ cwd: 'modules' }, ['*','!utils.js']);
   function ngMinModulesConfig(memo, moduleName){
 
@@ -46,14 +47,17 @@ module.exports = function (grunt) {
   //
 
 
+  // HACK TO MAKE TRAVIS WORK
   var testConfig = function(configFile, customOptions) {
     var options = { configFile: configFile, singleRun: true };
     var travisOptions = process.env.TRAVIS && { browsers: ['Firefox', 'PhantomJS'], reporters: ['dots'] };
     return grunt.util._.extend(options, customOptions, travisOptions);
   };
+  //
+
 
   // Project configuration.
-  initConfig = {
+  grunt.initConfig({
     bower: 'bower_components',
     dist : '<%= bower %>/angular-ui-docs',
     pkg: grunt.file.readJSON('package.json'),
@@ -183,7 +187,6 @@ module.exports = function (grunt) {
     },
 
     ngmin: moduleNames.reduce(ngMinModulesConfig, {})
-  };
-  grunt.initConfig(initConfig);
+  });
 
 };
