@@ -56,7 +56,7 @@ angular.module('ui.scroll.jqlite', ['ui.scroll']).service('jqLiteExtras', [
           convertToPx = function(elem, value) {
             var core_pnum, left, result, rnumnonpx, rs, rsLeft, style;
             core_pnum = /[+-]?(?:\d*\.|)\d+(?:[eE][+-]?\d+|)/.source;
-            rnumnonpx = new RegExp("^(" + core_pnum + ")(?!px)[a-z%]+$", "i");
+            rnumnonpx = new RegExp('^(' + core_pnum + ')(?!px)[a-z%]+$', 'i');
             if (!rnumnonpx.test(value)) {
               return parseFloat(value);
             } else {

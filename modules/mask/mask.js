@@ -215,10 +215,10 @@ angular.module('ui.mask', [])
           function getPlaceholderChar(i) {
             var placeholder = iAttrs.placeholder;
 
-            if (typeof placeholder !== "undefined" && placeholder[i]) {
+            if (typeof placeholder !== 'undefined' && placeholder[i]) {
               return placeholder[i];
             } else {
-              return "_";
+              return '_';
             }
           }
 
@@ -245,7 +245,7 @@ angular.module('ui.mask', [])
               minRequiredLength = 0;
 
               var isOptional = false,
-                  splitMask  = mask.split("");
+                  splitMask  = mask.split('');
 
               angular.forEach(splitMask, function (chr, i){
                 if (linkOptions.maskDefinitions[chr]) {
@@ -260,7 +260,7 @@ angular.module('ui.mask', [])
                     minRequiredLength++;
                   }
                 }
-                else if (chr === "?") {
+                else if (chr === '?') {
                   isOptional = true;
                 }
                 else {

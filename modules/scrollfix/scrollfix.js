@@ -29,7 +29,7 @@ angular.module('ui.scrollfix',[]).directive('uiScrollfix', ['$window', function 
         if (angular.isDefined($window.pageYOffset)) {
           offset = $window.pageYOffset;
         } else {
-          var iebody = (document.compatMode && document.compatMode !== "BackCompat") ? document.documentElement : document.body;
+          var iebody = (document.compatMode && document.compatMode !== 'BackCompat') ? document.documentElement : document.body;
           offset = iebody.scrollTop;
         }
         if (!elm.hasClass('ui-scrollfix') && offset > attrs.uiScrollfix) {
