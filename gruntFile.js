@@ -7,8 +7,12 @@ module.exports = function (grunt) {
 
   // Default task.
   grunt.registerTask('default', ['jshint', 'karma:unit']);
-  grunt.registerTask('serve', [ 'karma:continuous', 'dist', 'build:gh-pages', 'connect:continuous', 'watch']);
-  grunt.registerTask('dist', ['concat:tmp', 'concat:modules', 'clean:rm_tmp', 'ngmin', 'uglify', 'concat:html_doc', 'copy']);
+  grunt.registerTask('serve', [ 'karma:continuous', 'dist:main', 'dist:demo', 'build:gh-pages', 'connect:continuous', 'watch']);
+
+  grunt.registerTask('dist', ['dist:main', 'dist:sub', 'dist:demo']);
+  grunt.registerTask('dist:main', ['concat:tmp', 'concat:modules', 'clean:rm_tmp', 'uglify:main']);
+  grunt.registerTask('dist:sub', ['ngmin', 'uglify:sub']);
+  grunt.registerTask('dist:demo', ['concat:html_doc', 'copy']);
 
 
   // HACK TO ACCESS TO THE COMPONENT-PUBLISHER
@@ -75,7 +79,7 @@ module.exports = function (grunt) {
 
       src: {
         files: ['modules/**/*.js', '!modules/**/test/*Spec.js', 'demo/**/*.js'],
-        tasks: ['jshint:src', 'karma:unit:run', 'dist', 'build:gh-pages']
+        tasks: ['jshint:src', 'karma:unit:run', 'dist:main', 'dist:demo', 'build:gh-pages']
       },
       test: {
         files: ['modules/**/test/*Spec.js'],
@@ -83,7 +87,7 @@ module.exports = function (grunt) {
       },
       demo: {
         files: ['modules/**/demo/*'],
-        tasks: ['jshint:src', 'concat:html_doc', 'copy', 'build:gh-pages']
+        tasks: ['jshint:src', 'dist:demo', 'build:gh-pages']
       },
       livereload: {
         files: ['out/built/gh-pages/**/*'],
