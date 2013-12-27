@@ -24,7 +24,7 @@ module.exports = function (grunt) {
       var done = this.async();
       var spawn = require('child_process').spawn;
       spawn('./node_modules/.bin/gulp', [ prefix, '--branch='+this.args[0] ].concat(grunt.option.flags()), {
-        cwd : './node_modules/component-publisher',
+        cwd : './node_modules/angular-ui-publisher',
         stdio: 'inherit'
       }).on('close', done);
     };
