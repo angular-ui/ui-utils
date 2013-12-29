@@ -190,7 +190,8 @@ module.exports = function (grunt) {
       }
     },
 
-    ngmin: moduleNames.reduce(ngMinModulesConfig, {})
+    ngmin: moduleNames.reduce(ngMinModulesConfig, {}),
+    changelog: { options: { dest: 'CHANGELOG.md' } }
   });
 
 };
