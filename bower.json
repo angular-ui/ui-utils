@@ -1,0 +1,8 @@
+{
+  "name": "angular-ui-route",
+  "version": "0.1.0",
+  "main": "./route.js",
+  "dependencies": {
+    "angular": ">= 1.0.2"
+  }
+}
