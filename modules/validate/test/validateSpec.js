@@ -1,4 +1,6 @@
-describe('uiValidate', function ($compile) {
+describe('uiValidate', function () {
+  'use strict';
+
   var scope, compileAndDigest;
 
   var trueValidator = function () {

@@ -1,3 +1,5 @@
+'use strict';
+
 /*
  Attaches input mask onto input element
  */
@@ -213,10 +215,10 @@ angular.module('ui.mask', [])
           function getPlaceholderChar(i) {
             var placeholder = iAttrs.placeholder;
 
-            if (typeof placeholder !== "undefined" && placeholder[i]) {
+            if (typeof placeholder !== 'undefined' && placeholder[i]) {
               return placeholder[i];
             } else {
-              return "_";
+              return '_';
             }
           }
 
@@ -243,7 +245,7 @@ angular.module('ui.mask', [])
               minRequiredLength = 0;
 
               var isOptional = false,
-                  splitMask  = mask.split("");
+                  splitMask  = mask.split('');
 
               angular.forEach(splitMask, function (chr, i){
                 if (linkOptions.maskDefinitions[chr]) {
@@ -258,7 +260,7 @@ angular.module('ui.mask', [])
                     minRequiredLength++;
                   }
                 }
-                else if (chr === "?") {
+                else if (chr === '?') {
                   isOptional = true;
                 }
                 else {
@@ -297,11 +299,13 @@ angular.module('ui.mask', [])
           iElement.bind('mousedown mouseup', mouseDownUpHandler);
 
           function mouseoutHandler(){
+            /*jshint validthis: true */
             oldSelectionLength = getSelectionLength(this);
             iElement.unbind('mouseout', mouseoutHandler);
           }
 
           function eventHandler(e){
+            /*jshint validthis: true */
             e = e || {};
             // Allows more efficient minification
             var eventWhich = e.which,
@@ -412,6 +416,7 @@ angular.module('ui.mask', [])
           function isValidCaretPosition(pos){ return maskCaretMap.indexOf(pos) > -1; }
 
           function getCaretPosition(input){
+            if (!input) return 0;
             if (input.selectionStart !== undefined) {
               return input.selectionStart;
             } else if (document.selection) {
@@ -425,6 +430,7 @@ angular.module('ui.mask', [])
           }
 
           function setCaretPosition(input, pos){
+            if (!input) return 0;
             if (input.offsetWidth === 0 || input.offsetHeight === 0) {
               return; // Input's hidden
             }
@@ -443,6 +449,7 @@ angular.module('ui.mask', [])
           }
 
           function getSelectionLength(input){
+            if (!input) return 0;
             if (input.selectionStart !== undefined) {
               return (input.selectionEnd - input.selectionStart);
             }
@@ -455,7 +462,6 @@ angular.module('ui.mask', [])
           // https://developer.mozilla.org/en-US/docs/JavaScript/Reference/Global_Objects/Array/indexOf
           if (!Array.prototype.indexOf) {
             Array.prototype.indexOf = function (searchElement /*, fromIndex */){
-              "use strict";
               if (this === null) {
                 throw new TypeError();
               }

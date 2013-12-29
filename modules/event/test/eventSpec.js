@@ -1,4 +1,6 @@
 describe('uiEvent', function () {
+  'use strict';
+
   var $scope, $rootScope, $compile;
 
   beforeEach(module('ui.event'));

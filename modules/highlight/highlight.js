@@ -1,3 +1,5 @@
+'use strict';
+
 /**
  * Wraps the
  * @param text {string} haystack to search through
