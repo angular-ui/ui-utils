@@ -5,8 +5,8 @@ node_js:
 before_install:
 - export DISPLAY=:99.0
 - sh -e /etc/init.d/xvfb start
-- npm install -g bower grunt-cli
-- npm install
+- npm install -qg bower grunt-cli
+- npm install -q
 - bower install --force
 - bower install --force
 after_success:
