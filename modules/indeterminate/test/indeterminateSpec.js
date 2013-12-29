@@ -1,5 +1,7 @@
 describe('uiIndeterminate', function () {
-  var $scope, $compile;
+  'use strict';
+
+  var $scope, $compile, elm;
 
   beforeEach(module('ui.indeterminate'));
   beforeEach(inject(function (_$rootScope_, _$compile_) {

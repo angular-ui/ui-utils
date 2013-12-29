@@ -1,3 +1,5 @@
+'use strict';
+
 /**
  * Provides an easy way to toggle a checkboxes indeterminate property
  *
@@ -12,7 +14,7 @@ angular.module('ui.indeterminate',[]).directive('uiIndeterminate', [
         }
 
         return function ($scope, elm, attrs) {
-          $scope.$watch(attrs.uiIndeterminate, function(newVal, oldVal) {
+          $scope.$watch(attrs.uiIndeterminate, function(newVal) {
             elm[0].indeterminate = !!newVal;
           });
         };

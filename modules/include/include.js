@@ -1,3 +1,5 @@
+'use strict';
+
 // modeled after: angular-1.0.7/src/ng/directive/ngInclude.js
 angular.module('ui.include',[])
 .directive('uiInclude', ['$http', '$templateCache', '$anchorScroll', '$compile',

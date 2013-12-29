@@ -1,4 +1,6 @@
 describe('highlight', function () {
+  'use strict';
+
   var highlightFilter, testPhrase = 'Prefix Highlight Suffix';
 
   beforeEach(module('ui.highlight'));

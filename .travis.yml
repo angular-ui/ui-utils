@@ -1,15 +1,17 @@
 ---
 language: node_js
 node_js:
-- '0.8'
+- '0.10'
 before_install:
 - export DISPLAY=:99.0
 - sh -e /etc/init.d/xvfb start
-- npm install -g bower grunt-cli
-- npm install
-- bower install
-before_script: bower_components/angular-ui-docs/.travis/before_script.sh
-after_success: bower_components/angular-ui-docs/.travis/after_success.sh
+- npm install -qg bower grunt-cli
+- npm install -q
+- bower install --force
+- bower install --force
+after_success:
+- "./node_modules/angular-ui-publisher/travis/authentication.sh || exit 0"
+- "grunt dist build:gh-pages publish:gh-pages build:bower publish:bower build:subbower publish:subbower"
 script: grunt
 env:
   global:

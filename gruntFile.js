@@ -1,39 +1,67 @@
+'use strict';
+
 module.exports = function (grunt) {
 
-  var initConfig;
-
   // Loading external tasks
-  grunt.loadNpmTasks('grunt-contrib-watch');
-  grunt.loadNpmTasks('grunt-contrib-uglify');
-  grunt.loadNpmTasks('grunt-contrib-concat');
-  grunt.loadNpmTasks('grunt-contrib-clean');
-  grunt.loadNpmTasks('grunt-contrib-jshint');
-  grunt.loadNpmTasks('grunt-contrib-copy');
-  grunt.loadNpmTasks('grunt-karma');
-
-
-  /**
-   * Custom task to inline a generated file at a certain moment...
-   */
-  grunt.registerTask('UGF', 'Use Generated Files.', function() {
-    initConfig.meta.view.demoHTML= grunt.file.read(  grunt.template.process("<%= dist %>/demos.html"));
-  });
+  require('load-grunt-tasks')(grunt);
 
   // Default task.
   grunt.registerTask('default', ['jshint', 'karma:unit']);
-  grunt.registerTask('build', ['concat:tmp', 'concat:modules', 'clean:rm_tmp', 'uglify']);
-  grunt.registerTask('build-doc', ['build', 'concat:html_doc', 'UGF', 'copy']);
-  grunt.registerTask('server', ['karma:start']);
+  grunt.registerTask('serve', [ 'karma:continuous', 'dist:main', 'dist:demo', 'build:gh-pages', 'connect:continuous', 'watch']);
+
+  grunt.registerTask('dist', ['dist:main', 'dist:sub', 'dist:demo']);
+  grunt.registerTask('dist:main', ['concat:tmp', 'concat:modules', 'clean:rm_tmp', 'uglify:main']);
+  grunt.registerTask('dist:sub', ['ngmin', 'uglify:sub']);
+  grunt.registerTask('dist:demo', ['concat:html_doc', 'copy']);
 
 
+  // HACK TO ACCESS TO THE COMPONENT-PUBLISHER
+  function fakeTargetTask(prefix){
+    return function(){
+
+      if (this.args.length !== 1) return grunt.log.fail('Just give the name of the ' + prefix + ' you want like :\ngrunt ' + prefix + ':bower');
+
+      var done = this.async();
+      var spawn = require('child_process').spawn;
+      spawn('./node_modules/.bin/gulp', [ prefix, '--branch='+this.args[0] ].concat(grunt.option.flags()), {
+        cwd : './node_modules/angular-ui-publisher',
+        stdio: 'inherit'
+      }).on('close', done);
+    };
+  }
+
+  grunt.registerTask('build', fakeTargetTask('build'));
+  grunt.registerTask('publish', fakeTargetTask('publish'));
+  //
+
+
+  // HACK TO LIST ALL THE MODULE NAMES
+  var moduleNames = grunt.file.expand({ cwd: 'modules' }, ['*','!utils.js']);
+  function ngMinModulesConfig(memo, moduleName){
+
+     memo[moduleName]= {
+      expand: true,
+      cwd: 'modules/' + moduleName,
+      src: [moduleName + '.js'],
+      dest: 'dist/sub/' + moduleName
+    };
+
+    return memo;
+  }
+  //
+
+
+  // HACK TO MAKE TRAVIS WORK
   var testConfig = function(configFile, customOptions) {
     var options = { configFile: configFile, singleRun: true };
     var travisOptions = process.env.TRAVIS && { browsers: ['Firefox', 'PhantomJS'], reporters: ['dots'] };
     return grunt.util._.extend(options, customOptions, travisOptions);
   };
+  //
+
 
   // Project configuration.
-  initConfig = {
+  grunt.initConfig({
     bower: 'bower_components',
     dist : '<%= bower %>/angular-ui-docs',
     pkg: grunt.file.readJSON('package.json'),
@@ -44,27 +72,45 @@ module.exports = function (grunt) {
         ' * @link <%= pkg.homepage %>',
         ' * @license <%= pkg.license %>',
         ' */',
-        ''].join('\n'),
-      view : {
-        humaName : "UI Utils",
-        repoName : "ui-utils",
-        demoJS : grunt.file.read("demo/demo.js"),
-        js : [
-          'build/<%= meta.view.repoName %>.min.js'
-        ]
-      },
-      destName : '<%= dist %>/build/<%= meta.view.repoName %>'
+        ''].join('\n')
     },
+
     watch: {
-      karma: {
-        files: ['modules/**/*.js'],
-        tasks: ['karma:unit:run'] //NOTE the :run flag
+
+      src: {
+        files: ['modules/**/*.js', '!modules/**/test/*Spec.js', 'demo/**/*.js'],
+        tasks: ['jshint:src', 'karma:unit:run', 'dist:main', 'dist:demo', 'build:gh-pages']
+      },
+      test: {
+        files: ['modules/**/test/*Spec.js'],
+        tasks: ['jshint:test', 'karma:unit:run']
+      },
+      demo: {
+        files: ['modules/**/demo/*'],
+        tasks: ['jshint:src', 'dist:demo', 'build:gh-pages']
+      },
+      livereload: {
+        files: ['out/built/gh-pages/**/*'],
+        options: { livereload: true }
       }
     },
+
+    connect: {
+      options: {
+        base : 'out/built/gh-pages',
+        open: true,
+        livereload: true
+      },
+      server: { options: { keepalive: true } },
+      continuous: { options: { keepalive: false } }
+    },
+
     karma: {
       unit: testConfig('test/karma.conf.js'),
-      start: {configFile: 'test/karma.conf.js'}
+      server: {configFile: 'test/karma.conf.js'},
+      continuous: {configFile: 'test/karma.conf.js',  background: true }
     },
+
     concat: {
       html_doc: {
         options: {
@@ -74,7 +120,7 @@ module.exports = function (grunt) {
           ].join('\n  '),
           footer : '</div>'},
         src: [ 'modules/**/demo/index.html'],
-        dest: '<%= dist %>/demos.html'
+        dest: 'demo/demos.html'
       },
       tmp: {
         files: {  'tmp/dep.js': [ 'modules/**/*.js', '!modules/utils.js', '!modules/ie-shiv/*.js', '!modules/**/test/*.js']}
@@ -82,57 +128,69 @@ module.exports = function (grunt) {
       modules: {
         options: {banner: '<%= meta.banner %>'},
         files: {
-          '<%= meta.destName %>.js': ['tmp/dep.js', 'modules/utils.js'],
-          '<%= meta.destName %>-ieshiv.js' : ['modules/ie-shiv/*.js']
+          'dist/main/ui-utils.js': ['tmp/dep.js', 'modules/utils.js'],
+          'dist/main/ui-utils-ieshiv.js' : ['modules/ie-shiv/*.js']
         }
       }
     },
     uglify: {
       options: {banner: '<%= meta.banner %>'},
-      build: {
+      main: {
         files: {
-          '<%= meta.destName %>.min.js': ['<%= meta.destName %>.js'],
-          '<%= meta.destName %>-ieshiv.min.js': ['<%= meta.destName %>-ieshiv.js']
+          'dist/main/ui-utils.min.js': ['dist/main/ui-utils.js'],
+          'dist/main/ui-utils-ieshiv.min.js': ['dist/main/ui-utils-ieshiv.js']
         }
+      },
+      sub: {
+        expand: true,
+        cwd: 'dist/sub/',
+        src: ['**/*.js'],
+        ext: '.min.js',
+        dest: 'dist/sub/'
       }
     },
     clean: {
       rm_tmp: {src: ['tmp']}
     },
     jshint: {
-      files:['modules/**/*.js', 'gruntFile.js', 'test/**/*Spec.js', 'demo/**/*.js'],
-      options: {
-        curly: true,
-        eqeqeq: true,
-        immed: true,
-        latedef: true,
-        newcap: true,
-        noarg: true,
-        sub: true,
-        boss: true,
-        eqnull: true,
-        globals: {}
+      src: {
+        files:{ src : ['modules/**/*.js', '!modules/**/test/*Spec.js','demo/**/*.js'] },
+        options: { jshintrc: '.jshintrc' }
+      },
+      test: {
+        files:{ src : [ 'modules/**/test/*Spec.js', 'gruntFile.js'] },
+        options: grunt.util._.extend({}, grunt.file.readJSON('.jshintrc'), {
+          node: true,
+          globals: {
+            angular: false,
+            inject: false,
+            jQuery: false,
+
+            jasmine: false,
+            afterEach: false,
+            beforeEach: false,
+            ddescribe: false,
+            describe: false,
+            expect: false,
+            iit: false,
+            it: false,
+            spyOn: false,
+            xdescribe: false,
+            xit: false
+          }
+        })
       }
     },
     copy: {
       main: {
         files: [
-          {src: ['demo/demo.js'], dest: '<%= dist %>/core/demo.js', filter: 'isFile'},
-
           // UI.Include needs a external html source.
-          {src: ['modules/include/demo/fragments.html'], dest: '<%= dist %>/assets/fragments.html', filter: 'isFile'}
-        ]
-      },
-      template : {
-        options : {processContent : function(content){
-          return grunt.template.process(content);
-        }},
-        files: [
-          {src: ['<%= dist %>/.tmpl/index.tmpl'], dest: '<%= dist %>/index.html'}
+          {src: ['modules/include/demo/fragments.html'], dest: 'demo/fragments.html', filter: 'isFile'}
         ]
       }
-    }
-  };
-  grunt.initConfig(initConfig);
+    },
+
+    ngmin: moduleNames.reduce(ngMinModulesConfig, {})
+  });
 
 };

@@ -1,10 +1,9 @@
-/*global describe, beforeEach, module, inject, it, spyOn, expect, $ */
 describe('uiRoute', function () {
   'use strict';
 
   var scope, $compile, $location;
   beforeEach(module('ui.route'));
-  beforeEach(inject(function (_$rootScope_, _$compile_, _$window_, _$location_) {
+  beforeEach(inject(function (_$rootScope_, _$compile_, _$location_) {
     scope = _$rootScope_.$new();
     $compile = _$compile_;
     $location = _$location_;
@@ -36,7 +35,7 @@ describe('uiRoute', function () {
       if (routeModel){ elm.attr('ng-model', routeModel);}
       return $compile(elm[0])(scope);
     }
-    
+
     describe('with uiRoute defined', function(){
       it('should use the uiRoute property', function(){
         compileRoute('<div ui-route="/foo">');
