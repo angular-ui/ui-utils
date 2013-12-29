@@ -1,0 +1,8 @@
+{
+  "name": "angular-ui-validate",
+  "version": "0.1.0",
+  "main": "./validate.js",
+  "dependencies": {
+    "angular": ">= 1.0.2"
+  }
+}
