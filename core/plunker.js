@@ -105,5 +105,5 @@ angular.module('plunker', [])
         });
         scope.content[attrs.plunkerContent] = htmlContent;
       }
-    }
+    };
   });

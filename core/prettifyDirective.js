@@ -27,7 +27,7 @@ angular.module('prettifyDirective', [])
       }
       lines.push('');
       return lines.join('\n');
-    }
+    };
   })
   .directive('prettyprint', ['reindentCode', function (reindentCode) {
     return {

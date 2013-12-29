@@ -1,6 +1,6 @@
 /**
  * angular-ui-utils - Swiss-Army-Knife of AngularJS tools (with no external dependencies!)
- * @version v0.0.3 - 2013-05-23
+ * @version v0.1.0 - 2013-12-29
  * @link http://angular-ui.github.com
  * @license MIT License, http://www.opensource.org/licenses/MIT
  */
@@ -18,10 +18,10 @@
 //    <script src="build/angular-ui-ieshiv.js"></script>
 // <![endif]-->
 
-(function (exports) {
+(function (window, document) {
+  "use strict";
 
-  var debug = window.ieShivDebug || false,
-      tags = [ "ngInclude", "ngPluralize", "ngView", "ngSwitch", "uiCurrency", "uiCodemirror", "uiDate", "uiEvent",
+  var tags = [ "ngInclude", "ngPluralize", "ngView", "ngSwitch", "uiCurrency", "uiCodemirror", "uiDate", "uiEvent",
                 "uiKeypress", "uiKeyup", "uiKeydown", "uiMask", "uiMapInfoWindow", "uiMapMarker", "uiMapPolyline",
                 "uiMapPolygon", "uiMapRectangle", "uiMapCircle", "uiMapGroundOverlay", "uiModal", "uiReset",
                 "uiScrollfix", "uiSelect2", "uiShow", "uiHide", "uiToggle", "uiSortable", "uiTinymce"
@@ -35,15 +35,25 @@
     var dashed = str.replace(/([A-Z])/g, function ($1) {
       return " " + $1.toLowerCase();
     });
-    var tokens = dashed.split(' ');
-    var ns = tokens[0];
-    var dirname = tokens.slice(1).join('-');
+    var tokens = dashed.split(" ");
 
-    // this is finite list and it seemed senseless to create a custom method
-    result.push(ns + ":" + dirname);
-    result.push(ns + "-" + dirname);
-    result.push("x-" + ns + "-" + dirname);
-    result.push("data-" + ns + "-" + dirname);
+    // If a token is just a single name (i.e. no namespace) then we juse define the elements the name given
+    if (tokens.length === 1) {
+      var name = tokens[0];
+
+      result.push(name);
+      result.push("x-" + name);
+      result.push("data-" + name);
+    } else {
+      var ns = tokens[0];
+      var dirname = tokens.slice(1).join("-");
+
+      // this is finite list and it seemed senseless to create a custom method
+      result.push(ns + ":" + dirname);
+      result.push(ns + "-" + dirname);
+      result.push("x-" + ns + "-" + dirname);
+      result.push("data-" + ns + "-" + dirname);
+    }
     return result;
   };
 
@@ -55,4 +65,4 @@
     }
   }
 
-})(window);
+})(window, document);
