@@ -7,7 +7,7 @@
   "homepage": "http://angular-ui.github.com",
   "dependencies": {},
   "devDependencies": {
-    "angular-ui-publisher": "~1.x",
+    "angular-ui-publisher": "~1.1.x",
     "grunt": "~0.4.1",
     "grunt-contrib-clean": "~0.4.1",
     "grunt-contrib-concat": "~0.3.0",
