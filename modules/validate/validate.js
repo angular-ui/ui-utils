@@ -64,7 +64,7 @@ angular.module('ui.validate',[]).directive('uiValidate', function () {
           {
               scope.$watch(watch, function(){
                   angular.forEach(validators, function(validatorFn){
-                      validatorFn(ctrl.$modelValue);
+                      validatorFn(ctrl.$viewValue);
                   });
               });
               return;
@@ -77,7 +77,7 @@ angular.module('ui.validate',[]).directive('uiValidate', function () {
                   scope.$watch(expression, function()
                   {
                       angular.forEach(validators, function(validatorFn){
-                          validatorFn(ctrl.$modelValue);
+                          validatorFn(ctrl.$viewValue);
                       });
                   });
               });
@@ -93,7 +93,7 @@ angular.module('ui.validate',[]).directive('uiValidate', function () {
                   if (angular.isString(expression))
                   {
                       scope.$watch(expression, function(){
-                          validators[validatorKey](ctrl.$modelValue);
+                          validators[validatorKey](ctrl.$viewValue);
                       });
                   }
 
@@ -103,7 +103,7 @@ angular.module('ui.validate',[]).directive('uiValidate', function () {
                       angular.forEach(expression, function(intExpression)
                       {
                           scope.$watch(intExpression, function(){
-                              validators[validatorKey](ctrl.$modelValue);
+                              validators[validatorKey](ctrl.$viewValue);
                           });
                       });
                   }

@@ -102,9 +102,15 @@ describe('uiValidate', function () {
     function validateWatch(watchMe) {
       return watchMe;
     }
+
     beforeEach(function(){
       scope.validateWatch = validateWatch;
     });
+
+    var sniffer;
+    beforeEach(inject(function ($sniffer) {
+      sniffer = $sniffer;
+    }));
 
     it('should watch the string and refire the single validator', function () {
       scope.watchMe = false;
@@ -112,6 +118,23 @@ describe('uiValidate', function () {
       expect(scope.form.input.$valid).toBe(false);
       expect(scope.form.input.$error.validator).toBe(true);
       scope.$apply('watchMe=true');
+      expect(scope.form.input.$valid).toBe(true);
+      expect(scope.form.input.$error.validator).toBe(false);
+    });
+
+    // This test will fail unless the validation is run against the view value and not the modelValue
+    it('should watch the string and refire the single validator against the viewValue', function () {
+      scope.watchMe = '12';
+      var inputElm = compileAndDigest('<input name="input" ng-model="value" ui-validate=" \'$value == watchMe\' " ui-validate-watch=" \'watchMe\' ">', scope);
+      
+      inputElm.val('5');
+      inputElm.trigger((sniffer.hasEvent('input') ? 'input' : 'change'));
+      
+      expect(scope.form.input.$valid).toBe(false);
+      expect(scope.form.input.$error.validator).toBe(true);
+
+      scope.$apply('watchMe="5"');
+      
       expect(scope.form.input.$valid).toBe(true);
       expect(scope.form.input.$error.validator).toBe(false);
     });
