@@ -245,6 +245,38 @@ describe("uiMask", function () {
       input.triggerHandler("blur");
       expect(scope.test.input.$viewValue).toBe("");
     });
+
+    var inputHtmlClearOnBlur = "<input name='input' ng-model='x' ui-mask='{{mask}}' ui-options=\"input.options\">";
+
+    it("should not clear an invalid value if clearOnBlur is false", function() {
+      scope.input = {
+        options: {clearOnBlur: false}
+      };
+
+      var input = compileElement(inputHtmlClearOnBlur);
+
+      scope.$apply("x = ''");
+      scope.$apply("mask = '(9) * A'");
+
+      input.val("9a").triggerHandler("input");
+      input.triggerHandler("blur");
+      expect(input.val()).toBe("(9) a _");
+    });
+
+    it("should clear an invalid value if clearOnBlur is true", function() {
+      scope.input = {
+        options: {clearOnBlur: true}
+      };
+
+      var input = compileElement(inputHtmlClearOnBlur);
+
+      scope.$apply("x = ''");
+      scope.$apply("mask = '(9) * A'");
+
+      input.val("9a").triggerHandler("input");
+      input.triggerHandler("blur");
+      expect(input.val()).toBe("");
+    });
   });
 
 });
