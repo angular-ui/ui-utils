@@ -61,7 +61,7 @@ angular.module('ui.mask', [])
             if (!maskProcessed) {
               return fromModelValue;
             }
-            value = unmaskValue(fromModelValue || '');
+            value = unmaskValue((!fromModelValue && fromModelValue !== 0 ? "" : fromModelValue));
             isValid = validateValue(value);
             controller.$setValidity('mask', isValid);
             return isValid && value.length ? maskValue(value) : undefined;
