@@ -26,7 +26,7 @@ angular.module('ui.validate', []).directive('uiValidate', function () {
             return valueToValidate;
           } else {
             ctrl.$setValidity(key, false);
-            return undefined;
+            return valueToValidate;
           }
         };
         validators[key] = validateFn;
