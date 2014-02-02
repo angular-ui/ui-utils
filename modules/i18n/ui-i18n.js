@@ -2,96 +2,116 @@
  * Created by Tim on 2/1/14.
  */
 (function(){
+
+    // adding deep copy method until angularjs supports deep copy like everyone else.
+    // https://github.com/angular/angular.js/pull/5059
+    function deepExtend(destination, source) {
+        for (var property in source) {
+            if (source[property] && source[property].constructor &&
+                source[property].constructor === Object) {
+                destination[property] = destination[property] || {};
+                arguments.callee(destination[property], source[property]);
+            } else {
+                destination[property] = source[property];
+            }
+        }
+        return destination;
+    }
     'use strict';
     var MISSING = '[MISSING]: ';
     var uiI18n = angular.module('ui.i18n', []);
 
-    uiI18n.value('uiI18n.pack', {
-        i18n: {},
-        lang: null
-    });
-    var injector = angular.injector(['ng','ui.i18n']);
-    var getPack = function(){
-        return injector.get('uiI18n.pack');
+    var langCache = {
+        _langs: {},
+        current: null
     };
-    var $root;
-    uiI18n.i18n = {
-        add: function(langs, strings){
-            var pack = getPack();
-            if (typeof(langs) === 'object'){
-                angular.forEach(langs, function(lang){
-                    if (lang){
-                        var lower = lang.toLowerCase();
-                        var combined = angular.extend(pack.i18n[lang] || {}, strings);
-                        pack.i18n[lower] = combined;
-                    }
-                });
-            } else {
-                var lower = langs.toLowerCase();
-                var combined = angular.extend(pack.i18n[langs] || {}, strings);
-                pack.i18n[lower] = combined;
-            }
-            uiI18n.value('uiI18n.pack', pack);
-        },
-        set: function(lang){
-            if (lang){
-                var pack = getPack();
-                pack.lang = lang;
-                uiI18n.value('uiI18n.pack', pack);
-                if ($root) $root.$broadcast('$uiI18n', lang);
-            }
+    langCache.get = function(lang){
+        return langCache._langs[lang.toLowerCase()];
+    };
+    langCache.add = function(lang, strings){
+        var lower = lang.toLowerCase();
+        var cache = langCache._langs;
+        cache[lower] = deepExtend(cache[lower] || {}, strings);
+    };
+    langCache.setCurrent = function(lang){
+        langCache.current = lang.toLowerCase();
+    };
+    langCache.getCurrent = function(){
+        return langCache.get(langCache.current);
+    };
+
+    uiI18n._cache = langCache;
+    uiI18n.$broadcast = function(lang){
+        if (lang && this.$root){
+            uiI18n.$root.$broadcast('$uiI18n', lang);
+        }
+    };
+    uiI18n.add =  function(langs, strings){
+        if (typeof(langs) === 'object'){
+            angular.forEach(langs, function(lang){
+                if (lang){
+                    langCache.add(lang, strings);
+                }
+            });
+        } else {
+            langCache.add(langs, strings);
+        }
+    };
+    uiI18n.set = function(lang){
+        if (lang){
+            langCache.setCurrent(lang);
+            uiI18n.$broadcast(lang);
         }
     };
 
     uiI18n.directive('uiI18n',function() {
         return {
             link: function($scope, $elm, $attrs) {
+                if (!uiI18n.$root) uiI18n.$root = $scope.$root;
                 // check for watchable property
                 var lang = $scope.$eval($attrs.uiI18n);
                 if (lang){
-                    $scope.$watch($attrs.uiI18n, uiI18n.i18n.set);
+                    $scope.$watch($attrs.uiI18n, uiI18n.set);
                 } else {
                     // fall back to the string value
                     lang = $attrs.uiI18n;
                 }
-                uiI18n.i18n.set(lang);
+                uiI18n.set(lang);
             }
         };
     });
 
-    var uitDirective = function($parse, pack) {
+    // directive syntax
+    var uitDirective = function($parse) {
         return {
             restrict: 'EA',
             compile: function(){
                 return function($scope, $elm, $attrs) {
-                    // this is such a hack! I tried injector invoke $rootScope but its not the right one!
-                    // TODO: make this not stupid...
-                    if (!$root) $root = $scope.$root;
+                    if (!uiI18n.$root) uiI18n.$root = $scope.$root;
                     var token = $attrs.uiT || $attrs.uiTranslate || $elm.html();
                     var getter = $parse(token);
                     var missing = MISSING + token;
 
                     var listener = $scope.$on('$uiI18n', function(evt, lang){
                         // set text based on i18n current language
-                        $elm.html(getter(pack.i18n[lang]) || missing);
+                        $elm.html(getter(langCache.get(lang)) || missing);
                     });
                     $scope.$on('$destroy', listener);
                 };
             }
         };
     };
-    // directive syntax
-    uiI18n.directive('uiT',['$parse', 'uiI18n.pack', uitDirective]);
-    uiI18n.directive('uiTranslate',['$parse', 'uiI18n.pack', uitDirective]);
+    uiI18n.directive('uiT',['$parse', uitDirective]);
+    uiI18n.directive('uiTranslate',['$parse', uitDirective]);
 
-    var uitFilter = function($parse, pack) {
+    // optional filter syntax
+    var uitFilter = function($parse) {
         return function(data) {
             var getter = $parse(data);
             // set text based on i18n current language
-            return getter(pack.i18n[pack.lang]) || MISSING + data;
+            return getter(langCache.getCurrent()) || MISSING + data;
         };
     };
-    // optional syntax
-    uiI18n.filter('t', ['$parse', 'uiI18n.pack', uitFilter]);
-    uiI18n.filter('translate', ['$parse', 'uiI18n.pack', uitFilter]);
+    uiI18n.filter('t', ['$parse', uitFilter]);
+    uiI18n.filter('translate', ['$parse', uitFilter]);
 })();
