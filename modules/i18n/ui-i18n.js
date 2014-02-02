@@ -3,7 +3,7 @@
  */
 (function(){
     'use strict';
-    var MISSING = "[MISSING]: ";
+    var MISSING = '[MISSING]: ';
     var uiI18n = angular.module('ui.i18n', []);
     uiI18n.value('uiI18n.packs', {
         i18n: {},
@@ -15,7 +15,7 @@
     uiI18n.i18n = {
         add: function(langs, strings){
             var packs = getPack();
-            if (typeof(langs) === "object"){
+            if (typeof(langs) === 'object'){
                 angular.forEach(langs, function(lang){
                     if (lang){
                         var lower = lang.toLowerCase();
@@ -39,7 +39,7 @@
         }
     };
 
-    uiI18n.directive('uiI18n',['uiI18n.packs', function(packs) {
+    uiI18n.directive('uiI18n',function() {
         return {
             link: function($scope, $elm, $attrs) {
                 // check for watchable property
@@ -47,7 +47,7 @@
                 if (lang){
                     $scope.$watch($attrs.uiI18n, function(newLang){
                         uiI18n.i18n.set(newLang);
-                        $scope.$broadcast("$uiI18n", newLang);
+                        $scope.$broadcast('$uiI18n', newLang);
                     });
                 } else {
                     // fall back to the string value
@@ -56,7 +56,7 @@
                 uiI18n.i18n.set(lang);
             }
         };
-    }]);
+    });
 
     var uitDirective = function($parse, packs) {
         return {
@@ -67,7 +67,7 @@
                     var getter = $parse(token);
                     var missing = MISSING + token;
 
-                    var listener = $scope.$on("$uiI18n", function(evt, lang){
+                    var listener = $scope.$on('$uiI18n', function(evt, lang){
                         // set text based on i18n current language
                         $elm.html(getter(packs.i18n[lang]) || missing);
                     });
