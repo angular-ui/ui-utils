@@ -2,7 +2,7 @@
  * Created by Tim on 2/1/14.
  */
 (function(){
-    'use strict'
+    'use strict';
     // adding deep copy method until angularjs supports deep copy like everyone else.
     // https://github.com/angular/angular.js/pull/5059
     function deepExtend(destination, source) {
@@ -10,7 +10,9 @@
             if (source[property] && source[property].constructor &&
                 source[property].constructor === Object) {
                 destination[property] = destination[property] || {};
-                arguments.callee(destination[property], source[property]); // jshint ignore:line
+                /* jshint ignore:start */
+                arguments.callee(destination[property], source[property]);
+                /* jshint ignore:end */
             } else {
                 destination[property] = source[property];
             }
