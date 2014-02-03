@@ -76,7 +76,7 @@
                         }
                         uiI18n.set(lang || DEFAULT_LANG);
                     }
-                }
+                };
             }
         };
     };
@@ -114,7 +114,7 @@
                         });
                         $scope.$on('$destroy', listener);
                     }
-                }
+                };
             }
         };
     };
@@ -135,6 +135,7 @@
         uiI18n.filter(alias,['$parse', uitFilter]);
     });
 })(function(destination, source) {
+    'user strict';
     // adding deep copy method until angularjs supports deep copy like everyone else.
     // https://github.com/angular/angular.js/pull/5059
     for (var property in source) {
