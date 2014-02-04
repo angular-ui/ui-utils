@@ -139,7 +139,7 @@
         uiI18n.filter(alias,['$parse', uitFilter]);
     });
 })(function deepExtend(destination, source) {
-    'user strict';
+    'use strict';
     // adding deep copy method until angularjs supports deep copy like everyone else.
     // https://github.com/angular/angular.js/pull/5059
     for (var property in source) {
