@@ -3,6 +3,25 @@
  * https://github.com/timothyswt
  * MIT License
  */
+ /**
+ * @ngdoc directive
+ * @name ui-i18n
+ * @requires $parse
+ *
+ * @description
+ * Allows you to localize your project by being able to specify a language on any root-ish element
+ * this can be a bindable property or the string.
+ * if bound it will automatically update all children when update.
+ * @example
+ <example module="uiI18n">
+ <file name="index.html">
+     <body ng-controller="main" ui-i18n="language">
+
+     </body>
+ </file>
+ </example>
+ */
+
 (function(deepExtend){
     'use strict';
     var MISSING = '[MISSING]: ',
@@ -83,7 +102,106 @@
         };
     };
     uiI18n.directive(LOCALE_DIRECTIVE_ALIAS, localeDirective);
+/**
+ *  * @ngdoc directive
+ * @name ui-t,ui-Translate
+ * @requires $parse
+ *
+ * @description
+ * specify the i18n string to use
+ * this can be a bindable property, expression/partial expression, or the object token.
+ * @example
+<example module="uiI18n">
+    <file name="index.html">
+        <div ng-controller="main" ui-i18n="language">
+            <div>
+                <button ng-click="changeDesc()">change Desc</button>
+                <span ui-t="groupPanel.{{desc}}"></span>
+            </div>
 
+            <p ui-t="example"></p>
+
+            <p ui-t>groupPanel.testingMerge</p>
+
+            <p ui-t>example</p>
+
+            <p ui-t="invalid.translation.path"></p>
+
+            <p ui-t>invalid.path</p>
+
+            <p ui-t>invalid.translation.again</p>
+
+
+            <h3>Using element:</h3>
+            <ui-t>example</ui-t>
+            <br/>
+            <ui-translate>groupPanel.description</ui-translate>
+            <br/>
+            <ui-t>invalid.path</ui-t>
+            <br/>
+            <ui-t>invalid.translation.again</ui-t>
+
+            <h3>Using Translate Filters:</h3>
+
+            <p>{{"groupPanel.description" | t}}</p>
+
+            <p>{{"example" | t}}</p>
+            <p>{{"invalid.path" | t}}</p>
+
+            <p>{{"invalid.translation.again" | translate}}</p>
+        </div>
+    </file>
+    <file name="script.js">
+    var app = angular.module('app', ['ui.i18n']);
+
+    app.controller('main', ['$scope', function($scope){
+        $scope.language = "en";
+        $scope.hello = "ui-i18n Example";
+        $scope.desc = "description";
+        $scope.changeLanguage = function(){
+          $scope.language = $scope.language == "de" ? "en" : "de";
+        };
+        $scope.changeDesc = function(){
+          $scope.desc = $scope.desc == "description" ? "otherText" : "description";
+        };
+    }]);
+    //Declare your i18n strings, this is enclosed in order to show that this can be done anywhere in the application
+     (function(){
+        var uiI18n = angular.module('ui.i18n');
+        uiI18n.add(["en", "en-us"],{
+            groupPanel:{
+            testingMerge: 'some text',
+            otherText: 'some other group property text',
+            description:'Drag a column header here and drop it to group by that column.'
+        },
+        example: "I speak English",
+        anotherExample: "I speak A Different Language"
+        });
+     })();
+
+     (function(){
+        var uiI18n = angular.module('ui.i18n');
+        uiI18n.add("de",{
+            groupPanel:{
+                otherText: 'eine andere gruppe eigenschaft text',
+                description:'Ziehen Sie eine Spaltenüberschrift hierhin um nach dieser Spalte zu gruppieren.'
+            },
+            example: "Ich spreche Deutsch"
+        });
+     })();
+
+     (function(){
+        var uiI18n = angular.module('ui.i18n');
+        uiI18n.add("de",{
+            groupPanel:{
+                testingMerge: 'falaffels are spelled horribly...',
+            },
+            anotherExample: "I speak A Different Language"
+        });
+     })();
+    </file>
+</example>
+ **/
     // directive syntax
     var uitDirective = function($parse) {
         return {
