@@ -35,6 +35,7 @@ module.exports = function() {
     // HACK...
     main_dist_dir: 'main',
 
+    bowerData : { main: './ui-utils.js'},
 
     // The sub-components
     subcomponents : modulesName.reduce(makingComponentData, {}),
