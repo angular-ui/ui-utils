@@ -6,6 +6,14 @@
  *   Takes 300 (absolute) or -300 or +300 (relative to detected)
  */
 angular.module('ui.scrollfix',[]).directive('uiScrollfix', ['$window', function ($window) {
+  function getWindowScrollTop() {
+    if (angular.isDefined($window.pageYOffset)) {
+      return $window.pageYOffset;
+    } else {
+      var iebody = (document.compatMode && document.compatMode !== 'BackCompat') ? document.documentElement : document.body;
+      return iebody.scrollTop;
+    }
+  }
   return {
     require: '^?uiScrollfixTarget',
     link: function (scope, elm, attrs, uiScrollfixTarget) {
@@ -25,13 +33,7 @@ angular.module('ui.scrollfix',[]).directive('uiScrollfix', ['$window', function 
 
       function onScroll() {
         // if pageYOffset is defined use it, otherwise use other crap for IE
-        var offset;
-        if (angular.isDefined($window.pageYOffset)) {
-          offset = $window.pageYOffset;
-        } else {
-          var iebody = (document.compatMode && document.compatMode !== 'BackCompat') ? document.documentElement : document.body;
-          offset = iebody.scrollTop;
-        }
+        var offset = uiScrollfixTarget ? $target[0].scrollTop : getWindowScrollTop();
         if (!elm.hasClass('ui-scrollfix') && offset > attrs.uiScrollfix) {
           elm.addClass('ui-scrollfix');
         } else if (elm.hasClass('ui-scrollfix') && offset < attrs.uiScrollfix) {
