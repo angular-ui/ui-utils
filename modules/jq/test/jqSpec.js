@@ -1,6 +1,11 @@
 describe('uiJq', function () {
   'use strict';
 
+  // Don't need to test the directive without jquery...
+  if (!jQuery){
+    return;
+  }
+
   var scope, compile, timeout;
   scope = null;
   beforeEach(module('ui.jq'));
