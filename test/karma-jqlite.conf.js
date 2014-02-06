@@ -15,8 +15,13 @@ module.exports = function(config) {
     // list of files / patterns to load in the browser
     files: [
       'bower_components/jquery/jquery.js',
+
+      'test/helpers/jquery_remove.js',
+      'test/helpers/browserTrigger.js',
+
       'bower_components/angular/angular.js',
       'bower_components/angular-mocks/angular-mocks.js',
+
       'modules/*/*.js',
       'modules/*/test/*Spec.js'
     ],
@@ -24,7 +29,7 @@ module.exports = function(config) {
 
     // list of files to exclude
     exclude: [
-      
+
     ],
 
 
@@ -58,7 +63,7 @@ module.exports = function(config) {
     // - Safari (only Mac)
     // - PhantomJS
     // - IE (only Windows)
-    browsers: ['Chrome', 'Firefox'],
+    browsers: ['Chrome', 'Firefox', 'PhantomJS'],
 
 
     // If browser does not capture in given timeout [ms], kill it

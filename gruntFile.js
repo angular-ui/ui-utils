@@ -14,6 +14,10 @@ module.exports = function (grunt) {
   grunt.registerTask('dist:sub', ['ngmin', 'uglify:sub']);
   grunt.registerTask('dist:demo', ['concat:html_doc', 'copy']);
 
+  grunt.registerTask('karma:continuous', ['karma:wjqlite_bg', 'karma:wjquery_bg']);
+  grunt.registerTask('karma:unit', ['karma:wjqlite:unit', 'karma:wjquery:unit']);
+  grunt.registerTask('karma:unit:run', ['karma:wjqlite:unit:run', 'karma:wjquery:unit:run']);
+
 
   // HACK TO ACCESS TO THE COMPONENT-PUBLISHER
   function fakeTargetTask(prefix){
@@ -106,9 +110,10 @@ module.exports = function (grunt) {
     },
 
     karma: {
-      unit: testConfig('test/karma.conf.js'),
-      server: {configFile: 'test/karma.conf.js'},
-      continuous: {configFile: 'test/karma.conf.js',  background: true }
+      wjquery: testConfig('test/karma-jquery.conf.js'),
+      wjqlite: testConfig('test/karma-jqlite.conf.js'),
+      wjquery_bg: {configFile: 'test/karma-jquery.conf.js', background: true },
+      wjqlite_bg: {configFile: 'test/karma-jqlite.conf.js', background: true }
     },
 
     concat: {
