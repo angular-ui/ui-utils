@@ -1,6 +1,6 @@
 /**
  * angular-ui-utils - Swiss-Army-Knife of AngularJS tools (with no external dependencies!)
- * @version v0.1.1 - 2014-02-05
+ * @version v0.1.1 - 2014-02-08
  * @link http://angular-ui.github.com
  * @license MIT License, http://www.opensource.org/licenses/MIT
  */
@@ -1308,8 +1308,8 @@ angular.module('ui.scroll', []).directive('ngScrollViewport', [
 				transclude: 'element',
 				priority: 1000,
 				terminal: true,
-				compile: function(element, attr, linker) {
-					return function($scope, $element, $attr, controllers) {
+				compile: function(elementTemplate, attr, linker) {
+					return function($scope, element, $attr, controllers) {
 						var adapter, adjustBuffer, adjustRowHeight, bof, bottomVisiblePos, buffer, bufferPadding, bufferSize, clipBottom, clipTop, datasource, datasourceName, enqueueFetch, eof, eventListener, fetch, finalize, first, insert, isDatasource, isLoading, itemName, loading, match, next, pending, reload, removeFromBuffer, resizeHandler, scrollHandler, scrollHeight, shouldLoadBottom, shouldLoadTop, tempScope, topVisiblePos, viewport;
 						match = $attr.ngScroll.match(/^\s*(\w+)\s+in\s+(\w+)\s*$/);
 						if (!match) {
