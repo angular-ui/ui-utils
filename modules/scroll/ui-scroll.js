@@ -28,8 +28,8 @@ angular.module('ui.scroll', []).directive('ngScrollViewport', [
 				transclude: 'element',
 				priority: 1000,
 				terminal: true,
-				compile: function(element, attr, linker) {
-					return function($scope, $element, $attr, controllers) {
+				compile: function(elementTemplate, attr, linker) {
+					return function($scope, element, $attr, controllers) {
 						var adapter, adjustBuffer, adjustRowHeight, bof, bottomVisiblePos, buffer, bufferPadding, bufferSize, clipBottom, clipTop, datasource, datasourceName, enqueueFetch, eof, eventListener, fetch, finalize, first, insert, isDatasource, isLoading, itemName, loading, match, next, pending, reload, removeFromBuffer, resizeHandler, scrollHandler, scrollHeight, shouldLoadBottom, shouldLoadTop, tempScope, topVisiblePos, viewport;
 						match = $attr.ngScroll.match(/^\s*(\w+)\s+in\s+(\w+)\s*$/);
 						if (!match) {
