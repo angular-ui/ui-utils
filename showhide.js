@@ -1,4 +1,12 @@
 'use strict';
+/**
+ * uiShow Directive
+ *
+ * Adds a 'ui-show' class to the element instead of display:block
+ * Created to allow tighter control  of CSS without bulkier directives
+ *
+ * @param expression {boolean} evaluated expression to determine if the class should be added
+ */
 angular.module('ui.showhide', []).directive('uiShow', [function () {
     return function (scope, elm, attrs) {
       scope.$watch(attrs.uiShow, function (newVal) {
