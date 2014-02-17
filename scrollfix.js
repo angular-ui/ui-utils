@@ -1,4 +1,9 @@
 'use strict';
+/**
+ * Adds a 'ui-scrollfix' class to the element when the page scrolls past it's position.
+ * @param [offset] {int} optional Y-offset to override the detected offset.
+ *   Takes 300 (absolute) or -300 or +300 (relative to detected)
+ */
 angular.module('ui.scrollfix', []).directive('uiScrollfix', [
   '$window',
   function ($window) {
@@ -9,6 +14,7 @@ angular.module('ui.scrollfix', []).directive('uiScrollfix', [
         if (!attrs.uiScrollfix) {
           attrs.uiScrollfix = top;
         } else if (typeof attrs.uiScrollfix === 'string') {
+          // charAt is generally faster than indexOf: http://jsperf.com/indexof-vs-charat
           if (attrs.uiScrollfix.charAt(0) === '-') {
             attrs.uiScrollfix = top - parseFloat(attrs.uiScrollfix.substr(1));
           } else if (attrs.uiScrollfix.charAt(0) === '+') {
@@ -16,6 +22,7 @@ angular.module('ui.scrollfix', []).directive('uiScrollfix', [
           }
         }
         function onScroll() {
+          // if pageYOffset is defined use it, otherwise use other crap for IE
           var offset;
           if (angular.isDefined($window.pageYOffset)) {
             offset = $window.pageYOffset;
@@ -30,6 +37,7 @@ angular.module('ui.scrollfix', []).directive('uiScrollfix', [
           }
         }
         $target.on('scroll', onScroll);
+        // Unbind scroll event handler when directive is removed
         scope.$on('$destroy', function () {
           $target.off('scroll', onScroll);
         });
