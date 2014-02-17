@@ -1,3 +1,14 @@
+// READ: http://docs-next.angularjs.org/guide/ie
+// element tags are statically defined in order to accommodate lazy-loading whereby directives are also unknown
+// The ieshiv takes care of our ui.directives and AngularJS's ng-view, ng-include, ng-pluralize, ng-switch.
+// However, IF you have custom directives that can be used as html tags (yours or someone else's) then
+// add list of directives into <code>window.myCustomTags</code>
+// <!--[if lte IE 8]>
+//    <script>
+//    window.myCustomTags = [ 'yourCustomDirective', 'somebodyElsesDirective' ]; // optional
+//    </script>
+//    <script src="build/angular-ui-ieshiv.js"></script>
+// <![endif]-->
 (function (window, document) {
   'use strict';
   var tags = [
@@ -31,6 +42,7 @@
       'uiTinymce'
     ];
   window.myCustomTags = window.myCustomTags || [];
+  // externally defined by developer using angular-ui directives
   tags.push.apply(tags, window.myCustomTags);
   var toCustomElements = function (str) {
     var result = [];
@@ -38,6 +50,7 @@
         return ' ' + $1.toLowerCase();
       });
     var tokens = dashed.split(' ');
+    // If a token is just a single name (i.e. no namespace) then we juse define the elements the name given
     if (tokens.length === 1) {
       var name = tokens[0];
       result.push(name);
@@ -46,6 +59,7 @@
     } else {
       var ns = tokens[0];
       var dirname = tokens.slice(1).join('-');
+      // this is finite list and it seemed senseless to create a custom method
       result.push(ns + ':' + dirname);
       result.push(ns + '-' + dirname);
       result.push('x-' + ns + '-' + dirname);
