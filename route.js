@@ -1,4 +1,7 @@
 'use strict';
+/**
+ * Set a $uiRoute boolean to see if the current route matches
+ */
 angular.module('ui.route', []).directive('uiRoute', [
   '$location',
   '$parse',
@@ -20,6 +23,7 @@ angular.module('ui.route', []).directive('uiRoute', [
         return function ($scope, elm, attrs) {
           var modelSetter = $parse(attrs.ngModel || attrs.routeModel || '$uiRoute').assign;
           var watcher = angular.noop;
+          // Used by href and ngHref
           function staticWatcher(newVal) {
             var hash = newVal.indexOf('#');
             if (hash > -1) {
@@ -30,6 +34,7 @@ angular.module('ui.route', []).directive('uiRoute', [
             };
             watcher();
           }
+          // Used by uiRoute
           function regexWatcher(newVal) {
             var hash = newVal.indexOf('#');
             if (hash > -1) {
@@ -43,6 +48,7 @@ angular.module('ui.route', []).directive('uiRoute', [
           }
           switch (useProperty) {
           case 'uiRoute':
+            // if uiRoute={{}} this will be undefined, otherwise it will have a value and $observe() never gets triggered
             if (attrs.uiRoute) {
               regexWatcher(attrs.uiRoute);
             } else {
@@ -50,6 +56,7 @@ angular.module('ui.route', []).directive('uiRoute', [
             }
             break;
           case 'ngHref':
+            // Setup watcher() every time ngHref changes
             if (attrs.ngHref) {
               staticWatcher(attrs.ngHref);
             } else {
@@ -57,11 +64,13 @@ angular.module('ui.route', []).directive('uiRoute', [
             }
             break;
           case 'href':
+            // Setup watcher()
             staticWatcher(attrs.href);
           }
           $scope.$on('$routeChangeSuccess', function () {
             watcher();
           });
+          //Added for compatibility with ui-router
           $scope.$on('$stateChangeSuccess', function () {
             watcher();
           });
