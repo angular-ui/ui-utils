@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html>
+
+    <head>
+        <meta charset='utf-8' />
+        <meta http-equiv="X-UA-Compatible" content="chrome=1" />
+        <meta name="description" content="Ng-pageslide : AngularJS sliding panel for serving additional content" />
+
+        <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.1.5/angular.min.js"></script>
+        <script  src="../src/angular-pageslide-directive.js"></script>
+        <link rel="stylesheet" type="text/css" href="http://cdn.jsdelivr.net/foundation/5.0.0/css/foundation.min.css"> 
+        <title>AngularJS Pageslide directive demo</title>
+        <style>
+            #ng-pageslide {
+                background: #eee;
+            }
+        </style>
+        <script>
+            var app = angular.module("app", ["pageslide-directive"]);
+
+            app.controller('pageslideCtrl',['$scope',function($scope){
+
+                $scope.checked; // This will be binded using the ps-open attribute
+
+            }]);
+
+            angular.element(document).ready(function(){
+
+                c = angular.element(document.querySelector('#controller-demo')).scope();
+            });
+        </script>
+    </head>
+
+    <body ng-app="app">
+
+
+        <!-- MAIN CONTENT -->
+        <div id="main_content_wrap" class="outer" style="padding:20px">
+            <header>
+            <h1>
+                <a name="angularjs-pageslide-directive" class="anchor" href="#angularjs-pageslide-directive"><span class="octicon octicon-link"></span></a>AngularJS Pageslide directive
+            </h1>
+            </header>
+
+            <section id="main_content" class="inner">
+
+            <p>
+                An <a href="http://angularjs.org/">AngularJS</a> directive which slides another panel over your browser to reveal an additional interaction pane.<br/>
+                It does all the css manipulation needed to position your content off canvas with html attibutes and it does not depend on jQuery
+            </p>
+
+            <a  class="large button" pageslide="right" ps-speed="0.5" href="#demo-right">Open Demo</a>
+
+            <h3>Different speeds</h3>
+            <a  class="tiny button" pageslide="right" ps-speed="5" href="#demo-slow">Slowmo</a>
+
+            <a  class="tiny button" pageslide="right" ps-speed="0.25" href="#demo-fast">Fastmo</a>
+            
+            <h3>Different directions</h3>
+            <a  class="tiny button" pageslide="bottom" ps-speed="0.5" href="#demo-down">Down by the water</a>
+
+            <a  class="tiny button" pageslide="top" ps-speed="0.5" href="#demo-top">Up up and above</a>
+
+            <a  class="tiny button" pageslide="left" ps-speed="0.5" href="#demo-left">Go West</a>
+
+            <div style="padding:20px" id="demo-right">
+                <h2>Hello Pageslide</h2>
+                <p>Put here whatever you want</p>
+                <a id="demo-right-close"i class="button" >Close</a>
+            </div>
+
+            <div style="padding:20px" id="demo-slow">
+                <h2>Hello Pageslide</h2>
+                <p>Put here whatever you want</p>
+                <a id="demo-slow-close"i class="button" >Close</a>
+            </div>
+
+            <div style="padding:20px" id="demo-fast">
+                <h2>Hello Pageslide</h2>
+                <p>Put here whatever you want</p>
+                <a id="demo-fast-close"i class="button" >Close</a>
+            </div>
+
+            <div style="padding:20px" id="demo-down">
+                <h2>Hello Pageslide</h2>
+                <p>Put here whatever you want</p>
+                <a id="demo-down-close" class="button" >Close</a>
+            </div>
+            <div style="padding:20px" id="demo-left">
+                <h2>Hello Pageslide</h2>
+                <p>Put here whatever you want</p>
+                <a id="demo-left-close" class="button" >Close</a>
+            </div>
+            <div style="padding:20px" id="demo-top">
+                <h2>Hello Pageslide</h2>
+                <p>Put here whatever you want</p>
+                <a id="demo-top-close" class="button" >Close</a>
+            </div>
+
+            <br/>
+
+            <div id="controller-demo" ng-controller="pageslideCtrl">
+                <h3>Opening / Closing within a controller</h3>
+                
+                <p>Check to open: <input type="checkbox" ng-model="checked" ></p><br/>
+                <pageslide ps-open="checked" ps-target="#demo-ctrl"></pageslide> 
+                <div style="padding:20px" id="demo-ctrl">
+                    <h2>Hello Pageslide</h2>
+                    <p>Put here whatever you want</p>
+                </div>
+            </div>
+        </div>
+
+        <script type="text/javascript">
+            var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+            document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+            </script>
+            <script type="text/javascript">
+                try {
+                    var pageTracker = _gat._getTracker("UA-42627434-1");
+                    pageTracker._trackPageview();
+                } catch(err) {}
+</script>
+
+
+        </body>
+    </html>
