@@ -112,11 +112,11 @@ angular.module('ui.mask', [])
           iAttrs.$observe('placeholder', initPlaceholder);
           var modelViewValue = false;
           iAttrs.$observe('modelViewValue', function(val) {
-            if(val === "true") {
+            if(val === 'true') {
               modelViewValue = true;
             }
           });
-          scope.$watch(iAttrs.ngModel, function(val) { 
+          scope.$watch(iAttrs.ngModel, function(val) {
             if(modelViewValue && val) {
               var model = $parse(iAttrs.ngModel);
               model.assign(scope, controller.$viewValue);
