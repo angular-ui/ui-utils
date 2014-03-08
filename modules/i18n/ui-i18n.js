@@ -256,7 +256,7 @@
     angular.forEach(FILTER_ALIASES, function(alias){
         uiI18n.filter(alias,['$parse', uitFilter]);
     });
-    angular.service('$i18nService', function(){
+    uiI18n.service('$i18nService', function(){
         var uii18nService = {
             getCache: function(){
                 return uiI18n._cache;
