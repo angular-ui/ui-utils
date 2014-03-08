@@ -256,6 +256,23 @@
     angular.forEach(FILTER_ALIASES, function(alias){
         uiI18n.filter(alias,['$parse', uitFilter]);
     });
+    angular.service("$i18nService", function(){
+        var uii18nService = {
+            getCache: function(){
+                return uiI18n._cache;
+            },
+            $broadcast: function(){
+                uiI18n.$broadcast(arguments);
+            },
+            add: function(langs, strings){
+                uiI18n.add(langs, strings);
+            },
+            set: function(lang){
+                uiI18n.set(lang);
+            }
+        };
+        return uii18nService;
+    });
 })(function deepExtend(destination, source) {
     'use strict';
     // adding deep copy method until angularjs supports deep copy like everyone else.
