@@ -2,7 +2,7 @@
   "author": "AngularUI Team",
   "name": "angular-ui-utils",
   "description": "AngularUI Utilities - Companion Suite for AngularJS",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "homepage": "http://angular-ui.github.com",
   "main": "./modules/utils.js",
   "dependencies": {
