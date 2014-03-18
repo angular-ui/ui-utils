@@ -1,8 +1,9 @@
 'use strict';
 
 angular.module('ui.keypress',[]).
-factory('keypressHelper', ['$parse', function keypress($parse){
-  var keysByCode = {
+provider('keysByCode', function () {
+  var keysByCode = this;
+  keysByCode.keymap = {
     8: 'backspace',
     9: 'tab',
     13: 'enter',
@@ -19,7 +20,11 @@ factory('keypressHelper', ['$parse', function keypress($parse){
     45: 'insert',
     46: 'delete'
   };
-
+  keysByCode.$get = function () {
+    return keysByCode.keymap;
+  };
+}).
+factory('keypressHelper', ['$parse', 'keysByCode', function keypress($parse, keysByCode){
   var capitaliseFirstLetter = function (string) {
     return string.charAt(0).toUpperCase() + string.slice(1);
   };

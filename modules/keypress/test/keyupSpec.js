@@ -21,6 +21,9 @@ describe('uiKeyup', function () {
   };
 
   beforeEach(module('ui.keypress'));
+  beforeEach(module(function (keysByCodeProvider) {
+    keysByCodeProvider.keymap[65] = 'a';
+  }));
   beforeEach(inject(function (_$rootScope_, _$compile_) {
     $compile = _$compile_;
     $scope = _$rootScope_.$new();
@@ -72,5 +75,12 @@ describe('uiKeyup', function () {
 
     element.trigger(createKeyEvent(13));
     expect($scope.event2.keyCode).toBe(13);
+  });
+
+  it('should allow to configure custom key aliases', function () {
+    var element = createElement({'a': 'cb($event)'});
+
+    element.trigger(createKeyEvent(65));
+    expect($scope.event1.keyCode).toBe(65);
   });
 });
