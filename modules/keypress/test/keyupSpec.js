@@ -73,4 +73,16 @@ describe('uiKeyup', function () {
     element.trigger(createKeyEvent(13));
     expect($scope.event2.keyCode).toBe(13);
   });
+
+  it('should allow to bind keys via API', inject(function (keypressHelper) {
+
+    var element = $compile('<span></span>')($scope);
+
+    keypressHelper('keyup', $scope, element, null,  {
+      enter: 'cb($event)'
+    });
+
+    element.trigger(createKeyEvent(13));
+    expect($scope.event1.keyCode).toBe(13);
+  }));
 });
