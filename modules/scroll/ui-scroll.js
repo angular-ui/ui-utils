@@ -52,6 +52,10 @@ angular.module('ui.scroll', []).directive('ngScrollViewport', [
 							return viewport.height() * Math.max(0.1, +$attr.padding || 0.1);
 						};
 						scrollHeight = function(elem) {
+							console.log(elem[0].scrollHeight, elem[0].document);
+							if( !elem[0].scrollHeight && !elem[0].document ) {
+								throw new Error('Could not determine scrollHeight of your viewport; make sure it has a constrained height (not height:auto)');
+							}
 							return elem[0].scrollHeight || elem[0].document.documentElement.scrollHeight;
 						};
 						adapter = null;
