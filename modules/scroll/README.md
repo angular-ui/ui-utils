@@ -24,9 +24,9 @@ the datasource. The datasource name is specified in the scroll_expression.
 The viewport is an element representing the space where the items from the collection are to be shown. Unless specified explicitly with the
 ngScrollViewport directive (see below), browser window will be used as viewport.
 
-**Important:** The viewport height has to be constrained because the directive will stop asking the datasource for more elements only when it has enough
-to fill out the viewport. If the height of the viewport is not constrained (style="height:auto") this will never happen and the directive will
-try to pull the entire content of the datasource.
+**Important: viewport height must be constrained.** The directive will stop asking the datasource for more elements only when it has enough
+to fill out the viewport. If the height of the viewport is not constrained (style="height:auto") this may throw an Error, or it could
+pull the entire content of the datasource.
 
 ### Dependencies
 
