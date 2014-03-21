@@ -508,4 +508,3 @@ angular.module('ui.scroll', []).directive('ngScrollViewport', [
 /*
 //# sourceURL=src/scripts/ui-scroll.js
 */
-
