@@ -2,6 +2,7 @@ describe('highlight', function () {
   'use strict';
 
   var highlightFilter, testPhrase = 'Prefix Highlight Suffix';
+  var regexTestPhrase = 'Prefix (.*+?^=!:${}()|[]/) Suffix';
 
   beforeEach(module('ui.highlight'));
   beforeEach(inject(function ($filter) {
@@ -23,6 +24,9 @@ describe('highlight', function () {
     it('should work correctly for number text', function () {
       expect(highlightFilter(3210123, '0')).toEqual('321<span class="ui-match">0</span>123');
     });
+    it('should work correctly when regex special characters are present', function (){
+      expect(highlightFilter(regexTestPhrase,'(.*+?^=!:${}()|[]/)')).toEqual('Prefix <span class="ui-match">(.*+?^=!:${}()|[]/)</span> Suffix');
+    });
   });
   describe('case sensitive', function () {
     it('should highlight a matching phrase', function () {
@@ -39,6 +43,9 @@ describe('highlight', function () {
     });
     it('should work correctly for number text', function () {
       expect(highlightFilter(3210123, '0', true)).toEqual('321<span class="ui-match">0</span>123');
+    });
+    it('should work correctly when regex special characters are present', function (){
+      expect(highlightFilter(regexTestPhrase,'(.*+?^=!:${}()|[]/)')).toEqual('Prefix <span class="ui-match">(.*+?^=!:${}()|[]/)</span> Suffix');
     });
     it('should not highlight a phrase with different letter-casing', function () {
       expect(highlightFilter(testPhrase, 'highlight', true)).toEqual(testPhrase);
