@@ -1,5 +1,4 @@
 'use strict';
-
 angular.module('ui.scroll.jqlite', ['ui.scroll']).service('jqLiteExtras', [
   '$log', '$window', function(console, window) {
     return {
@@ -176,7 +175,6 @@ angular.module('ui.scroll.jqlite', ['ui.scroll']).service('jqLiteExtras', [
                 return self;
               } else {
                 return value;
-
               }
             }
             box = {
@@ -189,7 +187,7 @@ angular.module('ui.scroll.jqlite', ['ui.scroll']).service('jqLiteExtras', [
               return;
             }
             docElem = doc.documentElement;
-            if (elem.getBoundingClientRect) {
+            if (elem.getBoundingClientRect != null) {
               box = elem.getBoundingClientRect();
             }
             win = doc.defaultView || doc.parentWindow;
