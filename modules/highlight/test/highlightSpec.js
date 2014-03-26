@@ -47,4 +47,7 @@ describe('highlight', function () {
   it('should highlight nothing if empty filter string passed - issue #114', function () {
     expect(highlightFilter(testPhrase, '')).toEqual(testPhrase);
   });
+  it('should work correctly for undefined text', function () {
+    expect(highlightFilter(undefined, 'whatever')).toEqual(undefined);
+  });
 });
