@@ -29,7 +29,9 @@ angular.module('ui.mask', [])
             originalPlaceholder = iAttrs.placeholder,
             originalMaxlength = iAttrs.maxlength,
           // Vars used exclusively in eventHandler()
-            oldValue, oldValueUnmasked, oldCaretPosition, oldSelectionLength;
+            oldValue, oldValueUnmasked, oldCaretPosition, oldSelectionLength,
+          // Vars for defining wether to return parsed value or viewValue
+            useViewValue;
 
           function initialize(maskAttr){
             if (!angular.isDefined(maskAttr)) {
@@ -79,9 +81,10 @@ angular.module('ui.mask', [])
             // to be out-of-sync with what the controller's $viewValue is set to.
             controller.$viewValue = value.length ? maskValue(value) : '';
             controller.$setValidity('mask', isValid);
-            if (value === '' && controller.$error.required !== undefined) {
-              controller.$setValidity('required', false);
-            }
+            
+            // Transform the value to be the viewValue
+            if (useViewValue)
+                value = value.length ? maskValue(value) : '';
             return isValid ? value : undefined;
           }
 
@@ -109,6 +112,9 @@ angular.module('ui.mask', [])
           }
 
           iAttrs.$observe('uiMask', initialize);
+          iAttrs.$observe('uiMaskUseViewvalue', function (useVVal) {
+              useViewValue = useVVal == 'true';
+          });
           iAttrs.$observe('placeholder', initPlaceholder);
           var modelViewValue = false;
           iAttrs.$observe('modelViewValue', function(val) {
