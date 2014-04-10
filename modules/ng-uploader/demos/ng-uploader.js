@@ -25,6 +25,7 @@ angular.module('ui.ng-uploader', [])
                     return (bytes / Math.pow(1024, i)).toFixed(i ? 1 : 0) + ' ' + sizes[isNaN(bytes) ? 0 : i + 1];
                 };
 
+                //Not $watch not supported yet by angularjs
                 element.find("input").bind("change", function(e) {
                     var files=e.target.files;
                     for ( var i = 0; i < files.length; i++) {
