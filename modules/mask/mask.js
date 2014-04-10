@@ -323,6 +323,9 @@ angular.module('ui.mask', [])
             var eventWhich = e.which,
               eventType = e.type;
 
+            //fixes IE bug: on TAB text should be highlighted
+            if (eventWhich === 9) { this.select(); return; }
+
             // Prevent shift and ctrl from mucking with old values
             if (eventWhich === 16 || eventWhich === 91) { return;}
 
