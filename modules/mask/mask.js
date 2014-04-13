@@ -435,7 +435,7 @@ angular.module('ui.mask', [])
               // Curse you IE
               input.focus();
               var selection = document.selection.createRange();
-              selection.moveStart('character', -input.value.length);
+              selection.moveStart('character', input.value ? -input.value.length : 0);
               return selection.text.length;
             }
             return 0;
