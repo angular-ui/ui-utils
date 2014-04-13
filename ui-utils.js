@@ -1,6 +1,6 @@
 /**
  * angular-ui-utils - Swiss-Army-Knife of AngularJS tools (with no external dependencies!)
- * @version v0.1.1 - 2014-03-28
+ * @version v0.1.1 - 2014-04-13
  * @link http://angular-ui.github.com
  * @license MIT License, http://www.opensource.org/licenses/MIT
  */
@@ -879,7 +879,7 @@ angular.module('ui.mask', [])
               // Curse you IE
               input.focus();
               var selection = document.selection.createRange();
-              selection.moveStart('character', -input.value.length);
+              selection.moveStart('character', input.value ? -input.value.length : 0);
               return selection.text.length;
             }
             return 0;
