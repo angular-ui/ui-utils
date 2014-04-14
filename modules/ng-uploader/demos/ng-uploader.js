@@ -16,7 +16,7 @@ angular.module('ui.ng-uploader', [])
             link: function ($scope, element, attrs) {
                 $scope.fileList = [];
                 $scope.concurrency = (typeof attrs.concurrency == 'undefined') ? 2 : attrs.concurrency;
-                $scope.concurrency = parseInt($scope.concurrency);
+                $scope.concurrency = parseInt($scope.concurrency, 10);
                 $scope.parameter = (typeof attrs.name == 'undefined') ? 'file' : attrs.name;
                 $scope.activeUploads = 0;
                 $scope.getSize = function (bytes) {
@@ -46,21 +46,21 @@ angular.module('ui.ng-uploader', [])
                     $scope.fileList.splice(position, 1);
                 };
                 $scope.onProgress = function (upload, loaded) {
-                    $log.info("progress=" + loaded);
+                    $log.info('progress=' + loaded);
                     upload.value = (loaded / upload.file.size) * 100;
                     upload.size = $scope.getSize(loaded);
                     $scope.$apply();
                 };
 
                 $scope.onCompleted = function (upload) {
-                    $log.info("file uploaded=" + upload.filename);
+                    $log.info('file uploaded=' + upload.filename);
                     $scope.activeUploads -= 1;
                     $scope.fileList.splice($scope.fileList.indexOf(upload), 1);
                     $scope.$apply();
                     $scope.startUpload();
                 };
                 $scope.startUpload = function () {
-                    $log.info("URL=" + attrs.ngUploader);
+                    $log.info('URL=' + attrs.ngUploader);
                     for (var i = 0; i < $scope.fileList.length; i++) {
                         if ($scope.activeUploads == $scope.concurrency) {
                             break;
@@ -73,7 +73,7 @@ angular.module('ui.ng-uploader', [])
 
                 $scope.ajaxUpload = function (upload) {
 
-                    var xhr, formData, prop, data = "", key = "" || 'file';
+                    var xhr, formData, prop, data = '', key = '' || 'file';
                     $scope.activeUploads += 1;
                     upload.active = true;
                     xhr = new window.XMLHttpRequest();
