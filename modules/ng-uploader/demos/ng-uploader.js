@@ -1,4 +1,4 @@
-"use strict";
+'use strict';
 /*
  * Author: Remy Alain Ticona Carbajal http://realtica.org
  * Description: The main objective of ng-uploader is to have a user control,
@@ -15,9 +15,9 @@ angular.module('ui.ng-uploader', [])
             },
             link: function ($scope, element, attrs) {
                 $scope.fileList = [];
-                $scope.concurrency = (typeof attrs.concurrency == "undefined") ? 2 : attrs.concurrency;
+                $scope.concurrency = (typeof attrs.concurrency == 'undefined') ? 2 : attrs.concurrency;
                 $scope.concurrency = parseInt($scope.concurrency);
-                $scope.parameter = (typeof attrs.name == "undefined") ? "file" : attrs.name;
+                $scope.parameter = (typeof attrs.name == 'undefined') ? 'file' : attrs.name;
                 $scope.activeUploads = 0;
                 $scope.getSize = function (bytes) {
                     var sizes = [ 'n/a', 'bytes', 'KB', 'MB', 'GB', 'TB', 'PB', 'EiB', 'ZiB', 'YiB' ];
@@ -25,7 +25,7 @@ angular.module('ui.ng-uploader', [])
                     return (bytes / Math.pow(1024, i)).toFixed(i ? 1 : 0) + ' ' + sizes[isNaN(bytes) ? 0 : i + 1];
                 };
                 //AngularJS not support input file bind yet.
-                element.find("input").bind("change", function (e) {
+                element.find('input').bind('change', function (e) {
                     var files = e.target.files;
                     for (var i = 0; i < files.length; i++) {
                         $scope.fileList.push({
@@ -42,7 +42,6 @@ angular.module('ui.ng-uploader', [])
                 });
 
                 $scope.erase = function (ele) {
-                    $log.info("file erased=");
                     var position = $scope.fileList.indexOf(ele.file);
                     $scope.fileList.splice(position, 1);
                 };
@@ -75,7 +74,6 @@ angular.module('ui.ng-uploader', [])
                 $scope.ajaxUpload = function (upload) {
 
                     var xhr, formData, prop, data = "", key = "" || 'file';
-                    console.log('Beging upload: ' + upload.filename);
                     $scope.activeUploads += 1;
                     upload.active = true;
                     xhr = new window.XMLHttpRequest();
