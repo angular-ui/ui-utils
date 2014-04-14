@@ -27,7 +27,6 @@ Tech
 
 ng-uploader uses a number of open source projects to work properly:
 
-* [Twitter Bootstrap] - great UI boilerplate for modern web apps(optional)
 * [angularjs] - HTML enhanced for web apps!
 
 How to use
@@ -35,13 +34,10 @@ How to use
 
 Step 1
 ------
-Include [angularjs] and [Twitter Bootstrap] dependencies.
+Include [angularjs] dependency.
 
 ```html
 <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.14/angular.min.js"></script>
-<script src="http://code.jquery.com/jquery.min.js"></script>
-<link href="http://getbootstrap.com/dist/css/bootstrap.css" rel="stylesheet" type="text/css" />
-<script src="http://getbootstrap.com/dist/js/bootstrap.js"></script>
 <script src="ng-uploader.js"></script>    
 ```
 
@@ -50,7 +46,7 @@ Step 2
 Include ng-uploader gadget and a URL into ng-uploader attribute.
 
 ```html
-<div ng-app="myapp" ng-uploader="http://mydomain.com"></div>
+<div ng-app="myapp" ng-uploader="http://mydomain.com" template-url="template.html"></div>
 ```
 
 Step 3
@@ -81,10 +77,11 @@ Options
 **Attributes:**
 * concurrency: Default value "2"
 * name: Default value "file"
+* template-url: path/to/template
 
 **Example**
 ```html
-<div ng-app="myapp" ng-uploader="http://mydomain.com" concurrency="5" name="myfiletoupload"></div>
+<div ng-app="myapp" ng-uploader="http://mydomain.com" concurrency="5" name="myfiletoupload" template-url="template.html"></div>
 ```
 
 Next Features 
@@ -102,13 +99,12 @@ Author
 
 License
 -------
-[GNU Version 3]
+[MIT]
 
 *Free Software, Hell Yeah!*
   [Remy Alain Ticona Carbajal]: http://realtica.org
-  [Twitter Bootstrap]: http://getbootstrap.com/
   [angularjs]: http://angularjs.org/
-  [GNU Version 3]: https://www.gnu.org/copyleft/gpl.html
+  [MIT]: http://opensource.org/licenses/MIT
   
 
   

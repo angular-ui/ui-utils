@@ -1,0 +1,6 @@
+<input class="btn btn-default" type="file" name="{{file.parameter}}" multiple/><br>
+<div ng-repeat="file in fileList" style="margin-bottom: 5px;"><span>{{file.filename}}</span>
+    <progress value="{{file.value}}" max="100"></progress>
+    <a ng-click="erase(this)" href="#">X</a>
+</div>
+<button ng-click="startUpload()">Upload</button>

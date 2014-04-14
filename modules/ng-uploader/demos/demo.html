@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.14/angular.min.js"></script>
+    <script src="http://code.jquery.com/jquery.min.js"></script>
+    <link href="http://getbootstrap.com/dist/css/bootstrap.css" rel="stylesheet" type="text/css"/>
+    <script src="http://getbootstrap.com/dist/js/bootstrap.js"></script>
+    <script src="ng-uploader.js"></script>
+    <meta charset="utf-8">
+    <title>Demo</title>
+</head>
+<body ng-app="myapp" ng-controller="testCtrl">
+<div class="page-header">
+    <h1>ng-uploader demo <small>very easy to implement</small></h1>
+</div>
+<div class="well">Simultaneous Uploads:<input type="number" min="1" max="10" ng-model="simultaneousUploads"/></div>
+
+<div ng-uploader="" template-url="template.html"></div>
+<script>
+    var app = angular.module('myapp', ['ui.ng-uploader']);
+    app.controller('testCtrl', function ($scope, $log) {
+        $scope.simultaneousUploads = 2;
+        $scope.$watch('simultaneousUploads', function () {
+            $log.info($scope.concurrency);
+            $scope.concurrency = $scope.simultaneousUploads;
+            //alert('hey, myVar has changed!');
+        });
+    });
+</script>
+</body>
+</html>
