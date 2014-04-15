@@ -425,6 +425,8 @@ angular.module('ui.mask', [])
               caretPos++;
             }
             oldCaretPosition = caretPos;
+            //char position fix when mask does not starts with first character such as phone for example (___) ___-___
+            if (valueMasked[0] !== '_') caretPos++; 
             setCaretPosition(this, caretPos);
           }
 
