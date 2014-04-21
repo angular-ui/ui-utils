@@ -428,7 +428,8 @@ angular.module('ui.mask', [])
 
             //Fix the cursor position if the mask contain masking character on 1st field (for example phone "(___)___-____")
             if (valUnmasked.length === 1 && maskPlaceholder.indexOf('_') !== 0 && eventWhich !== 8) { 
-              if (eventWhich === 46) {caretPos = 1; 
+              if (eventWhich === 46) {
+                caretPos = 1; 
               } else {
                 caretPos = 2; 
               } 
