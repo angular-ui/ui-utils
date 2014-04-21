@@ -427,7 +427,12 @@ angular.module('ui.mask', [])
             oldCaretPosition = caretPos;
 
             //Fix the cursor position if the mask contain masking character on 1st field (for example phone "(___)___-____")
-            if (valUnmasked.length === 1 && maskPlaceholder.indexOf('_') !== 0 && eventWhich !== 8) { if (eventWhich === 46) {caretPos = 1; } else {caretPos = 2; }
+            if (valUnmasked.length === 1 && maskPlaceholder.indexOf('_') !== 0 && eventWhich !== 8) { 
+              if (eventWhich === 46) {caretPos = 1; 
+              } else {
+                caretPos = 2; 
+              } 
+            }
 
             setCaretPosition(this, caretPos);
           }
