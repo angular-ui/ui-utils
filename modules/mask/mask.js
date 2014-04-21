@@ -323,6 +323,9 @@ angular.module('ui.mask', [])
             var eventWhich = e.which,
               eventType = e.type;
 
+            // When tabbed into the input - select the text
+            if (eventWhich === 9) { this.select(); return; }
+
             // Prevent shift and ctrl from mucking with old values
             if (eventWhich === 16 || eventWhich === 91) { return;}
 
@@ -422,6 +425,16 @@ angular.module('ui.mask', [])
               caretPos++;
             }
             oldCaretPosition = caretPos;
+
+            //Fix the cursor position if the mask contain masking character on 1st field (for example phone "(___)___-____")
+            if (valUnmasked.length === 1 && maskPlaceholder.indexOf('_') !== 0 && eventWhich !== 8) { 
+              if (eventWhich === 46) {
+                caretPos = 1; 
+              } else {
+                caretPos = 2; 
+              } 
+            }
+
             setCaretPosition(this, caretPos);
           }
 
