@@ -24,14 +24,15 @@ the datasource. The datasource name is specified in the scroll_expression.
 The viewport is an element representing the space where the items from the collection are to be shown. Unless specified explicitly with the
 ngScrollViewport directive (see below), browser window will be used as viewport.
 
-**Important:** The viewport height has to be constrained because the directive will stop asking the datasource for more elements only when it has enough
-to fill out the viewport. If the height of the viewport is not constrained (style="height:auto") this will never happen and the directive will
-try to pull the entire content of the datasource.
+**Important: viewport height must be constrained.** The directive will stop asking the datasource for more elements only when it has enough
+ to fill out the viewport. If the height of the viewport is not constrained (style="height:auto")  it will pull the entire content of the datasource
+ and may throw an Error depending on the number of items in the datasource. Even if it does not, using the directive this way does not provide any
+ advantages over using ng-repeat, because item template will be always instantiated for every item in the datasource.
 
 ### Dependencies
 
-To use the directive make sure the ui-scroll.js (as transpiled from [ui-scroll.coffee](https://github.com/Hill30/NGScroller/tree/v0.0.2)) is loaded in your page. You also have to include
-module name 'ui.scroll' on the list of your application module dependencies. 
+To use the directive make sure the ui-scroll.js (as transpiled from [ui-scroll.coffee](https://github.com/Hill30/NGScroller/blob/master/src/scripts/application.coffee)) is loaded in your page. You also have to include
+module name 'ui.scroll' on the list of your application module dependencies.
 
 The code in this file relies on a few DOM element methods of jQuery which are currently not implemented in jQlite, namely
 * before(elem)
@@ -53,7 +54,7 @@ If you plan to use ng-scroll over jQuery feel free to skip ui-scroll-jqlite.
       ...
 </ANY>
 ```
-Listing `ANY` for the tag the directive can be applied to stretches the truth - a little bit. The directive works well with majority of
+Listing `ANY` for the tag, the directive can be applied to, stretches the truth - a little bit. The directive works well with majority of
 the 'usual' tags - divs, spans, a, inputs, etc. For all of them the viewport should be a div (unless it is the window). Some other tags
 require special treatment. If the repeated tag is a li, it is best to use ul or ol as a viewport. For a tr as a repeated tag the
 viewport has to be the tbody.  
@@ -69,6 +70,10 @@ dl as a repeated tag is not supported.
 * **buffer-size - value**, optional - number of items requested from the datasource in a single request. The default is 10 and the minimal value is 3
 * **padding - value**, optional - extra height added to the visible area for the purpose of determining when the items should be created/destroyed.
 The value is relative to the visible height of the area, the default is 0.5 and the minimal value is 0.3
+* **is-loading - name**, optional - if provided a boolean value indicating whether there are any pending load requests will be placed in the member with the said name on the scope associated with the viewport. If the viewport is the window, the value will be placed on the $rootScope
+* **top-visible - name**, optional - if provided a reference to the item currently in the topmost visible position will be placed in the member with the said name on the scope associated with the viewport. If the viewport is the window, the value will be placed on the $rootScope
+* **top-visible-element - name**, optional - if provided a reference to the DOM element currently in the topmost visible position will be placed in the member with the said name on the scope associated with the viewport. If the viewport is the window, the value will be placed on the $rootScope
+* **top-visible-scope - name**, optional - if provided a reference to the scope created for the item currently in the topmost visible position will be placed in the member with the said name on the scope associated with the viewport. If the viewport is the window, the value will be placed on the $rootScope
 
 ###Data Source 
 Data source is an object to be used by the ngScroll directive to access the data. 
@@ -93,12 +98,15 @@ The datasource object implements methods and properties to be used by the direct
 **Important:** Make sure to respect the `index` and `count` parameters of the request. The array passed to the success method should have 
 exactly `count` elements unless it hit eof/bof
 
-* Method `loading`
+* Method `loading`  
 
         loading(value)
 
     #### Description
     this is an optional method. If supplied this function will be called with a value indicating whether there is data loading request pending
+
+**Deprecated:** Method `loading` is deprecated - use `is-loading` attribute instead
+    
 
 * Method `revision`
 
@@ -131,3 +139,23 @@ I intentionally broke every rule of proper html/css structure (i.e. embedded sty
 it to you to do it properly - whatever properly means in your book.
 
 See [index.html] (http://rawgithub.com/Hill30/NGScroller/master/src/index.html)
+
+###Debugging coffeeScript directly in the browser
+
+With adding sourceURL setting the source maps for the coffeScript seem to be functional now - at least with Chrome. You can set breakpoints and inspect values form the coffeeScript source window. 
+
+There is one dirty trick though - to make the breakpoints stick, the first one to be hit **has** to be set from the javascript source window. With the way the sample source code is, open the source code dropdown and select the source called 'src/scripts/application.js' under 'no domain', and place the breakpoint on the second line of the code in this file. Because of source mapping the blue arrow indicating the breakpoint will be put in the corresponding place of the coffeeScript code (application.coffee in this case), so you will not see it in the application.js. Now, if you refresh the page, Chrome will break on the first line of the code in the application.coffee. 
+
+Once the first breakpoint set up this way is hit, the rest of them will work just fine. You can set and/or remove them directly in coffeeScript. Just do not remove the first one - as soon as you do, the rest of you breakpoints while still visible in the editor will cease to work.
+
+Do not ask me why this woodoo is necessary, but as of Chrome version 30 it is just the way it is.
+
+###History
+
+####v0.1.*
+
+Introduced `is-loading` and `top-visible-*` attributes. Streamlined and added a few more usage examples
+
+####v0.0.*
+
+Initial commit including ngScroll, ngScrollViewPort directives and usage examples

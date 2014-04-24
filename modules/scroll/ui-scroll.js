@@ -31,7 +31,7 @@ angular.module('ui.scroll', []).directive('ngScrollViewport', [
       terminal: true,
       compile: function(elementTemplate, attr, linker) {
         return function($scope, element, $attr, controllers) {
-          var adapter, adjustBuffer, adjustRowHeight, bof, bottomVisiblePos, buffer, bufferPadding, bufferSize, clipBottom, clipTop, datasource, datasourceName, enqueueFetch, eof, eventListener, fetch, finalize, first, insert, isDatasource, isLoading, itemName, loading, log, match, next, pending, reload, removeFromBuffer, resizeHandler, scrollHandler, scrollHeight, shouldLoadBottom, shouldLoadTop, tempScope, topVisible, topVisibleElement, topVisibleItem, topVisiblePos, topVisibleScope, viewport, viewportScope;
+          var adapter, adjustBuffer, adjustRowHeight, bof, bottomVisiblePos, buffer, bufferPadding, bufferSize, clipBottom, clipTop, datasource, datasourceName, enqueueFetch, eof, eventListener, fetch, finalize, first, insert, isDatasource, isLoading, itemName, loading, log, match, next, pending, reload, removeFromBuffer, resizeHandler, ridActual, scrollHandler, scrollHeight, shouldLoadBottom, shouldLoadTop, tempScope, topVisible, topVisibleElement, topVisibleItem, topVisiblePos, topVisibleScope, viewport, viewportScope;
           log = console.debug || console.log;
           match = $attr.ngScroll.match(/^\s*(\w+)\s+in\s+(\w+)\s*$/);
           if (!match) {
@@ -168,6 +168,7 @@ angular.module('ui.scroll', []).directive('ngScrollViewport', [
               }
             };
           }
+          ridActual = 0;
           first = 1;
           next = 1;
           buffer = [];
@@ -184,6 +185,7 @@ angular.module('ui.scroll', []).directive('ngScrollViewport', [
             return buffer.splice(start, stop - start);
           };
           reload = function() {
+            ridActual++;
             first = 1;
             next = 1;
             removeFromBuffer(0, buffer.length);
@@ -192,7 +194,7 @@ angular.module('ui.scroll', []).directive('ngScrollViewport', [
             pending = [];
             eof = false;
             bof = false;
-            return adjustBuffer(false);
+            return adjustBuffer(ridActual, false);
           };
           bottomVisiblePos = function() {
             return viewport.scrollTop() + viewport.height();
@@ -249,13 +251,13 @@ angular.module('ui.scroll', []).directive('ngScrollViewport', [
               return log('clipped off top ' + overage + ' top padding ' + (adapter.topPadding()));
             }
           };
-          enqueueFetch = function(direction, scrolling) {
+          enqueueFetch = function(rid, direction, scrolling) {
             if (!isLoading) {
               isLoading = true;
               loading(true);
             }
             if (pending.push(direction) === 1) {
-              return fetch(scrolling);
+              return fetch(rid, scrolling);
             }
           };
           insert = function(index, item) {
@@ -303,20 +305,20 @@ angular.module('ui.scroll', []).directive('ngScrollViewport', [
               }
             }
           };
-          adjustBuffer = function(scrolling, newItems, finalize) {
+          adjustBuffer = function(rid, scrolling, newItems, finalize) {
             var doAdjustment;
             doAdjustment = function() {
               var item, itemHeight, topHeight, _i, _len, _results;
               log('top {actual=' + (adapter.topDataPos()) + ' visible from=' + (topVisiblePos()) + ' bottom {visible through=' + (bottomVisiblePos()) + ' actual=' + (adapter.bottomDataPos()) + '}');
               if (shouldLoadBottom()) {
-                enqueueFetch(true, scrolling);
+                enqueueFetch(rid, true, scrolling);
               } else {
                 if (shouldLoadTop()) {
-                  enqueueFetch(false, scrolling);
+                  enqueueFetch(rid, false, scrolling);
                 }
               }
               if (finalize) {
-                finalize();
+                finalize(rid);
               }
               if (pending.length === 0) {
                 topHeight = 0;
@@ -347,53 +349,56 @@ angular.module('ui.scroll', []).directive('ngScrollViewport', [
               return doAdjustment();
             }
           };
-          finalize = function(scrolling, newItems) {
-            return adjustBuffer(scrolling, newItems, function() {
+          finalize = function(rid, scrolling, newItems) {
+            return adjustBuffer(rid, scrolling, newItems, function() {
               pending.shift();
               if (pending.length === 0) {
                 isLoading = false;
                 return loading(false);
               } else {
-                return fetch(scrolling);
+                return fetch(rid, scrolling);
               }
             });
           };
-          fetch = function(scrolling) {
+          fetch = function(rid, scrolling) {
             var direction;
             direction = pending[0];
             if (direction) {
               if (buffer.length && !shouldLoadBottom()) {
-                return finalize(scrolling);
+                return finalize(rid, scrolling);
               } else {
                 return datasource.get(next, bufferSize, function(result) {
                   var item, newItems, _i, _len;
+                  if (rid && rid !== ridActual) {
+                    return;
+                  }
                   newItems = [];
                   if (result.length === 0) {
                     eof = true;
                     adapter.bottomPadding(0);
-                    log('appended: requested ' + bufferSize + ' records starting from ' + next + ' recieved: eof');
                   } else {
                     clipTop();
                     for (_i = 0, _len = result.length; _i < _len; _i++) {
                       item = result[_i];
                       newItems.push(insert(++next, item));
                     }
-                    log('appended: requested ' + bufferSize + ' received ' + result.length + ' buffer size ' + buffer.length + ' first ' + first + ' next ' + next);
                   }
-                  return finalize(scrolling, newItems);
+                  return finalize(rid, scrolling, newItems);
                 });
               }
             } else {
               if (buffer.length && !shouldLoadTop()) {
-                return finalize(scrolling);
+                return finalize(rid, scrolling);
               } else {
                 return datasource.get(first - bufferSize, bufferSize, function(result) {
                   var i, newItems, _i, _ref;
+                  if (rid && rid !== ridActual) {
+                    return;
+                  }
                   newItems = [];
                   if (result.length === 0) {
                     bof = true;
                     adapter.topPadding(0);
-                    log('prepended: requested ' + bufferSize + ' records starting from ' + (first - bufferSize) + ' recieved: bof');
                   } else {
                     if (buffer.length) {
                       clipBottom();
@@ -401,23 +406,22 @@ angular.module('ui.scroll', []).directive('ngScrollViewport', [
                     for (i = _i = _ref = result.length - 1; _ref <= 0 ? _i <= 0 : _i >= 0; i = _ref <= 0 ? ++_i : --_i) {
                       newItems.unshift(insert(--first, result[i]));
                     }
-                    log('prepended: requested ' + bufferSize + ' received ' + result.length + ' buffer size ' + buffer.length + ' first ' + first + ' next ' + next);
                   }
-                  return finalize(scrolling, newItems);
+                  return finalize(rid, scrolling, newItems);
                 });
               }
             }
           };
           resizeHandler = function() {
             if (!$rootScope.$$phase && !isLoading) {
-              adjustBuffer(false);
+              adjustBuffer(null, false);
               return $scope.$apply();
             }
           };
           viewport.bind('resize', resizeHandler);
           scrollHandler = function() {
             if (!$rootScope.$$phase && !isLoading) {
-              adjustBuffer(true);
+              adjustBuffer(null, true);
               return $scope.$apply();
             }
           };
@@ -480,7 +484,7 @@ angular.module('ui.scroll', []).directive('ngScrollViewport', [
               item = buffer[i];
               item.scope.$index = first + i;
             }
-            return adjustBuffer(false);
+            return adjustBuffer(null, false);
           });
           return eventListener.$on('insert.item', function(event, locator, item) {
             var i, inserted, _i, _len, _ref;
@@ -497,7 +501,7 @@ angular.module('ui.scroll', []).directive('ngScrollViewport', [
               item = buffer[i];
               item.scope.$index = first + i;
             }
-            return adjustBuffer(false, inserted);
+            return adjustBuffer(null, false, inserted);
           });
         };
       }
