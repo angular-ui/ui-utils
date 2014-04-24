@@ -1,5 +1,4 @@
 'use strict';
-
 angular.module('ui.scroll.jqlite', ['ui.scroll']).service('jqLiteExtras', [
   '$log', '$window', function(console, window) {
     return {
@@ -168,6 +167,11 @@ angular.module('ui.scroll.jqlite', ['ui.scroll']).service('jqLiteExtras', [
           outerHeight: function(option) {
             return getWidthHeight(this[0], 'height', option ? 'outerfull' : 'outer');
           },
+          /*
+          NGScroller no longer relies on jQuery method offset. The jQLite implementation of the method
+          is kept here just for the reference. Also the offset setter method was never implemented
+          */
+
           offset: function(value) {
             var box, doc, docElem, elem, self, win;
             self = this;
@@ -175,8 +179,7 @@ angular.module('ui.scroll.jqlite', ['ui.scroll']).service('jqLiteExtras', [
               if (value === void 0) {
                 return self;
               } else {
-                return value;
-
+                throw new Error('offset setter method is not implemented');
               }
             }
             box = {
@@ -189,7 +192,7 @@ angular.module('ui.scroll.jqlite', ['ui.scroll']).service('jqLiteExtras', [
               return;
             }
             docElem = doc.documentElement;
-            if (elem.getBoundingClientRect) {
+            if (elem.getBoundingClientRect != null) {
               box = elem.getBoundingClientRect();
             }
             win = doc.defaultView || doc.parentWindow;
@@ -219,3 +222,9 @@ angular.module('ui.scroll.jqlite', ['ui.scroll']).service('jqLiteExtras', [
     }
   }
 ]);
+
+/*
+//# sourceURL=src/scripts/ui-scroll-jqlite.js
+*/
+
+
