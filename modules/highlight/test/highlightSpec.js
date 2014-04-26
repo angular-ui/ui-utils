@@ -17,6 +17,9 @@ describe('highlight', function () {
     it('should highlight nothing for the undefined filter', function () {
       expect(highlightFilter(testPhrase, undefined)).toEqual(testPhrase);
     });
+    it('should work correctly if text is null', function() {
+      expect(highlightFilter(null,'highlight')).toEqual(null);
+    });
     it('should work correctly for number filters', function () {
       expect(highlightFilter('3210123', 0)).toEqual('321<span class="ui-match">0</span>123');
     });
@@ -33,6 +36,9 @@ describe('highlight', function () {
     });
     it('should highlight nothing for the undefined filter', function () {
       expect(highlightFilter(testPhrase, undefined, true)).toEqual(testPhrase);
+    });
+    it('should work correctly if text is null', function() {
+      expect(highlightFilter(null,'Highlight')).toEqual(null);
     });
     it('should work correctly for number filters', function () {
       expect(highlightFilter('3210123', 0, true)).toEqual('321<span class="ui-match">0</span>123');

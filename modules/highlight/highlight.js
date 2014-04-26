@@ -8,7 +8,7 @@
  */
 angular.module('ui.highlight',[]).filter('highlight', function () {
   return function (text, search, caseSensitive) {
-    if (search || angular.isNumber(search)) {
+    if (text && (search || angular.isNumber(search))) {
       text = text.toString();
       search = search.toString();
       if (caseSensitive) {
