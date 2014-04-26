@@ -1,6 +1,6 @@
 /**
  * angular-ui-utils - Swiss-Army-Knife of AngularJS tools (with no external dependencies!)
- * @version v0.1.1 - 2014-04-24
+ * @version v0.1.1 - 2014-04-26
  * @link http://angular-ui.github.com
  * @license MIT License, http://www.opensource.org/licenses/MIT
  */
@@ -102,7 +102,7 @@ angular.module('ui.format',[]).filter('format', function(){
  */
 angular.module('ui.highlight',[]).filter('highlight', function () {
   return function (text, search, caseSensitive) {
-    if (search || angular.isNumber(search)) {
+    if (text && (search || angular.isNumber(search))) {
       text = text.toString();
       search = search.toString();
       if (caseSensitive) {
