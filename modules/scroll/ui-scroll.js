@@ -206,13 +206,17 @@ angular.module('ui.scroll', []).directive('ngScrollViewport', [
             return !eof && adapter.bottomDataPos() < bottomVisiblePos() + bufferPadding();
           };
           clipBottom = function() {
-            var bottomHeight, i, itemHeight, overage, _i, _ref;
+                      var item, bottomHeight, i, itemHeight = 0, overage, _i, _ref, itemPos, rowTop, newRow;
             bottomHeight = 0;
             overage = 0;
             for (i = _i = _ref = buffer.length - 1; _ref <= 0 ? _i <= 0 : _i >= 0; i = _ref <= 0 ? ++_i : --_i) {
-              itemHeight = buffer[i].element.outerHeight(true);
+              item = buffer[i];
+              itemPos = item.element.position();
+              newRow = rowTop != itemPos.top;
+              rowTop = itemPos.top;
+              itemHeight = newRow ? item.element.outerHeight(true) : itemHeight;
               if (adapter.bottomDataPos() - bottomHeight - itemHeight > bottomVisiblePos() + bufferPadding()) {
-                bottomHeight += itemHeight;
+                bottomHeight = newRow ? bottomHeight + itemHeight : bottomHeight;
                 overage++;
                 eof = false;
               } else {
@@ -230,14 +234,17 @@ angular.module('ui.scroll', []).directive('ngScrollViewport', [
             return !bof && (adapter.topDataPos() > topVisiblePos() - bufferPadding());
           };
           clipTop = function() {
-            var item, itemHeight, overage, topHeight, _i, _len;
+            var item, itemHeight = 0, overage, topHeight, _i, _len, itemPos, rowTop, newRow;
             topHeight = 0;
             overage = 0;
             for (_i = 0, _len = buffer.length; _i < _len; _i++) {
               item = buffer[_i];
-              itemHeight = item.element.outerHeight(true);
+              itemPos = item.element.position();
+              newRow = rowTop != itemPos.top;
+              rowTop = itemPos.top;
+              itemHeight = newRow ? item.element.outerHeight(true) : itemHeight;
               if (adapter.topDataPos() + topHeight + itemHeight < topVisiblePos() - bufferPadding()) {
-                topHeight += itemHeight;
+                topHeight = newRow ? topHeight + itemHeight : topHeight;
                 overage++;
                 bof = false;
               } else {
@@ -308,7 +315,7 @@ angular.module('ui.scroll', []).directive('ngScrollViewport', [
           adjustBuffer = function(rid, scrolling, newItems, finalize) {
             var doAdjustment;
             doAdjustment = function() {
-              var item, itemHeight, topHeight, _i, _len, _results;
+              var item, itemHeight = 0, topHeight, _i, _len, _results, itemPos, rowTop, newRow;
               log('top {actual=' + (adapter.topDataPos()) + ' visible from=' + (topVisiblePos()) + ' bottom {visible through=' + (bottomVisiblePos()) + ' actual=' + (adapter.bottomDataPos()) + '}');
               if (shouldLoadBottom()) {
                 enqueueFetch(rid, true, scrolling);
@@ -325,11 +332,18 @@ angular.module('ui.scroll', []).directive('ngScrollViewport', [
                 _results = [];
                 for (_i = 0, _len = buffer.length; _i < _len; _i++) {
                   item = buffer[_i];
-                  itemHeight = item.element.outerHeight(true);
+                  itemPos = item.element.position();
+                  newRow = rowTop != itemPos.top;
+                  rowTop = itemPos.top;
+                  itemHeight = newRow ? item.element.outerHeight(true) : itemHeight;
                   if (adapter.topDataPos() + topHeight + itemHeight < topVisiblePos()) {
-                    _results.push(topHeight += itemHeight);
+                    if (newRow) {
+                      _results.push(topHeight += itemHeight);
+                    }
                   } else {
-                    topVisible(item);
+                    if (newRow) {
+                      topVisible(item);
+                    }
                     break;
                   }
                 }
@@ -338,10 +352,14 @@ angular.module('ui.scroll', []).directive('ngScrollViewport', [
             };
             if (newItems) {
               return $timeout(function() {
-                var row, _i, _len;
+                var row, _i, _len, itemPos, rowTop;
                 for (_i = 0, _len = newItems.length; _i < _len; _i++) {
                   row = newItems[_i];
-                  adjustRowHeight(row.appended, row.wrapper);
+                  itemPos = row.wrapper.element.position();
+                  if (rowTop != itemPos.top) {
+                    rowTop = itemPos.top;
+                    adjustRowHeight(row.appended, row.wrapper);
+                  }
                 }
                 return doAdjustment();
               });
