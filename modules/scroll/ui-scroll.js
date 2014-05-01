@@ -206,7 +206,7 @@ angular.module('ui.scroll', []).directive('ngScrollViewport', [
             return !eof && adapter.bottomDataPos() < bottomVisiblePos() + bufferPadding();
           };
           clipBottom = function() {
-                      var item, bottomHeight, i, itemHeight = 0, overage, _i, _ref, itemPos, rowTop, newRow;
+            var item, bottomHeight, i, itemHeight = 0, overage, _i, _ref, itemPos, rowTop, newRow;
             bottomHeight = 0;
             overage = 0;
             for (i = _i = _ref = buffer.length - 1; _ref <= 0 ? _i <= 0 : _i >= 0; i = _ref <= 0 ? ++_i : --_i) {
@@ -220,7 +220,11 @@ angular.module('ui.scroll', []).directive('ngScrollViewport', [
                 overage++;
                 eof = false;
               } else {
-                break;
+                if (newRow) {
+                  break;
+                } else {
+                  overage++;
+                }
               }
             }
             if (overage > 0) {
@@ -248,7 +252,11 @@ angular.module('ui.scroll', []).directive('ngScrollViewport', [
                 overage++;
                 bof = false;
               } else {
-                break;
+                if (newRow) {
+                  break;
+                } else {
+                  overage++;
+                }
               }
             }
             if (overage > 0) {
@@ -352,14 +360,18 @@ angular.module('ui.scroll', []).directive('ngScrollViewport', [
             };
             if (newItems) {
               return $timeout(function() {
-                var row, _i, _len, itemPos, rowTop;
+                var row, _i, _len, itemPos, rowTop, rows = [];
                 for (_i = 0, _len = newItems.length; _i < _len; _i++) {
                   row = newItems[_i];
                   itemPos = row.wrapper.element.position();
                   if (rowTop != itemPos.top) {
+                    rows.push(row);
                     rowTop = itemPos.top;
-                    adjustRowHeight(row.appended, row.wrapper);
                   }
+                }
+                for (_i = 0, _len = rows.length; _i < _len; _i++) {
+                  row = rows[_i];
+                  adjustRowHeight(row.appended, row.wrapper);
                 }
                 return doAdjustment();
               });
