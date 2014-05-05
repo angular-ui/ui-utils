@@ -206,14 +206,14 @@ angular.module('ui.scroll', []).directive('ngScrollViewport', [
             return !eof && adapter.bottomDataPos() < bottomVisiblePos() + bufferPadding();
           };
           clipBottom = function() {
-            var item, bottomHeight, i, itemHeight = 0, overage, _i, _ref, itemPos, rowTop, newRow;
+            var item, bottomHeight, i, itemHeight = 0, overage, _i, _ref, itemTop, rowTop, newRow;
             bottomHeight = 0;
             overage = 0;
             for (i = _i = _ref = buffer.length - 1; _ref <= 0 ? _i <= 0 : _i >= 0; i = _ref <= 0 ? ++_i : --_i) {
               item = buffer[i];
-              itemPos = item.element.position();
-              newRow = rowTop != itemPos.top;
-              rowTop = itemPos.top;
+              itemTop = item.element.offset().top;
+              newRow = rowTop != itemTop;
+              rowTop = itemTop;
               itemHeight = newRow ? item.element.outerHeight(true) : itemHeight;
               if (adapter.bottomDataPos() - bottomHeight - itemHeight > bottomVisiblePos() + bufferPadding()) {
                 bottomHeight = newRow ? bottomHeight + itemHeight : bottomHeight;
@@ -238,14 +238,14 @@ angular.module('ui.scroll', []).directive('ngScrollViewport', [
             return !bof && (adapter.topDataPos() > topVisiblePos() - bufferPadding());
           };
           clipTop = function() {
-            var item, itemHeight = 0, overage, topHeight, _i, _len, itemPos, rowTop, newRow;
+            var item, itemHeight = 0, overage, topHeight, _i, _len, itemTop, rowTop, newRow;
             topHeight = 0;
             overage = 0;
             for (_i = 0, _len = buffer.length; _i < _len; _i++) {
               item = buffer[_i];
-              itemPos = item.element.position();
-              newRow = rowTop != itemPos.top;
-              rowTop = itemPos.top;
+              itemTop = item.element.offset().top;
+              newRow = rowTop != itemTop;
+              rowTop = itemTop;
               itemHeight = newRow ? item.element.outerHeight(true) : itemHeight;
               if (adapter.topDataPos() + topHeight + itemHeight < topVisiblePos() - bufferPadding()) {
                 topHeight = newRow ? topHeight + itemHeight : topHeight;
@@ -323,7 +323,7 @@ angular.module('ui.scroll', []).directive('ngScrollViewport', [
           adjustBuffer = function(rid, scrolling, newItems, finalize) {
             var doAdjustment;
             doAdjustment = function() {
-              var item, itemHeight = 0, topHeight, _i, _len, _results, itemPos, rowTop, newRow;
+              var item, itemHeight = 0, topHeight, _i, _len, _results, itemTop, rowTop, newRow;
               log('top {actual=' + (adapter.topDataPos()) + ' visible from=' + (topVisiblePos()) + ' bottom {visible through=' + (bottomVisiblePos()) + ' actual=' + (adapter.bottomDataPos()) + '}');
               if (shouldLoadBottom()) {
                 enqueueFetch(rid, true, scrolling);
@@ -340,9 +340,9 @@ angular.module('ui.scroll', []).directive('ngScrollViewport', [
                 _results = [];
                 for (_i = 0, _len = buffer.length; _i < _len; _i++) {
                   item = buffer[_i];
-                  itemPos = item.element.position();
-                  newRow = rowTop != itemPos.top;
-                  rowTop = itemPos.top;
+                  itemTop = item.element.offset().top;
+                  newRow = rowTop != itemTop;
+                  rowTop = itemTop;
                   itemHeight = newRow ? item.element.outerHeight(true) : itemHeight;
                   if (adapter.topDataPos() + topHeight + itemHeight < topVisiblePos()) {
                     if (newRow) {
@@ -360,13 +360,13 @@ angular.module('ui.scroll', []).directive('ngScrollViewport', [
             };
             if (newItems) {
               return $timeout(function() {
-                var row, _i, _len, itemPos, rowTop, rows = [];
+                var row, _i, _len, itemTop, rowTop, rows = [];
                 for (_i = 0, _len = newItems.length; _i < _len; _i++) {
                   row = newItems[_i];
-                  itemPos = row.wrapper.element.position();
-                  if (rowTop != itemPos.top) {
+                  itemTop = row.wrapper.element.offset().top;
+                  if (rowTop != itemTop) {
                     rows.push(row);
-                    rowTop = itemPos.top;
+                    rowTop = itemTop;
                   }
                 }
                 for (_i = 0, _len = rows.length; _i < _len; _i++) {
