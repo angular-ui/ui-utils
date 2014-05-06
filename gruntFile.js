@@ -42,7 +42,7 @@ module.exports = function (grunt) {
      memo[moduleName]= {
       expand: true,
       cwd: 'modules/' + moduleName,
-      src: [moduleName + '.js'],
+      src: ['*.js'],
       dest: 'dist/sub/' + moduleName
     };
 
