@@ -227,4 +227,3 @@ angular.module('ui.scroll.jqlite', ['ui.scroll']).service('jqLiteExtras', [
 //# sourceURL=src/scripts/ui-scroll-jqlite.js
 */
 
-
