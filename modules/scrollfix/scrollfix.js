@@ -5,10 +5,11 @@
  * @param [offset] {int} optional Y-offset to override the detected offset.
  *   Takes 300 (absolute) or -300 or +300 (relative to detected)
  */
-angular.module('ui.scrollfix',[]).directive('uiScrollfix', ['$window', function ($window) {
+angular.module('ui.scrollfix',[]).directive('uiScrollfix', ['$window', '$timeout', function ($window, $timeout) {
   return {
     require: '^?uiScrollfixTarget',
     link: function (scope, elm, attrs, uiScrollfixTarget) {
+      var promise = null;
       var top = elm[0].offsetTop,
           $target = uiScrollfixTarget && uiScrollfixTarget.$element || angular.element($window);
 
@@ -24,19 +25,22 @@ angular.module('ui.scrollfix',[]).directive('uiScrollfix', ['$window', function 
       }
 
       function onScroll() {
-        // if pageYOffset is defined use it, otherwise use other crap for IE
-        var offset;
-        if (angular.isDefined($window.pageYOffset)) {
-          offset = $window.pageYOffset;
-        } else {
-          var iebody = (document.compatMode && document.compatMode !== 'BackCompat') ? document.documentElement : document.body;
-          offset = iebody.scrollTop;
-        }
-        if (!elm.hasClass('ui-scrollfix') && offset > attrs.uiScrollfix) {
-          elm.addClass('ui-scrollfix');
-        } else if (elm.hasClass('ui-scrollfix') && offset < attrs.uiScrollfix) {
-          elm.removeClass('ui-scrollfix');
-        }
+        $timeout.cancel(promise);
+        promise = $timeout(function() {
+            // if pageYOffset is defined use it, otherwise use other crap for IE
+            var offset;
+            if (angular.isDefined($window.pageYOffset)) {
+              offset = $window.pageYOffset;
+            } else {
+              var iebody = (document.compatMode && document.compatMode !== 'BackCompat') ? document.documentElement : document.body;
+              offset = iebody.scrollTop;
+            }
+            if (!elm.hasClass('ui-scrollfix') && offset > attrs.uiScrollfix) {
+              elm.addClass('ui-scrollfix');
+            } else if (elm.hasClass('ui-scrollfix') && offset < attrs.uiScrollfix) {
+              elm.removeClass('ui-scrollfix');
+            }
+        }, 300, false);
       }
 
       $target.on('scroll', onScroll);
