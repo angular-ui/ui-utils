@@ -1,6 +1,6 @@
 /**
  * angular-ui-utils - Swiss-Army-Knife of AngularJS tools (with no external dependencies!)
- * @version v0.1.1 - 2014-04-26
+ * @version v0.1.1 - 2014-05-12
  * @link http://angular-ui.github.com
  * @license MIT License, http://www.opensource.org/licenses/MIT
  */
@@ -1296,7 +1296,6 @@ angular.module('ui.scroll.jqlite', ['ui.scroll']).service('jqLiteExtras', [
 /*
 //# sourceURL=src/scripts/ui-scroll-jqlite.js
 */
-
 
 
 'use strict';
