@@ -20,8 +20,8 @@
                 Items can be of any complexity and can vary in any possible way. They are dynamically instantiated as they become visible and $destroyed as they are scrolled out of view.
             </p>
 
-            <div class="my-viewport" ng-scroll-viewport>
-                <div ng-scroll="item in datasource">{{$index + ' ' + item}}</div>
+            <div class="my-viewport" ui-scroll-viewport>
+                <div ui-scroll="item in datasource">{{$index + ' ' + item}}</div>
             </div>
         </div>
         <div class="span6">
@@ -45,13 +45,13 @@
 
 <p>If all you want to use the entire window as the viewport, all you need is this:</p>
 <pre class="prettyprint">
-&lt;div ng-scroll=&quot;item in datasource&quot;&gt;{{item}}&lt;/div&gt;
+&lt;div ui-scroll=&quot;item in datasource&quot;&gt;{{item}}&lt;/div&gt;
 </pre>
 
 <p>If you want to control the viewport yourself you can do it like this:</p>
 <pre class="prettyprint">
-&lt;div ng-scroll-viewport style=&quot;height:200px;&quot; &gt;
-   &lt;div ng-scroll="item in datasource"&gt;{{item}}&lt;/div&gt;
+&lt;div ui-scroll-viewport style=&quot;height:200px;&quot; &gt;
+   &lt;div ui-scroll="item in datasource"&gt;{{item}}&lt;/div&gt;
 &lt;/div&gt;
 </pre>
 <p>Make sure that you always constrain the height of your viewport</p>
