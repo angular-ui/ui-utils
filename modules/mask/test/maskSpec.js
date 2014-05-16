@@ -113,6 +113,39 @@ describe("uiMask", function () {
       input.triggerHandler("input");
       expect(scope.x).toBe("");
     });
+
+    it("should not setValidity on required to false on a control that isn't required", function() {
+      var input = compileElement("<input name='input' ng-model='x' ui-mask='{{mask}}'>");
+      scope.$apply("x = ''");
+      scope.$apply("mask = '(A) * 9'");
+      scope.$apply("required = true");
+      expect(input.data("$ngModelController").$error.required).toBeUndefined();
+      input.triggerHandler("input");
+      expect(scope.x).toBe("");
+      expect(input.data("$ngModelController").$error.required).toBeUndefined();
+
+      input = compileElement("<input name='input' ng-model='x' ui-mask='{{mask}}' required>");
+      expect(input.data("$ngModelController").$error.required).toBeUndefined();
+      input.triggerHandler("input");
+      expect(input.data("$ngModelController").$error.required).toBe(true);
+      input.val("abc123").triggerHandler("input");
+      expect(scope.x).toBe("ab1");
+      expect(input.data("$ngModelController").$error.required).toBe(false);
+
+      input = compileElement("<input name='input' ng-model='x' ui-mask='{{mask}}' ng-required='required'>");
+      expect(input.data("$ngModelController").$error.required).toBeUndefined();
+      input.triggerHandler("input");
+      expect(input.data("$ngModelController").$error.required).toBe(true);
+      scope.$apply("required = false");
+      expect(input.data("$ngModelController").$error.required).toBe(false);
+      input.triggerHandler("input");
+      expect(input.data("$ngModelController").$error.required).toBe(false);
+      input.triggerHandler("focus");
+      input.triggerHandler("blur");
+      expect(input.data("$ngModelController").$error.required).toBe(false);
+      input.val("").triggerHandler("input");
+      expect(input.data("$ngModelController").$error.required).toBe(false);
+    });
   });
 
   describe("changes from the model", function () {

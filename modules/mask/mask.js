@@ -79,7 +79,7 @@ angular.module('ui.mask', [])
             // to be out-of-sync with what the controller's $viewValue is set to.
             controller.$viewValue = value.length ? maskValue(value) : '';
             controller.$setValidity('mask', isValid);
-            if (value === '' && controller.$error.required !== undefined) {
+            if (value === '' && iAttrs.required) {
               controller.$setValidity('required', false);
             }
             return isValid ? value : undefined;
