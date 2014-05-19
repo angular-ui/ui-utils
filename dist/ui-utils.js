@@ -1,6 +1,6 @@
 /**
  * angular-ui-utils - Swiss-Army-Knife of AngularJS tools (with no external dependencies!)
- * @version v0.1.1 - 2014-05-12
+ * @version v0.1.1 - 2014-05-19
  * @link http://angular-ui.github.com
  * @license MIT License, http://www.opensource.org/licenses/MIT
  */
@@ -523,7 +523,7 @@ angular.module('ui.mask', [])
             // to be out-of-sync with what the controller's $viewValue is set to.
             controller.$viewValue = value.length ? maskValue(value) : '';
             controller.$setValidity('mask', isValid);
-            if (value === '' && controller.$error.required !== undefined) {
+            if (value === '' && iAttrs.required) {
               controller.$setValidity('required', false);
             }
             return isValid ? value : undefined;
