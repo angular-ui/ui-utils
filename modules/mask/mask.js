@@ -57,15 +57,29 @@ angular.module('ui.mask', [])
             }
           }
 
-          function formatter(fromModelValue){
+        function formatter(fromModelValue){
+            // Need to check if there are other formatters, so we don't conflict with them
+            var customValueCheck = false;
+            angular.forEach(controller.$formatters,function(i){
+                if (i !== formatter) {
+                    customValueCheck = true;
+                }
+            });
+
             if (!maskProcessed) {
-              return fromModelValue;
+                return fromModelValue;
             }
             value = unmaskValue(fromModelValue || '');
             isValid = validateValue(value);
             controller.$setValidity('mask', isValid);
-            return isValid && value.length ? maskValue(value) : undefined;
-          }
+
+            if (customValueCheck) {
+                maskValue(value); // Mask the value, but don't return its result
+                return isValid && value.length ? fromModelValue : undefined;
+            } else {
+                return isValid && value.length ? maskValue(value) : undefined;
+            }
+        }
 
           function parser(fromViewValue){
             if (!maskProcessed) {
