@@ -64,7 +64,7 @@ angular.module('ui.mask', [])
             value = unmaskValue(fromModelValue || '');
             isValid = validateValue(value);
             controller.$setValidity('mask', isValid);
-            if (iAttrs.uiMaskSupressFormatter != null) {
+            if (iAttrs.uiMaskSuppressFormatter != null) {
               return isValid && value.length ? fromModelValue : undefined;
             } else {
               return isValid && value.length ? maskValue(value) : undefined;
@@ -87,7 +87,7 @@ angular.module('ui.mask', [])
               controller.$setValidity('required', false);
             }
 
-            if (iAttrs.uiMaskSupressParser != null) {
+            if (iAttrs.uiMaskSuppressParser != null) {
               return isValid ? fromViewValue : undefined;
             } else {
               return isValid ? value : undefined;
