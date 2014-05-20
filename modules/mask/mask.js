@@ -57,29 +57,19 @@ angular.module('ui.mask', [])
             }
           }
 
-        function formatter(fromModelValue){
-          // Need to check if there are other formatters, so we don't conflict with them
-          var customValueCheck = false;
-          angular.forEach(controller.$formatters,function(i){
-            if (i !== formatter) {
-              customValueCheck = true;
+          function formatter(fromModelValue){
+            if (!maskProcessed) {
+              return fromModelValue;
             }
-          });
-
-          if (!maskProcessed) {
-            return fromModelValue;
+            value = unmaskValue(fromModelValue || '');
+            isValid = validateValue(value);
+            controller.$setValidity('mask', isValid);
+            if (iAttrs.uiMaskSupressFormatter != null) {
+              return isValid && value.length ? fromModelValue : undefined;
+            } else {
+              return isValid && value.length ? maskValue(value) : undefined;
+            }
           }
-          value = unmaskValue(fromModelValue || '');
-          isValid = validateValue(value);
-          controller.$setValidity('mask', isValid);
-
-          if (customValueCheck) {
-            maskValue(value); // Mask the value, but don't return its result
-            return isValid && value.length ? fromModelValue : undefined;
-          } else {
-            return isValid && value.length ? maskValue(value) : undefined;
-          }
-        }
 
           function parser(fromViewValue){
             if (!maskProcessed) {
@@ -96,7 +86,12 @@ angular.module('ui.mask', [])
             if (value === '' && controller.$error.required !== undefined) {
               controller.$setValidity('required', false);
             }
-            return isValid ? value : undefined;
+
+            if (iAttrs.uiMaskSupressParser != null) {
+              return isValid ? fromViewValue : undefined;
+            } else {
+              return isValid ? value : undefined;
+            }
           }
 
           var linkOptions = {};
