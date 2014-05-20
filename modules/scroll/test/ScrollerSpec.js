@@ -76,7 +76,7 @@ describe('uiScroll', function () {
 	};
 
 	describe('basic setup', function() {
-			var html = '<div ng-scroll="item in myEmptyDatasource">{{$index}}: {{item}}</div>';
+			var html = '<div ui-scroll="item in myEmptyDatasource">{{$index}}: {{item}}</div>';
 
 			it('should bind to window scroll and resize events and unbind upon scope destroy', function(){
 				spyOn($.fn, 'bind').andCallThrough();
@@ -136,7 +136,7 @@ describe('uiScroll', function () {
 
 	describe('datasource with only 3 elements', function () {
 
-		var html = '<div ng-scroll="item in myOnePageDatasource">{{$index}}: {{item}}</div>';
+		var html = '<div ui-scroll="item in myOnePageDatasource">{{$index}}: {{item}}</div>';
 
 		it('should create 3 divs with data (+ 2 padding divs)', function() {
 			runTest(html,
@@ -177,7 +177,7 @@ describe('uiScroll', function () {
 
 	describe('datasource with 20 elements default buffer size (10) - constrained viewport', function () {
 
-		var html = '<div ng-scroll-viewport style="height:200px"><div style="height:40px" ng-scroll="item in myMultipageDatasource" buffer-size="3">{{$index}}: {{item}}</div></div>';
+		var html = '<div ui-scroll-viewport style="height:200px"><div style="height:40px" ui-scroll="item in myMultipageDatasource" buffer-size="3">{{$index}}: {{item}}</div></div>';
 
 		it('should create 6 divs with data (+ 2 padding divs)', function() {
 			runTest(html,
