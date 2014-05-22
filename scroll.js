@@ -11,7 +11,7 @@ globals: angular, window
 		element.scrollTop()
 		element.scrollTop(value)
 */
-angular.module('ui.scroll', []).directive('ngScrollViewport', [
+angular.module('ui.scroll', []).directive('uiScrollViewport', [
   '$log',
   function () {
     return {
@@ -24,14 +24,14 @@ angular.module('ui.scroll', []).directive('ngScrollViewport', [
       ]
     };
   }
-]).directive('ngScroll', [
+]).directive('uiScroll', [
   '$log',
   '$injector',
   '$rootScope',
   '$timeout',
   function (console, $injector, $rootScope, $timeout) {
     return {
-      require: ['?^ngScrollViewport'],
+      require: ['?^uiScrollViewport'],
       transclude: 'element',
       priority: 1000,
       terminal: true,
@@ -39,9 +39,9 @@ angular.module('ui.scroll', []).directive('ngScrollViewport', [
         return function ($scope, element, $attr, controllers) {
           var adapter, adjustBuffer, adjustRowHeight, bof, bottomVisiblePos, buffer, bufferPadding, bufferSize, clipBottom, clipTop, datasource, datasourceName, enqueueFetch, eof, eventListener, fetch, finalize, first, insert, isDatasource, isLoading, itemName, loading, log, match, next, pending, reload, removeFromBuffer, resizeHandler, ridActual, scrollHandler, scrollHeight, shouldLoadBottom, shouldLoadTop, tempScope, topVisible, topVisibleElement, topVisibleItem, topVisiblePos, topVisibleScope, viewport, viewportScope;
           log = console.debug || console.log;
-          match = $attr.ngScroll.match(/^\s*(\w+)\s+in\s+(\w+)\s*$/);
+          match = $attr.uiScroll.match(/^\s*(\w+)\s+in\s+(\w+)\s*$/);
           if (!match) {
-            throw new Error('Expected ngScroll in form of \'_item_ in _datasource_\' but got \'' + $attr.ngScroll + '\'');
+            throw new Error('Expected ngScroll in form of \'_item_ in _datasource_\' but got \'' + $attr.uiScroll + '\'');
           }
           itemName = match[1];
           datasourceName = match[2];
