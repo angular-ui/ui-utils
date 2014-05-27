@@ -1,6 +1,6 @@
 /**
  * angular-ui-utils - Swiss-Army-Knife of AngularJS tools (with no external dependencies!)
- * @version v0.1.1 - 2014-05-22
+ * @version v0.1.1 - 2014-05-27
  * @link http://angular-ui.github.com
  * @license MIT License, http://www.opensource.org/licenses/MIT
  */
@@ -1335,7 +1335,7 @@ angular.module('ui.scroll', []).directive('uiScrollViewport', [
           log = console.debug || console.log;
           match = $attr.uiScroll.match(/^\s*(\w+)\s+in\s+(\w+)\s*$/);
           if (!match) {
-            throw new Error('Expected ngScroll in form of \'_item_ in _datasource_\' but got \'' + $attr.uiScroll + '\'');
+            throw new Error('Expected uiScroll in form of \'_item_ in _datasource_\' but got \'' + $attr.uiScroll + '\'');
           }
           itemName = match[1];
           datasourceName = match[2];
@@ -1362,7 +1362,7 @@ angular.module('ui.scroll', []).directive('uiScrollViewport', [
             var bottomPadding, createPadding, padding, repeaterType, topPadding, viewport;
             repeaterType = template[0].localName;
             if (repeaterType === 'dl') {
-              throw new Error('ng-scroll directive does not support <' + template[0].localName + '> as a repeating tag: ' + template[0].outerHTML);
+              throw new Error('ui-scroll directive does not support <' + template[0].localName + '> as a repeating tag: ' + template[0].outerHTML);
             }
             if (repeaterType !== 'li' && repeaterType !== 'tr') {
               repeaterType = 'div';
