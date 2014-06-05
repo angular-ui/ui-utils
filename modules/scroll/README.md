@@ -134,7 +134,8 @@ marked with uiScrollViewport directive, the browser window object will be used a
 
 ###Examples
 
-Currently examples consist of a sample datasource service (called 'datasource' see [application.coffee] (https://github.com/Hill30/NGScroller/blob/master/src/scripts/application.coffee)) and several pages with different ways the ui-scroll can be used.
+Examples ([look here](https://github.com/Hill30/NGScroller/tree/master/src/examples)) consist of several pages (.html files) showing various ways to use the ui-scroll directive. Each page relays on its own datasource service (called `datasource`) defined in the coffescript file with the same name and .coffee extension.
+
 I intentionally broke every rule of proper html/css structure (i.e. embedded styles). This is done to keep the html as bare bones as possible and leave
 it to you to do it properly - whatever properly means in your book.
 
@@ -152,10 +153,20 @@ Do not ask me why this woodoo is necessary, but as of Chrome version 30 it is ju
 
 ###History
 
+####v1.0.0
+
+* Renamed ng-scroll to ui-scroll.
+* Reduced server requests by eof and bof recalculation.
+* Support for inline-block/floated elements.
+* Reduced flickering via new blocks rendering optimization.
+* Prevented unwanted scroll bubbling.
+* Fixed race-condition and others minor bugs.
+* Added more usage examples (such as cache within datasource implementation).
+
 ####v0.1.*
 
-Introduced `is-loading` and `top-visible-*` attributes. Streamlined and added a few more usage examples
+Introduced `is-loading` and `top-visible-*` attributes. Streamlined and added a few more usage examples.
 
 ####v0.0.*
 
-Initial commit including uiScroll, uiScrollViewPort directives and usage examples
+Initial commit including uiScroll, uiScrollViewPort directives and usage examples.
