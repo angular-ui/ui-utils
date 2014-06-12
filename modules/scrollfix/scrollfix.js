@@ -46,7 +46,7 @@ angular.module('ui.scrollfix',[]).directive('uiScrollfix', ['$window', function 
           var elmBottom = elm.offset().top + elm.outerHeight();
 
           if (!elm.hasClass('ui-scrollfix-bottom') && elmBottom >= $bottom.offset().top) {
-            offsetMark = offset;
+            offsetMark = offset - (elmBottom - $bottom.offset().top);
             elm.addClass('ui-scrollfix-bottom');
           } else if(elm.hasClass('ui-scrollfix-bottom') && offsetMark > offset) {
             elm.removeClass('ui-scrollfix-bottom');
