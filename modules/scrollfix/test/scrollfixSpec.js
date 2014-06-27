@@ -2,12 +2,13 @@
 describe('uiScrollfix', function () {
   'use strict';
 
-  var scope, $compile, $window;
+  var scope, $compile, $window, $timeout;
   beforeEach(module('ui.scrollfix'));
-  beforeEach(inject(function (_$rootScope_, _$compile_, _$window_) {
+  beforeEach(inject(function (_$rootScope_, _$compile_, _$window_, _$timeout_) {
     scope = _$rootScope_.$new();
     $compile = _$compile_;
     $window = _$window_;
+    $timeout = _$timeout_;
   }));
 
   describe('compiling this directive', function () {
@@ -39,17 +40,20 @@ describe('uiScrollfix', function () {
     it('should add the ui-scrollfix class if the offset is greater than specified', function () {
       var element = $compile('<div ui-scrollfix="-100"></div>')(scope);
       angular.element($window).trigger('scroll');
+      $timeout.flush();
       expect(element.hasClass('ui-scrollfix')).toBe(true);
     });
     it('should remove the ui-scrollfix class if the offset is less than specified (using absolute coord)', function () {
       var element = $compile('<div ui-scrollfix="100" class="ui-scrollfix"></div>')(scope);
       angular.element($window).trigger('scroll');
+      $timeout.flush();
       expect(element.hasClass('ui-scrollfix')).toBe(false);
 
     });
     it('should remove the ui-scrollfix class if the offset is less than specified (using relative coord)', function () {
       var element = $compile('<div ui-scrollfix="+100" class="ui-scrollfix"></div>')(scope);
       angular.element($window).trigger('scroll');
+      $timeout.flush();
       expect(element.hasClass('ui-scrollfix')).toBe(false);
     });
   });
