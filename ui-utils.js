@@ -1,6 +1,6 @@
 /**
  * angular-ui-utils - Swiss-Army-Knife of AngularJS tools (with no external dependencies!)
- * @version v0.1.1 - 2014-05-27
+ * @version v0.1.1 - 2014-06-27
  * @link http://angular-ui.github.com
  * @license MIT License, http://www.opensource.org/licenses/MIT
  */
@@ -1238,7 +1238,7 @@ angular.module('ui.scroll.jqlite', ['ui.scroll']).service('jqLiteExtras', [
             return getWidthHeight(this[0], 'height', option ? 'outerfull' : 'outer');
           },
           /*
-          NGScroller no longer relies on jQuery method offset. The jQLite implementation of the method
+          UIScroller no longer relies on jQuery method offset. The jQLite implementation of the method
           is kept here just for the reference. Also the offset setter method was never implemented
           */
 
@@ -1331,7 +1331,7 @@ angular.module('ui.scroll', []).directive('uiScrollViewport', [
       terminal: true,
       compile: function(elementTemplate, attr, linker) {
         return function($scope, element, $attr, controllers) {
-          var adapter, adjustBuffer, adjustRowHeight, bof, bottomVisiblePos, buffer, bufferPadding, bufferSize, clipBottom, clipTop, datasource, datasourceName, enqueueFetch, eof, eventListener, fetch, finalize, first, insert, isDatasource, isLoading, itemName, loading, log, match, next, pending, reload, removeFromBuffer, resizeHandler, ridActual, scrollHandler, scrollHeight, shouldLoadBottom, shouldLoadTop, tempScope, topVisible, topVisibleElement, topVisibleItem, topVisiblePos, topVisibleScope, viewport, viewportScope;
+          var adapter, adjustBuffer, adjustRowHeight, bof, bottomVisiblePos, buffer, bufferPadding, bufferSize, clipBottom, clipTop, datasource, datasourceName, doAdjustment, enqueueFetch, eof, eventListener, fetch, finalize, first, hideElementBeforeAppend, insert, isDatasource, isLoading, itemName, loading, log, match, next, pending, reload, removeFromBuffer, resizeHandler, ridActual, scrollHandler, scrollHeight, shouldLoadBottom, shouldLoadTop, showElementAfterRender, tempScope, topVisible, topVisibleElement, topVisibleItem, topVisiblePos, topVisibleScope, viewport, viewportScope, wheelHandler;
           log = console.debug || console.log;
           match = $attr.uiScroll.match(/^\s*(\w+)\s+in\s+(\w+)\s*$/);
           if (!match) {
@@ -1351,7 +1351,7 @@ angular.module('ui.scroll', []).directive('uiScrollViewport', [
           }
           bufferSize = Math.max(3, +$attr.bufferSize || 10);
           bufferPadding = function() {
-            return viewport.height() * Math.max(0.1, +$attr.padding || 0.1);
+            return viewport.outerHeight() * Math.max(0.1, +$attr.padding || 0.1);
           };
           scrollHeight = function(elem) {
             var _ref;
@@ -1497,7 +1497,7 @@ angular.module('ui.scroll', []).directive('uiScrollViewport', [
             return adjustBuffer(ridActual, false);
           };
           bottomVisiblePos = function() {
-            return viewport.scrollTop() + viewport.height();
+            return viewport.scrollTop() + viewport.outerHeight();
           };
           topVisiblePos = function() {
             return viewport.scrollTop();
@@ -1506,17 +1506,28 @@ angular.module('ui.scroll', []).directive('uiScrollViewport', [
             return !eof && adapter.bottomDataPos() < bottomVisiblePos() + bufferPadding();
           };
           clipBottom = function() {
-            var bottomHeight, i, itemHeight, overage, _i, _ref;
+            var bottomHeight, i, item, itemHeight, itemTop, newRow, overage, rowTop, _i, _ref;
             bottomHeight = 0;
             overage = 0;
             for (i = _i = _ref = buffer.length - 1; _ref <= 0 ? _i <= 0 : _i >= 0; i = _ref <= 0 ? ++_i : --_i) {
-              itemHeight = buffer[i].element.outerHeight(true);
+              item = buffer[i];
+              itemTop = item.element.offset().top;
+              newRow = rowTop !== itemTop;
+              rowTop = itemTop;
+              if (newRow) {
+                itemHeight = item.element.outerHeight(true);
+              }
               if (adapter.bottomDataPos() - bottomHeight - itemHeight > bottomVisiblePos() + bufferPadding()) {
-                bottomHeight += itemHeight;
+                if (newRow) {
+                  bottomHeight += itemHeight;
+                }
                 overage++;
                 eof = false;
               } else {
-                break;
+                if (newRow) {
+                  break;
+                }
+                overage++;
               }
             }
             if (overage > 0) {
@@ -1530,18 +1541,28 @@ angular.module('ui.scroll', []).directive('uiScrollViewport', [
             return !bof && (adapter.topDataPos() > topVisiblePos() - bufferPadding());
           };
           clipTop = function() {
-            var item, itemHeight, overage, topHeight, _i, _len;
+            var item, itemHeight, itemTop, newRow, overage, rowTop, topHeight, _i, _len;
             topHeight = 0;
             overage = 0;
             for (_i = 0, _len = buffer.length; _i < _len; _i++) {
               item = buffer[_i];
-              itemHeight = item.element.outerHeight(true);
+              itemTop = item.element.offset().top;
+              newRow = rowTop !== itemTop;
+              rowTop = itemTop;
+              if (newRow) {
+                itemHeight = item.element.outerHeight(true);
+              }
               if (adapter.topDataPos() + topHeight + itemHeight < topVisiblePos() - bufferPadding()) {
-                topHeight += itemHeight;
+                if (newRow) {
+                  topHeight += itemHeight;
+                }
                 overage++;
                 bof = false;
               } else {
-                break;
+                if (newRow) {
+                  break;
+                }
+                overage++;
               }
             }
             if (overage > 0) {
@@ -1560,6 +1581,15 @@ angular.module('ui.scroll', []).directive('uiScrollViewport', [
               return fetch(rid, scrolling);
             }
           };
+          hideElementBeforeAppend = function(element) {
+            element.displayTemp = element.css('display');
+            return element.css('display', 'none');
+          };
+          showElementAfterRender = function(element) {
+            if (element.hasOwnProperty('displayTemp')) {
+              return element.css('display', element.displayTemp);
+            }
+          };
           insert = function(index, item) {
             var itemScope, toBeAppended, wrapper;
             itemScope = $scope.$new();
@@ -1576,6 +1606,7 @@ angular.module('ui.scroll', []).directive('uiScrollViewport', [
               wrapper.element = clone;
               if (toBeAppended) {
                 if (index === next) {
+                  hideElementBeforeAppend(clone);
                   adapter.append(clone);
                   return buffer.push(wrapper);
                 } else {
@@ -1583,6 +1614,7 @@ angular.module('ui.scroll', []).directive('uiScrollViewport', [
                   return buffer.splice(index - first + 1, 0, wrapper);
                 }
               } else {
+                hideElementBeforeAppend(clone);
                 adapter.prepend(clone);
                 return buffer.unshift(wrapper);
               }
@@ -1605,48 +1637,65 @@ angular.module('ui.scroll', []).directive('uiScrollViewport', [
               }
             }
           };
-          adjustBuffer = function(rid, scrolling, newItems, finalize) {
-            var doAdjustment;
-            doAdjustment = function() {
-              var item, itemHeight, topHeight, _i, _len, _results;
-              log('top {actual=' + (adapter.topDataPos()) + ' visible from=' + (topVisiblePos()) + ' bottom {visible through=' + (bottomVisiblePos()) + ' actual=' + (adapter.bottomDataPos()) + '}');
-              if (shouldLoadBottom()) {
-                enqueueFetch(rid, true, scrolling);
-              } else {
-                if (shouldLoadTop()) {
-                  enqueueFetch(rid, false, scrolling);
-                }
+          doAdjustment = function(rid, scrolling, finalize) {
+            var item, itemHeight, itemTop, newRow, rowTop, topHeight, _i, _len, _results;
+            log('top {actual=' + (adapter.topDataPos()) + ' visible from=' + (topVisiblePos()) + ' bottom {visible through=' + (bottomVisiblePos()) + ' actual=' + (adapter.bottomDataPos()) + '}');
+            if (shouldLoadBottom()) {
+              enqueueFetch(rid, true, scrolling);
+            } else {
+              if (shouldLoadTop()) {
+                enqueueFetch(rid, false, scrolling);
               }
-              if (finalize) {
-                finalize(rid);
-              }
-              if (pending.length === 0) {
-                topHeight = 0;
-                _results = [];
-                for (_i = 0, _len = buffer.length; _i < _len; _i++) {
-                  item = buffer[_i];
+            }
+            if (finalize) {
+              finalize(rid);
+            }
+            if (pending.length === 0) {
+              topHeight = 0;
+              _results = [];
+              for (_i = 0, _len = buffer.length; _i < _len; _i++) {
+                item = buffer[_i];
+                itemTop = item.element.offset().top;
+                newRow = rowTop !== itemTop;
+                rowTop = itemTop;
+                if (newRow) {
                   itemHeight = item.element.outerHeight(true);
-                  if (adapter.topDataPos() + topHeight + itemHeight < topVisiblePos()) {
-                    _results.push(topHeight += itemHeight);
-                  } else {
-                    topVisible(item);
-                    break;
-                  }
                 }
-                return _results;
+                if (newRow && (adapter.topDataPos() + topHeight + itemHeight < topVisiblePos())) {
+                  _results.push(topHeight += itemHeight);
+                } else {
+                  if (newRow) {
+                    topVisible(item);
+                  }
+                  break;
+                }
               }
-            };
-            if (newItems) {
+              return _results;
+            }
+          };
+          adjustBuffer = function(rid, scrolling, newItems, finalize) {
+            if (newItems && newItems.length) {
               return $timeout(function() {
-                var row, _i, _len;
+                var itemTop, row, rowTop, rows, _i, _j, _len, _len1;
+                rows = [];
                 for (_i = 0, _len = newItems.length; _i < _len; _i++) {
                   row = newItems[_i];
+                  element = row.wrapper.element;
+                  showElementAfterRender(element);
+                  itemTop = element.offset().top;
+                  if (rowTop !== itemTop) {
+                    rows.push(row);
+                    rowTop = itemTop;
+                  }
+                }
+                for (_j = 0, _len1 = rows.length; _j < _len1; _j++) {
+                  row = rows[_j];
                   adjustRowHeight(row.appended, row.wrapper);
                 }
-                return doAdjustment();
+                return doAdjustment(rid, scrolling, finalize);
               });
             } else {
-              return doAdjustment();
+              return doAdjustment(rid, scrolling, finalize);
             }
           };
           finalize = function(rid, scrolling, newItems) {
@@ -1673,10 +1722,11 @@ angular.module('ui.scroll', []).directive('uiScrollViewport', [
                     return;
                   }
                   newItems = [];
-                  if (result.length === 0) {
+                  if (result.length < bufferSize) {
                     eof = true;
                     adapter.bottomPadding(0);
-                  } else {
+                  }
+                  if (result.length > 0) {
                     clipTop();
                     for (_i = 0, _len = result.length; _i < _len; _i++) {
                       item = result[_i];
@@ -1696,10 +1746,11 @@ angular.module('ui.scroll', []).directive('uiScrollViewport', [
                     return;
                   }
                   newItems = [];
-                  if (result.length === 0) {
+                  if (result.length < bufferSize) {
                     bof = true;
                     adapter.topPadding(0);
-                  } else {
+                  }
+                  if (result.length > 0) {
                     if (buffer.length) {
                       clipBottom();
                     }
@@ -1726,6 +1777,15 @@ angular.module('ui.scroll', []).directive('uiScrollViewport', [
             }
           };
           viewport.bind('scroll', scrollHandler);
+          wheelHandler = function(event) {
+            var scrollTop, yMax;
+            scrollTop = viewport[0].scrollTop;
+            yMax = viewport[0].scrollHeight - viewport[0].clientHeight;
+            if ((scrollTop === 0 && !bof) || (scrollTop === yMax && !eof)) {
+              return event.preventDefault();
+            }
+          };
+          viewport.bind('mousewheel', wheelHandler);
           $scope.$watch(datasource.revision, function() {
             return reload();
           });
@@ -1737,7 +1797,8 @@ angular.module('ui.scroll', []).directive('uiScrollViewport', [
           $scope.$on('$destroy', function() {
             eventListener.$destroy();
             viewport.unbind('resize', resizeHandler);
-            return viewport.unbind('scroll', scrollHandler);
+            viewport.unbind('scroll', scrollHandler);
+            return viewport.unbind('mousewheel', wheelHandler);
           });
           eventListener.$on('update.items', function(event, locator, newItem) {
             var wrapper, _fn, _i, _len, _ref;
