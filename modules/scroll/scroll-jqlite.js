@@ -10,7 +10,11 @@ angular.module('ui.scroll.jqlite', ['ui.scroll']).service('jqLiteExtras', [
           self = this;
           elem = self[0];
           if (!(!elem || elem.nodeType === 3 || elem.nodeType === 8 || !elem.style)) {
-            return css.call(self, name, value);
+            if(value == undefined) {
+              return css.call(self, name);
+            } else {
+              return css.call(self, name, value);
+            }
           }
         };
         isWindow = function(obj) {
