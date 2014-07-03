@@ -21,12 +21,11 @@ angular.module('ui.mask', [])
 
         return function uiMaskLinkingFunction(scope, iElement, iAttrs, controller){
           var maskProcessed = false, eventsBound = false,
-            maskCaretMap, maskPatterns, maskPlaceholder, maskComponents,
+            maskCaretMap, maskPatterns, uiMaskFormat, maskComponents,
           // Minimum required length of the value to be considered valid
             minRequiredLength,
             value, valueMasked, isValid,
           // Vars for initializing/uninitializing
-            originalPlaceholder = iAttrs.placeholder,
             originalMaxlength = iAttrs.maxlength,
           // Vars used exclusively in eventHandler()
             oldValue, oldValueUnmasked, oldCaretPosition, oldSelectionLength;
@@ -44,12 +43,12 @@ angular.module('ui.mask', [])
             return true;
           }
 
-          function initPlaceholder(placeholderAttr) {
-            if(! angular.isDefined(placeholderAttr)) {
+          function initUiMaskFormat(uiMaskFormatAttr) {
+            if(! angular.isDefined(uiMaskFormatAttr)) {
               return;
             }
 
-            maskPlaceholder = placeholderAttr;
+            uiMaskFormat = uiMaskFormatAttr;
 
             // If the mask is processed, then we need to update the value
             if (maskProcessed) {
@@ -109,7 +108,7 @@ angular.module('ui.mask', [])
           }
 
           iAttrs.$observe('uiMask', initialize);
-          iAttrs.$observe('placeholder', initPlaceholder);
+          iAttrs.$observe('uiMaskFormat', initUiMaskFormat);
           var modelViewValue = false;
           iAttrs.$observe('modelViewValue', function(val) {
             if(val === 'true') {
@@ -128,12 +127,6 @@ angular.module('ui.mask', [])
           function uninitialize(){
             maskProcessed = false;
             unbindEventListeners();
-
-            if (angular.isDefined(originalPlaceholder)) {
-              iElement.attr('placeholder', originalPlaceholder);
-            } else {
-              iElement.removeAttr('placeholder');
-            }
 
             if (angular.isDefined(originalMaxlength)) {
               iElement.attr('maxlength', originalMaxlength);
@@ -154,7 +147,6 @@ angular.module('ui.mask', [])
             if (iAttrs.maxlength) { // Double maxlength to allow pasting new val at end of mask
               iElement.attr('maxlength', maskCaretMap[maskCaretMap.length - 1] * 2);
             }
-            iElement.attr('placeholder', maskPlaceholder);
             iElement.val(viewValue);
             controller.$viewValue = viewValue;
             // Not using $setViewValue so we don't clobber the model value and dirty the form
@@ -211,7 +203,7 @@ angular.module('ui.mask', [])
             var valueMasked = '',
                 maskCaretMapCopy = maskCaretMap.slice();
 
-            angular.forEach(maskPlaceholder.split(''), function (chr, i){
+            angular.forEach(uiMaskFormat.split(''), function (chr, i){
               if (unmaskedValue.length && i === maskCaretMapCopy[0]) {
                 valueMasked  += unmaskedValue.charAt(0) || '_';
                 unmaskedValue = unmaskedValue.substr(1);
@@ -224,11 +216,11 @@ angular.module('ui.mask', [])
             return valueMasked;
           }
 
-          function getPlaceholderChar(i) {
-            var placeholder = iAttrs.placeholder;
+          function getMaskFormatChar(i) {
+            var maskFormat = iAttrs.uiMaskFormat;
 
-            if (typeof placeholder !== 'undefined' && placeholder[i]) {
-              return placeholder[i];
+            if (typeof maskFormat !== 'undefined' && maskFormat[i]) {
+              return maskFormat[i];
             } else {
               return '_';
             }
@@ -243,7 +235,7 @@ angular.module('ui.mask', [])
           // of the maskable char gets deleted, we'll still be able to strip
           // it in the unmaskValue() preprocessing.
           function getMaskComponents() {
-            return maskPlaceholder.replace(/[_]+/g, '_').replace(/([^_]+)([a-zA-Z0-9])([^_])/g, '$1$2_$3').split('_');
+            return uiMaskFormat.replace(/[_]+/g, '_').replace(/([^_]+)([a-zA-Z0-9])([^_])/g, '$1$2_$3').split('_');
           }
 
           function processRawMask(mask){
@@ -251,7 +243,7 @@ angular.module('ui.mask', [])
 
             maskCaretMap    = [];
             maskPatterns    = [];
-            maskPlaceholder = '';
+            uiMaskFormat  = '';
 
             if (typeof mask === 'string') {
               minRequiredLength = 0;
@@ -264,7 +256,7 @@ angular.module('ui.mask', [])
 
                   maskCaretMap.push(characterCount);
 
-                  maskPlaceholder += getPlaceholderChar(i);
+                  uiMaskFormat += getMaskFormatChar(i);
                   maskPatterns.push(linkOptions.maskDefinitions[chr]);
 
                   characterCount++;
@@ -276,7 +268,7 @@ angular.module('ui.mask', [])
                   isOptional = true;
                 }
                 else {
-                  maskPlaceholder += chr;
+                  uiMaskFormat += chr;
                   characterCount++;
                 }
               });
