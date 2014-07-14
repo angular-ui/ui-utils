@@ -27,7 +27,11 @@ angular.module('ui.scrollfix',[]).directive('uiScrollfix', ['$window', function 
         // if pageYOffset is defined use it, otherwise use other crap for IE
         var offset;
         if (angular.isDefined($window.pageYOffset)) {
-          offset = $window.pageYOffset;
+          if ($target[0] === $window) {
+            offset = $window.pageYOffset;
+          } else {
+            offset = $target[0].scrollTop;
+          }
         } else {
           var iebody = (document.compatMode && document.compatMode !== 'BackCompat') ? document.documentElement : document.body;
           offset = iebody.scrollTop;

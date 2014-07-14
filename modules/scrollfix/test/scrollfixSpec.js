@@ -53,4 +53,24 @@ describe('uiScrollfix', function () {
       expect(element.hasClass('ui-scrollfix')).toBe(false);
     });
   });
+  describe('scrolling the target', function () {
+    it('should add the ui-scrollfix class if the offset is greater than specified', function () {
+      var target = angular.element($compile('<div ui-scrollfix-target><div id="elm" ui-scrollfix="-100"></div></div>')(scope));
+      target.trigger('scroll');
+      var element = angular.element(target.children()[0]);
+      expect(element.hasClass('ui-scrollfix')).toBe(true);
+    });
+    it('should remove the ui-scrollfix class if the offset is less than specified (using absolute coord)', function () {
+      var target = angular.element($compile('<div ui-scrollfix-target><div id="elm" ui-scrollfix="100"></div></div>')(scope));
+      target.trigger('scroll');
+      var element = angular.element(target.children()[0]);
+      expect(element.hasClass('ui-scrollfix')).toBe(false);
+    });
+    it('should remove the ui-scrollfix class if the offset is less than specified (using relative coord)', function () {
+      var target = angular.element($compile('<div ui-scrollfix-target><div id="elm" ui-scrollfix="+100"></div></div>')(scope));
+      target.trigger('scroll');
+      var element = angular.element(target.children()[0]);
+      expect(element.hasClass('ui-scrollfix')).toBe(false);
+    });
+  });
 });
