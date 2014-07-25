@@ -33,7 +33,7 @@ angular.module('ui.scroll', []).directive('uiScrollViewport', [
         return function($scope, element, $attr, controllers) {
           var adapter, adjustBuffer, adjustRowHeight, bof, bottomVisiblePos, buffer, bufferPadding, bufferSize, clipBottom, clipTop, datasource, datasourceName, doAdjustment, enqueueFetch, eof, eventListener, fetch, finalize, first, hideElementBeforeAppend, insert, isDatasource, isLoading, itemName, loading, log, match, next, pending, reload, removeFromBuffer, resizeHandler, ridActual, scrollHandler, scrollHeight, shouldLoadBottom, shouldLoadTop, showElementAfterRender, tempScope, topVisible, topVisibleElement, topVisibleItem, topVisiblePos, topVisibleScope, viewport, viewportScope, wheelHandler;
           log = console.debug || console.log;
-          match = $attr.uiScroll.match(/^\s*(\w+)\s+in\s+(\w+)\s*$/);
+          match = $attr.uiScroll.match(/^\s*(\w+)\s+in\s+((\w+)(\.*))+\s*$/);
           if (!match) {
             throw new Error('Expected uiScroll in form of \'_item_ in _datasource_\' but got \'' + $attr.uiScroll + '\'');
           }
