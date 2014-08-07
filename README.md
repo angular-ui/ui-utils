@@ -13,25 +13,25 @@ You can get it from [Bower](http://bower.io/)
 
 ```sh
 # All the modules
-bower install angular-ui-utils\#bower
+bower install angular-ui-utils#bower
 
 # A specific module
-# bower install angular-ui-utils\#bower-<moduleName>
-bower install angular-ui-utils\#bower-event
-bower install angular-ui-utils\#bower-keypress
+# bower install angular-ui-utils#bower-<moduleName>
+bower install angular-ui-utils#bower-event
+bower install angular-ui-utils#bower-keypress
 ...
 
 # A specific version
-bower install angular-ui-utils\#v0.0.4
+bower install angular-ui-utils#v0.0.4
 # A specific module version
-bower install angular-ui-utils\#event-0.0.4
-bower install angular-ui-utils\#keypress-0.0.4
+bower install angular-ui-utils#event-0.0.4
+bower install angular-ui-utils#keypress-0.0.4
 ...
 
 # If you want the sources with it
 bower install angular-ui-utils
 # or for a specific source version
-bower install angular-ui-utils\#src0.0.4
+bower install angular-ui-utils#src0.0.4
 ```
 
 This will copy the UI.Utils files into a `bower_components` folder, along with its dependencies. Load the script files in your application:
