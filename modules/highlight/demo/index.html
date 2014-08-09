@@ -17,14 +17,14 @@
 
     <p><input placeholder="Enter some text to highlight" ng-model="highlightText"></p>
 
-    <p ng-bind-html-unsafe="'Hello there, how are you today? I\'m fine thank you.' | highlight:highlightText:caseSensitive"></p>
+    <p ng-bind-html="'Hello there, how are you today? I\'m fine thank you.' | highlight:highlightText:caseSensitive"></p>
   </div>
 
   <h3>How?</h3>
 <pre class="prettyprint">
 &lt;label&gt;&lt;input type=&quot;checkbox&quot; ng-model=&quot;caseSensitive&quot;&gt; Case Sensitive?&lt;/label&gt;
 &lt;input placeholder=&quot;Enter some text to highlight&quot; value=&quot;you&quot; ng-model=&quot;highlightText&quot;&gt;
-&lt;p ng-bind-html-unsafe=&quot;&#x27;Hello there, how are you today? I\'m fine thank you.&#x27; | highlight:highlightText:caseSensitive&quot;&gt;&lt;/p&gt;
+&lt;p ng-bind-html=&quot;&#x27;Hello there, how are you today? I\'m fine thank you.&#x27; | highlight:highlightText:caseSensitive&quot;&gt;&lt;/p&gt;
 
 &lt;style&gt;
 .ui-match { background: yellow; }
