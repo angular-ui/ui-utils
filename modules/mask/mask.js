@@ -226,11 +226,20 @@ angular.module('ui.mask', [])
 
           function getPlaceholderChar(i) {
             var placeholder = iAttrs.placeholder;
+            var default_placeholder_char = '_';
 
             if (typeof placeholder !== 'undefined' && placeholder[i]) {
               return placeholder[i];
             } else {
-              return '_';
+              if (undefined !== iAttrs.defaultCharacter) {
+                if ('' === iAttrs.defaultCharacter) {
+                  default_placeholder_char = ' ';
+                } else {
+                  default_placeholder_char = iAttrs.defaultCharacter[0];
+                }
+              }
+
+              return default_placeholder_char;
             }
           }
 

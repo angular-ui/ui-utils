@@ -192,6 +192,51 @@ describe("uiMask", function () {
       expect(input.attr("placeholder")).toBe("__/__/____");
     });
 
+    it("should allow changing the default character", function() {
+
+      var placeholderHtml = "<input name='input' ng-model='x' ui-mask='{{mask}}' default-character='Z'>",
+          input           = compileElement(placeholderHtml);
+
+      scope.$apply("x = ''");
+      scope.$apply("mask = '99/99/9999'");
+
+      expect(input.attr("placeholder")).toBe("ZZ/ZZ/ZZZZ");
+
+      input.val("12").triggerHandler("input");
+
+      expect(input.val()).toBe("12/ZZ/ZZZZ");
+    });
+
+    it("should allow the default character to be a space", function() {
+
+      var placeholderHtml = "<input name='input' ng-model='x' ui-mask='{{mask}}' default-character=' '>",
+          input           = compileElement(placeholderHtml);
+
+      scope.$apply("x = ''");
+      scope.$apply("mask = '99/99/9999'");
+
+      expect(input.attr("placeholder")).toBe("  /  /    ");
+
+      input.val("12").triggerHandler("input");
+
+      expect(input.val()).toBe("12/  /    ");
+    });
+
+    it("should allow the default character to interpret an empty string as a space", function() {
+
+      var placeholderHtml = "<input name='input' ng-model='x' ui-mask='{{mask}}' default-character=''>",
+          input           = compileElement(placeholderHtml);
+
+      scope.$apply("x = ''");
+      scope.$apply("mask = '99/99/9999'");
+
+      expect(input.attr("placeholder")).toBe("  /  /    ");
+
+      input.val("12").triggerHandler("input");
+
+      expect(input.val()).toBe("12/  /    ");
+    });
+
     it("should allow mask substitutions via the placeholder attribute", function() {
 
       var placeholderHtml = "<input name='input' ng-model='x' ui-mask='{{mask}}' placeholder='MM/DD/YYYY'>",
