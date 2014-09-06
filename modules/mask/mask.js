@@ -19,7 +19,7 @@ angular.module('ui.mask', [])
       restrict: 'A',
       compile: function uiMaskCompilingFunction(){
         var options = maskConfig,
-        	globalMaskRaw = maskRaw;
+            globalMaskRaw = maskRaw;
 
         return function uiMaskLinkingFunction(scope, iElement, iAttrs, controller){
           var maskProcessed = false, eventsBound = false,
@@ -82,11 +82,11 @@ angular.module('ui.mask', [])
             // value performed by eventHandler() doesn't happen until after
             // this parser is called, which causes what the user sees in the input
             // to be out-of-sync with what the controller's $viewValue is set to.
-            if (localMaskRaw == true) {
-            	controller.$viewValue = value.length ? maskValue(value) : '';
+            if (localMaskRaw === true) {
+                controller.$viewValue = value.length ? maskValue(value) : '';
             } else {
-            	value = value.length ? maskValue(value) : '';
-            	controller.$viewValue = value;
+                value = value.length ? maskValue(value) : '';
+                controller.$viewValue = value;
             }
             controller.$setValidity('mask', isValid);
             if (value === '' && iAttrs.required) {
@@ -120,8 +120,8 @@ angular.module('ui.mask', [])
 
           iAttrs.$observe('uiMask', initialize);
           iAttrs.$observe('uiMaskRaw', function (val) {
-        	  if (val != undefined)
-        		  localMaskRaw = !(val == 'false');
+        	  if (val !== undefined)
+        		  localMaskRaw = (val != 'false');
           });
           iAttrs.$observe('placeholder', initPlaceholder);
           var modelViewValue = false;
