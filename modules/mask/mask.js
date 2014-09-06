@@ -120,8 +120,8 @@ angular.module('ui.mask', [])
 
           iAttrs.$observe('uiMask', initialize);
           iAttrs.$observe('uiMaskRaw', function (val) {
-        	  if (val !== undefined)
-        		  localMaskRaw = (val != 'false');
+              if (val !== undefined)
+                  localMaskRaw = (val != 'false');
           });
           iAttrs.$observe('placeholder', initPlaceholder);
           var modelViewValue = false;
