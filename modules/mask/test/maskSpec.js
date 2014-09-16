@@ -227,6 +227,13 @@ describe("uiMask", function () {
       expect(input.attr("placeholder")).toBe("MM/DD/YYYY");
     });
 
+    it("should ignore the '?' character", function() {
+      var placeholderHtml = "<input type=\"text\" ui-mask=\"99/99/9999 ?99:99\" placeholder=\"DD/MM/YYYY HH:mm\" ng-model=\"myDate\">",
+        input = compileElement(placeholderHtml);
+
+      scope.$apply("myDate = ''");
+      expect(input.attr("placeholder")).toBe("DD/MM/YYYY HH:mm");
+    });
 
   });
 
