@@ -1,5 +1,3 @@
-'use strict';
-
 /**
  * General-purpose jQuery wrapper. Simply pass the plugin name as the expression.
  *
@@ -18,6 +16,8 @@
 angular.module('ui.jq',[]).
   value('uiJqConfig',{}).
   directive('uiJq', ['uiJqConfig', '$timeout', function uiJqInjectingFunction(uiJqConfig, $timeout) {
+  'use strict';
+
 
   return {
     restrict: 'A',

@@ -1,9 +1,9 @@
-'use strict';
-
 /**
  * Add a clear button to form inputs to reset their value
  */
 angular.module('ui.reset',[]).value('uiResetConfig',null).directive('uiReset', ['uiResetConfig', function (uiResetConfig) {
+  'use strict';
+
   var resetValue = null;
   if (uiResetConfig !== undefined){
       resetValue = uiResetConfig;

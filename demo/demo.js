@@ -1,10 +1,10 @@
-'use strict';
-
 angular.module('doc.ui-utils', ['ui.utils', 'prettifyDirective' ]);
 
 angular.module('ui.scroll')
     .factory('datasource', [
     '$log', '$timeout', function(console, $timeout) {
+        'use strict';
+
         var get = function(index, count, success) {
             return $timeout(function() {
                 var i, result, _i, _ref;
