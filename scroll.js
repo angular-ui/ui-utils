@@ -19,7 +19,8 @@ angular.module('ui.scroll', []).directive('uiScrollViewport', [
         '$scope',
         '$element',
         function (scope, element) {
-          return element;
+          this.viewport = element;
+          return this;
         }
       ]
     };
@@ -37,9 +38,9 @@ angular.module('ui.scroll', []).directive('uiScrollViewport', [
       terminal: true,
       compile: function (elementTemplate, attr, linker) {
         return function ($scope, element, $attr, controllers) {
-          var adapter, adjustBuffer, adjustRowHeight, bof, bottomVisiblePos, buffer, bufferPadding, bufferSize, clipBottom, clipTop, datasource, datasourceName, doAdjustment, enqueueFetch, eof, eventListener, fetch, finalize, first, hideElementBeforeAppend, insert, isDatasource, isLoading, itemName, loading, log, match, next, pending, reload, removeFromBuffer, resizeHandler, ridActual, scrollHandler, scrollHeight, shouldLoadBottom, shouldLoadTop, showElementAfterRender, tempScope, topVisible, topVisibleElement, topVisibleItem, topVisiblePos, topVisibleScope, viewport, viewportScope, wheelHandler;
+          var adapter, adjustBuffer, adjustRowHeight, bof, bottomVisiblePos, buffer, bufferPadding, bufferSize, clipBottom, clipTop, datasource, datasourceName, doAdjustment, enqueueFetch, eof, eventListener, fetch, finalize, first, getValueChain, hideElementBeforeAppend, insert, isDatasource, isLoading, itemName, loading, log, match, next, pending, reload, removeFromBuffer, resizeHandler, ridActual, scrollHandler, scrollHeight, shouldLoadBottom, shouldLoadTop, showElementAfterRender, tempScope, topVisible, topVisibleElement, topVisibleItem, topVisiblePos, topVisibleScope, viewport, viewportScope, wheelHandler;
           log = console.debug || console.log;
-          match = $attr.uiScroll.match(/^\s*(\w+)\s+in\s+(\w+)\s*$/);
+          match = $attr.uiScroll.match(/^\s*(\w+)\s+in\s+([\w\.]+)\s*$/);
           if (!match) {
             throw new Error('Expected uiScroll in form of \'_item_ in _datasource_\' but got \'' + $attr.uiScroll + '\'');
           }
@@ -48,7 +49,18 @@ angular.module('ui.scroll', []).directive('uiScrollViewport', [
           isDatasource = function (datasource) {
             return angular.isObject(datasource) && datasource.get && angular.isFunction(datasource.get);
           };
-          datasource = $scope[datasourceName];
+          getValueChain = function (targetScope, target) {
+            var chain;
+            if (!targetScope) {
+              return null;
+            }
+            chain = target.match(/^([\w]+)\.(.+)$/);
+            if (!chain || chain.length !== 3) {
+              return targetScope[target];
+            }
+            return getValueChain(targetScope[chain[1]], chain[2]);
+          };
+          datasource = getValueChain($scope, datasourceName);
           if (!isDatasource(datasource)) {
             datasource = $injector.get(datasourceName);
             if (!isDatasource(datasource)) {
@@ -73,7 +85,7 @@ angular.module('ui.scroll', []).directive('uiScrollViewport', [
             if (repeaterType !== 'li' && repeaterType !== 'tr') {
               repeaterType = 'div';
             }
-            viewport = controllers[0] || angular.element(window);
+            viewport = controllers[0] && controllers[0].viewport ? controllers[0].viewport : angular.element(window);
             viewport.css({
               'overflow-y': 'auto',
               'display': 'block'
