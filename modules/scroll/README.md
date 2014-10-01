@@ -155,7 +155,8 @@ Do not ask me why this woodoo is necessary, but as of Chrome version 30 it is ju
 ###History
 
 ####v1.0.1
-Deep datasource access via dot-notation in template. [Angular 1.3.x breaking change](https://github.com/angular/angular.js/issues/8876) fix with backward compatibility.
+* Deep datasource access via dot-notation in template. 
+* [Angular 1.3.x breaking change](https://github.com/angular/angular.js/issues/8876) fix with backward compatibility.
 
 ####v1.0.0
 
