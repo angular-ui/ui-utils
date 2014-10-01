@@ -66,7 +66,7 @@ angular.module('ui.mask', [])
             value = unmaskValue(fromModelValue || '');
             isValid = validateValue(value);
             ngModel.$setValidity('mask', isValid);
-            return isValid && value.length ? maskValue(value) : undefined;
+            return isValid && value.length ? maskValue(value) : allowInvalid(maskValue(value), undefined);
           }
 
           function allowInvalid(valid, invalid) {
@@ -86,7 +86,7 @@ angular.module('ui.mask', [])
             // value performed by eventHandler() doesn't happen until after
             // this parser is called, which causes what the user sees in the input
             // to be out-of-sync with what the controller's $viewValue is set to.
-            ngModel.$viewValue = value.length ? maskValue(value) : '';
+            ngModel.$viewValue = value.length ? maskValue(value) : allowInvalid(maskValue(value), '');
             ngModel.$setValidity('mask', isValid);
             if (value === '' && iAttrs.required) {
               ngModel.$setValidity('required', false);

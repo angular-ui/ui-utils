@@ -245,6 +245,13 @@ describe("uiMask", function () {
       input.triggerHandler("blur");
       expect(input.controller("ngModel").$modelValue).toBe("1 1 1");
       expect(input.controller("ngModel").$viewValue).toBe("");
+      scope.$apply(function(){
+        scope.x = "a a";
+        scope.mask = "(A) * 9";
+      });
+      input.triggerHandler("blur");
+      expect(input.controller("ngModel").$modelValue).toBe("a a");
+      expect(input.controller("ngModel").$viewValue).toBe("(a) a _");
     });
 
   });
