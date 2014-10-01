@@ -39,6 +39,7 @@ The code in this file relies on a few DOM element methods of jQuery which are cu
 * height() and height(value)
 * outerHeight() and outerHeight(true)
 * scrollTop() and scrollTop(value)
+* offset()
 
 File ui-scroll-jqlite.coffee houses implementations of the above methods and also has to be loaded in your page. Please note that the methods are implemented in a separate module
 'ui.scroll.jqlite' and this name should also be included in the dependency list of the main module. The implementation currently supports missing methods
@@ -139,7 +140,7 @@ Examples ([look here](https://github.com/Hill30/NGScroller/tree/master/src/examp
 I intentionally broke every rule of proper html/css structure (i.e. embedded styles). This is done to keep the html as bare bones as possible and leave
 it to you to do it properly - whatever properly means in your book.
 
-See [index.html] (http://rawgithub.com/Hill30/NGScroller/master/src/index.html)
+See [index.html](http://rawgithub.com/Hill30/NGScroller/master/src/index.html)
 
 ###Debugging coffeeScript directly in the browser
 
@@ -152,6 +153,9 @@ Once the first breakpoint set up this way is hit, the rest of them will work jus
 Do not ask me why this woodoo is necessary, but as of Chrome version 30 it is just the way it is.
 
 ###History
+
+####v1.0.1
+Deep datasource access via dot-notation in template. [Angular 1.3.x breaking change](https://github.com/angular/angular.js/issues/8876) fix with backward compatibility.
 
 ####v1.0.0
 
