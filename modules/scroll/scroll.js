@@ -559,14 +559,14 @@ angular.module('ui.scroll', []).directive('uiScrollViewport', [
             }
             return adjustBuffer(null, false);
           });
-          return eventListener.$on('insert.item', function(event, locator, item) {
+          eventListener.$on('insert.item', function(event, locator, item) {
             var i, inserted, _i, _len, _ref;
             inserted = [];
             if (angular.isFunction(locator)) {
               throw new Error('not implemented - Insert with locator function');
             } else {
-              if ((0 <= (_ref = locator - first - 1) && _ref < buffer.length)) {
-                inserted.push(insert(locator, item));
+              if ((0 <= (_ref = locator - first) && _ref < buffer.length)) {
+                inserted.push(insert(locator - 1, item));
                 next++;
               }
             }
