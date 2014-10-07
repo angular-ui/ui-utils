@@ -66,8 +66,15 @@ angular.module('ui.scroll', []).directive('uiScrollViewport', [
             return viewport.outerHeight() * Math.max(0.1, +$attr.padding || 0.1);
           };
           scrollHeight = function(elem) {
-            var _ref;
-            return (_ref = elem[0].scrollHeight) != null ? _ref : elem[0].document.documentElement.scrollHeight;
+            var height = elem[0].scrollHeight;
+            if(height != null){
+              return height;
+            }
+            height = element[0].parentElement.scrollHeight;
+            if(height != null){
+              return height;
+            }
+            return elem[0].document.documentElement.scrollHeight;
           };
           adapter = null;
           linker(tempScope = $scope.$new(), function(template) {
