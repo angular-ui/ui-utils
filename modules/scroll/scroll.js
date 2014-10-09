@@ -34,7 +34,8 @@ angular.module('ui.scroll', []).directive('uiScrollViewport', [
         return function($scope, element, $attr, controllers) {
           var adapter, adjustBuffer, adjustRowHeight, bof, bottomVisiblePos, buffer, bufferPadding, bufferSize, clipBottom, clipTop, datasource, datasourceName, doAdjustment, enqueueFetch, eof, eventListener, fetch, finalize, first, getValueChain, hideElementBeforeAppend, insert, isDatasource, isLoading, itemName, loading, log, match, next, pending, reload, removeFromBuffer, resizeHandler, ridActual, scrollHandler, scrollHeight, shouldLoadBottom, shouldLoadTop, showElementAfterRender, tempScope, topVisible, topVisibleElement, topVisibleItem, topVisiblePos, topVisibleScope, viewport, viewportScope, wheelHandler;
           //save out the initial parent element for scroll height calculations
-          var parentElem = element[0].parentElement;
+          //in i.e. 10 parentElement isn't always there...
+          var parentElem = element[0].parentElement || element[0].parentNode;
           log = console.debug || console.log;
           match = $attr.uiScroll.match(/^\s*(\w+)\s+in\s+([\w\.]+)\s*$/);
           if (!match) {
