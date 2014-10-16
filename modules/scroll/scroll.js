@@ -522,7 +522,13 @@ angular.module('ui.scroll', []).directive('uiScrollViewport', [
             eventListener.$destroy();
             viewport.unbind('resize', resizeHandler);
             viewport.unbind('scroll', scrollHandler);
-            return viewport.unbind('mousewheel', wheelHandler);
+            viewport.unbind('mousewheel', wheelHandler);
+            fetch = function(rid, scrolling) {};
+            removeFromBuffer(0, buffer.length);
+            adapter.topPadding(0);
+            adapter.bottomPadding(0);
+            pending = [];
+            removeFromBuffer(0, buffer.length);
           });
           eventListener.$on('update.items', function(event, locator, newItem) {
             var wrapper, _fn, _i, _len, _ref;
