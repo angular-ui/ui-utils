@@ -8,7 +8,7 @@
  */
 angular.module('ui.highlight',[]).filter('highlight', function () {
   function escapeRegExp(string){
-    return string.replace(/([.*+?^${}()|\[\]\/\\])/g, "\\$1");
+    return string.replace(/([.*+?^${}()|\[\]\/\\])/g, '\\$1');
   }
 
   return function (text, search, caseSensitive) {
