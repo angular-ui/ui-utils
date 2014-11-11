@@ -106,10 +106,12 @@ angular.module('ui.scroll', []).directive('uiScrollViewport', [
                   result.paddingHeight = function() {
                     return div.height.apply(div, arguments);
                   };
+                  result.css({'min-height': '0px'});
                   return result;
                 default:
                   result = angular.element('<' + repeaterType + '></' + repeaterType + '>');
                   result.paddingHeight = result.height;
+                  result.css({'min-height': '0px'});
                   return result;
               }
             };
