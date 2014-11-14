@@ -238,6 +238,23 @@ angular.module('ui.mask', [])
             return valueMasked;
           }
 
+          function maskValueForModel(unmaskedValue){
+            var valueMasked = '',
+              maskCaretMapCopy = maskCaretMap.slice();
+
+              angular.forEach(maskPlaceholder.split(''), function (chr, i) {
+                if (unmaskedValue.length) {
+                  if (i === maskCaretMapCopy[0]) {
+                    valueMasked  += unmaskedValue.charAt(0) || '';
+                    unmaskedValue = unmaskedValue.substr(1);
+                    maskCaretMapCopy.shift();
+                  } else {
+                    valueMasked += chr.replace('_', '');
+                  }
+              }});
+              return valueMasked;
+            }
+
           function getPlaceholderChar(i) {
             var placeholder = iAttrs.placeholder;
 
