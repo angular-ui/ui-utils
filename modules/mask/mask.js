@@ -58,7 +58,7 @@ angular.module('ui.mask', [])
           }
 
           function initMaskOptions(maskOptionsAttr) {
-            if(! angular.isDefined(maskOptionsAttr) || maskOptionsAttr == '') {
+            if(! angular.isDefined(maskOptionsAttr) || maskOptionsAttr === '') {
               return;
             }
             maskOptions = angular.fromJson(maskOptionsAttr);
