@@ -1,22 +1,20 @@
 (function () {
-    //'use strict';
-    // angular.module('myApp', []);
+    'use strict';
 
-    angular.module('myApp', ['ui.uploader'])
-        .controller('myController', demoController);
+    angular.module('myApp', ['ui.uploader']).controller('myController', demoController);
 
     demoController.$inject = ['$log', 'uiUploader', '$scope'];
 
     function demoController($log, $uiUploader, $scope) {
         
-        $scope.btn_remove=function(file){
-            $log.info("deleting="+file);
+        $scope.btn_remove = function(file){
+            $log.info('deleting='+file);
             $uiUploader.removeFile(file);
-        }
+        };
         
-        $scope.btn_clean=function(){
+        $scope.btn_clean = function(){
             $uiUploader.removeAll();
-        }
+        };
 
         $scope.btn_upload = function() {
             $log.info('uploading...');
@@ -24,7 +22,7 @@
                 url: 'http://localhost:3000/welcome/ui_uploader',
                 concurrency: 2,
                 onProgress: function(file) {
-                    $log.info(file.name+"="+file.humanSize);
+                    $log.info(file.name+'='+file.humanSize);
                     //$log.info($scope.files.indexOf(file));
                     $scope.$apply();
                 },
@@ -40,7 +38,7 @@
         element.addEventListener('change', function(e) {
             var files = e.target.files;
             $uiUploader.addFiles(files);
-            $scope.files=$uiUploader.getFiles();
+            $scope.files = $uiUploader.getFiles();
             $scope.$apply();
             //            $log.info($uiUploader.files.length);
         });
