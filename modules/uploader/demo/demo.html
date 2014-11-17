@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html ng-app="myApp">
+
+<head>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.14/angular.min.js"></script>
+    <style>
+        .close-btn {
+            border: 2px solid #c2c2c2;
+            position: relative;
+            padding: 1px 5px;
+            top: -10px;
+            background-color: #605F61;
+            left: 10px;
+            border-radius: 20px;
+        }
+    </style>
+
+    <meta charset="utf-8">
+    <title>Demo 2</title>
+</head>
+
+<body>
+
+    <div ng-controller="myController as ctrl">
+        <div style="width: 400px;border-style: groove;padding: 10px;">
+            <div>
+                <input type="file" id="file1" multiple/>
+                <div style="float:right;">
+                <button ng-click="btn_upload()">Upload</button>
+                <button ng-click="btn_clean()">Clean</button>
+                    </div>
+            </div>
+            <div ng-repeat="file in files" style="margin-top: 20px;border-bottom-color: antiquewhite;border-bottom-style: double;">
+                <div><span>{{file.name}}</span><div style="float:right;"><span>{{file.humanSize}}</span><span class="close-btn"><a ng-click="btn_remove(file)" href="#">X</a></span></div>
+                </div>
+                <progress style="width:400px;" value="{{file.loaded}}" max="{{file.size}}"></progress>
+            </div>
+        </div>
+    </div>
+    <script src="../uploader.js"></script>
+    <script src="demo.js"></script>
+</body>
+
+</html>
