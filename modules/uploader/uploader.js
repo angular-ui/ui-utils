@@ -11,11 +11,12 @@ angular.module('ui.uploader', []).service('uiUploader', uiUploader);
 uiUploader.$inject = ['$log'];
 
 function uiUploader($log) {
+    /*jshint validthis: true */
     var self = this;
     self.files = [];
     self.options = {};
     self.activeUploads = 0;
-    $log.info("uiUploader loaded");
+    $log.info('uiUploader loaded');
     
     function addFiles(files) {
         for (var i = 0; i < files.length; i++) {
@@ -30,7 +31,6 @@ function uiUploader($log) {
     function startUpload(options) {
         self.options = options;
         for (var i = 0; i < self.files.length; i++) {
-            $log.info(self.activeUploads+"|"+self.options.concurrency);
             if (self.activeUploads == self.options.concurrency) {
                 break;
             }
@@ -45,7 +45,7 @@ function uiUploader($log) {
     }
     
     function removeAll(){
-        self.files.splice(0,self.files.length)
+        self.files.splice(0,self.files.length);
     }
     
     return {
