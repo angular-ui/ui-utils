@@ -14,7 +14,7 @@ angular.module('ui.mask', [])
   .directive('uiMask', ['uiMaskConfig', '$parse', function (maskConfig, $parse) {
     return {
       priority: 100,
-      require: 'ngModel',
+      require: ['ngModel','?ngModelOptions'],
       restrict: 'A',
       compile: function uiMaskCompilingFunction(){
         var options = maskConfig;
@@ -28,6 +28,8 @@ angular.module('ui.mask', [])
           // Vars for initializing/uninitializing
             originalPlaceholder = iAttrs.placeholder,
             originalMaxlength = iAttrs.maxlength,
+            ngModel = controller[0],
+            ngModelOptions = controller[1],
           // Vars used exclusively in eventHandler()
             oldValue, oldValueUnmasked, oldCaretPosition, oldSelectionLength;
 
@@ -63,8 +65,15 @@ angular.module('ui.mask', [])
             }
             value = unmaskValue(fromModelValue || '');
             isValid = validateValue(value);
-            controller.$setValidity('mask', isValid);
-            return isValid && value.length ? maskValue(value) : undefined;
+            ngModel.$setValidity('mask', isValid);
+            return isValid && value.length ? maskValue(value) : allowInvalid(maskValue(value), undefined);
+          }
+
+          function allowInvalid(valid, invalid) {
+            if (ngModelOptions && ngModelOptions.$options && ngModelOptions.$options.allowInvalid === true) {
+              return valid;
+            }
+            return invalid;
           }
 
           function parser(fromViewValue){
@@ -77,12 +86,12 @@ angular.module('ui.mask', [])
             // value performed by eventHandler() doesn't happen until after
             // this parser is called, which causes what the user sees in the input
             // to be out-of-sync with what the controller's $viewValue is set to.
-            controller.$viewValue = value.length ? maskValue(value) : '';
-            controller.$setValidity('mask', isValid);
+            ngModel.$viewValue = value.length ? maskValue(value) : allowInvalid(maskValue(value), '');
+            ngModel.$setValidity('mask', isValid);
             if (value === '' && iAttrs.required) {
-              controller.$setValidity('required', false);
+              ngModel.$setValidity('required', false);
             }
-            return isValid ? value : undefined;
+            return isValid ? value : allowInvalid(value, undefined);
           }
 
           var linkOptions = {};
@@ -119,11 +128,11 @@ angular.module('ui.mask', [])
           scope.$watch(iAttrs.ngModel, function(val) {
             if(modelViewValue && val) {
               var model = $parse(iAttrs.ngModel);
-              model.assign(scope, controller.$viewValue);
+              model.assign(scope, ngModel.$viewValue);
             }
           });
-          controller.$formatters.push(formatter);
-          controller.$parsers.push(parser);
+          ngModel.$formatters.push(formatter);
+          ngModel.$parsers.push(parser);
 
           function uninitialize(){
             maskProcessed = false;
@@ -141,13 +150,13 @@ angular.module('ui.mask', [])
               iElement.removeAttr('maxlength');
             }
 
-            iElement.val(controller.$modelValue);
-            controller.$viewValue = controller.$modelValue;
+            iElement.val(ngModel.$modelValue);
+            ngModel.$viewValue = ngModel.$modelValue;
             return false;
           }
 
           function initializeElement(){
-            value = oldValueUnmasked = unmaskValue(controller.$modelValue || '');
+            value = oldValueUnmasked = unmaskValue(ngModel.$modelValue || '');
             valueMasked = oldValue = maskValue(value);
             isValid = validateValue(value);
             var viewValue = isValid && value.length ? valueMasked : '';
@@ -156,7 +165,7 @@ angular.module('ui.mask', [])
             }
             iElement.attr('placeholder', maskPlaceholder);
             iElement.val(viewValue);
-            controller.$viewValue = viewValue;
+            ngModel.$viewValue = viewValue;
             // Not using $setViewValue so we don't clobber the model value and dirty the form
             // without any kind of user interaction.
           }
@@ -289,13 +298,17 @@ angular.module('ui.mask', [])
           }
 
           function blurHandler(){
+            if (ngModelOptions && ngModelOptions.$options && ngModelOptions.$options.allowInvalid === true) {
+              return;
+            }
             oldCaretPosition = 0;
             oldSelectionLength = 0;
+
             if (!isValid || value.length === 0) {
               valueMasked = '';
               iElement.val('');
               scope.$apply(function (){
-                controller.$setViewValue('');
+                ngModel.$setViewValue('');
               });
             }
           }
@@ -393,7 +406,7 @@ angular.module('ui.mask', [])
             if (valAltered) {
               // We've altered the raw value after it's been $digest'ed, we need to $apply the new value.
               scope.$apply(function (){
-                controller.$setViewValue(valUnmasked);
+                ngModel.$setViewValue(valUnmasked);
               });
             }
 
