@@ -1,4 +1,4 @@
-# UI.Utils [![Build Status](https://travis-ci.org/angular-ui/ui-utils.png?branch=master)](https://travis-ci.org/angular-ui/ui-utils)
+# UI.Utils [![Build Status](https://travis-ci.org/angular-ui/ui-utils.svg?branch=master)](https://travis-ci.org/angular-ui/ui-utils)
 
 The companion suite for AngularJS
 
