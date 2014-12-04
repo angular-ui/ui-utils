@@ -64,7 +64,7 @@ angular.module('ui.resizable', []).directive('uiResizable', ['$document', '$log'
                 // W3C standard way:
                 if (defaultView && defaultView.getComputedStyle) {
                     // sanitize property name to css notation (hypen separated words eg. font-Size)
-                    styleProp = styleProp.replace(/([A-Z])/g, "-$1").toLowerCase();
+                    styleProp = styleProp.replace(/([A-Z])/g, '-$1').toLowerCase();
                     return defaultView.getComputedStyle(el, null).getPropertyValue(styleProp);
                 } else if (el.currentStyle) { // IE
                     // sanitize property name to camelCase
@@ -78,7 +78,7 @@ angular.module('ui.resizable', []).directive('uiResizable', ['$document', '$log'
                     var oldLeft = el.style.left, oldRsLeft = el.runtimeStyle.left;
                     el.runtimeStyle.left = el.currentStyle.left;
                     el.style.left = value || 0;
-                    value = el.style.pixelLeft + "px";
+                    value = el.style.pixelLeft + 'px';
                     el.style.left = oldLeft;
                     el.runtimeStyle.left = oldRsLeft;
                     return value;
@@ -98,7 +98,7 @@ angular.module('ui.resizable', []).directive('uiResizable', ['$document', '$log'
                 // get handle position
                 var regexp = new RegExp(options.handleDirectionClassPrefix + '[swen]+');
                 scope.handlePos = event.target.className.match(regexp)[0]
-                                                        .replace(options.handleDirectionClassPrefix, "");
+                                                        .replace(options.handleDirectionClassPrefix, '');
                 element.addClass(options.resizingClassName)
                     .addClass(options.resizingClassName+'-'+scope.handlePos);
 
@@ -123,14 +123,14 @@ angular.module('ui.resizable', []).directive('uiResizable', ['$document', '$log'
                 if (contElem) contRect = getOffsetRect(contElem);
 
                 // Calculate padding and border width/height
-                rect.left += parseInt(getStyle(element[0],'padding-left')) +
-                             parseInt(getStyle(element[0],'padding-right')) +
-                             parseInt(getStyle(element[0],'border-left-width')) +
-                             parseInt(getStyle(element[0],'border-right-width'));
-                rect.top +=  parseInt(getStyle(element[0],'padding-top')) +
-                             parseInt(getStyle(element[0],'padding-bottom')) +
-                             parseInt(getStyle(element[0],'border-top-width')) +
-                             parseInt(getStyle(element[0],'border-bottom-width'));
+                rect.left += parseInt(getStyle(element[0],'padding-left'), 10) +
+                             parseInt(getStyle(element[0],'padding-right'), 10) +
+                             parseInt(getStyle(element[0],'border-left-width'), 10) +
+                             parseInt(getStyle(element[0],'border-right-width'), 10);
+                rect.top +=  parseInt(getStyle(element[0],'padding-top'), 10) +
+                             parseInt(getStyle(element[0],'padding-bottom'), 10) +
+                             parseInt(getStyle(element[0],'border-top-width'), 10) +
+                             parseInt(getStyle(element[0],'border-bottom-width'), 10);
 
                 // bind event handlers
                 $document.bind('mousemove', mousemove);
@@ -172,7 +172,7 @@ angular.module('ui.resizable', []).directive('uiResizable', ['$document', '$log'
                 }
             };
 
-            var mouseup = function(event) {
+            var mouseup = function() {
                 $document.unbind('mousemove', mousemove);
                 $document.unbind('mouseup', mouseup);
                 element.removeClass(options.resizingClassName)
@@ -200,14 +200,14 @@ angular.module('ui.resizable', []).directive('uiResizable', ['$document', '$log'
                     continue;
                 }
                 // create the handle
-                handleElem = angular.element("<div>").addClass(options.handleClassName);
+                handleElem = angular.element('<div>').addClass(options.handleClassName);
                 if (!options.showBorders && handles[i].length !== 2)
                     handleElem.addClass(options.noBorderClassName);
                 // bind events to the handle
                 handleElem.bind('mousedown', handler);
                 // append handle to element
-                element.append(handleElem.addClass("handle-" + handles[i]));
+                element.append(handleElem.addClass(options.handleDirectionClassPrefix + handles[i]));
             }
         }
-    }
+    };
 }]);
