@@ -1,0 +1,55 @@
+@base-margin: 1px;
+@base-size: 12px;
+@base-color: #ccc;
+
+/* Resizable element must have position attribute
+   specified for correct handle positions */
+.ui-resizable {
+  position: relative;
+}
+
+/* Handle default style */
+.ui-resizable-handle {
+  position: absolute;
+  font-size: 1px;
+  display: block;
+  border-style: solid;
+  border-color: @base-color;
+  border-width: 0;
+}
+
+/* Resizing styles */
+.ui-resizing-e, .ui-resizing-w    { cursor: e-resize; }
+.ui-resizing-s, .ui-resizing-n    { cursor: s-resize; }
+.ui-resizing-se, .ui-resizing-nw  { cursor: se-resize; }
+.ui-resizing-sw, .ui-resizing-ne  { cursor: sw-resize; }
+.ui-resizing .ui-resizable-handle { display: none; }
+
+/* Disable borders when resizing or showBorders is false */
+.handle-s.no-border, .handle-w.no-border, .handle-e.no-border, .handle-n.no-border { border: none; }
+
+/* Handle position styles */
+.handle-n, .handle-s { cursor: n-resize; height: @base-size; left: @base-margin; right: @base-margin; }
+.handle-w, .handle-e { cursor: w-resize; width: @base-size; top: @base-margin; bottom: @base-margin; }
+.handle-n { top:    @base-margin; }
+.handle-s { bottom: @base-margin; }
+.handle-w { left:   @base-margin; }
+.handle-e { right:  @base-margin; }
+
+.handle-sw { cursor: sw-resize; left: @base-margin; bottom: @base-margin; }
+.handle-se { cursor: se-resize; right: @base-margin; bottom: @base-margin; }
+.handle-nw { cursor: nw-resize; top: @base-margin; left: @base-margin; }
+.handle-ne { cursor: ne-resize; top: @base-margin; right: @base-margin; }
+
+.handle-sw, .handle-se, .handle-nw, .handle-ne { border-right-color: transparent; border-left-color: transparent; }
+
+/* Show borders on hover */
+.ui-resizable:hover > .handle-n { border-top-width:    @base-margin; }
+.ui-resizable:hover > .handle-s { border-bottom-width: @base-margin; }
+.ui-resizable:hover > .handle-w { border-left-width:   @base-margin; }
+.ui-resizable:hover > .handle-e { border-right-width:  @base-margin; }
+
+.ui-resizable:hover > .handle-sw { border-width:0 @base-size @base-size 0; }
+.ui-resizable:hover > .handle-se { border-width:0 0 @base-size @base-size; }
+.ui-resizable:hover > .handle-nw { border-width:@base-size @base-size 0 0; }
+.ui-resizable:hover > .handle-ne { border-width:@base-size 0 0 @base-size; }

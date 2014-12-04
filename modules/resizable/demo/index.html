@@ -1,0 +1,78 @@
+<style>
+    .ui-resizable {
+      position: relative;
+    }
+    .ui-resizing-e, .ui-resizing-w   { cursor: e-resize; }
+    .ui-resizing-s, .ui-resizing-n   { cursor: s-resize; }
+    .ui-resizing-se, .ui-resizing-nw { cursor: se-resize; }
+    .ui-resizing-sw, .ui-resizing-ne { cursor: sw-resize; }
+    .ui-resizing .ui-resizable-handle { display: none; }
+    .ui-resizable-handle {
+      position: absolute;
+      font-size: 1px;
+      display: block;
+      border-style: solid;
+      border-color: #ccc;
+      border-width: 0;
+    }
+    .handle-s.no-border, .handle-w.no-border, .handle-e.no-border, .handle-n.no-border { border: none; }
+
+    .handle-n, .handle-s { cursor: n-resize; height: 12px; left: 1px; right: 1px; }
+    .handle-w, .handle-e { cursor: w-resize; width: 12px; top: 1px; bottom: 1px; }
+    .handle-n { top:    1px; }
+    .handle-s { bottom: 1px; }
+    .handle-w { left:   1px; }
+    .handle-e { right:  1px; }
+
+    .handle-sw { cursor: sw-resize; left: 1px; bottom: 1px; }
+    .handle-se { cursor: se-resize; right: 1px; bottom: 1px; }
+    .handle-nw { cursor: nw-resize; top: 1px; left: 1px; }
+    .handle-ne { cursor: ne-resize; top: 1px; right: 1px; }
+
+    .handle-sw, .handle-se,
+    .handle-nw, .handle-ne {
+      border-right-color: transparent;
+      border-left-color: transparent;
+    }
+
+    .ui-resizable:hover > .handle-n { border-top-width:    1px; }
+    .ui-resizable:hover > .handle-s { border-bottom-width: 1px; }
+    .ui-resizable:hover > .handle-w { border-left-width:   1px; }
+    .ui-resizable:hover > .handle-e { border-right-width:  1px; }
+
+    .ui-resizable:hover > .handle-sw { border-width:0 13px 13px 0; }
+    .ui-resizable:hover > .handle-se { border-width:0 0 13px 13px; }
+    .ui-resizable:hover > .handle-nw { border-width:13px 13px 0 0; }
+    .ui-resizable:hover > .handle-ne { border-width:13px 0 0 13px; }
+    #resizable > .well > .well {
+        background-color: #d9edf7;
+        border-color: #bce8f1;
+    }
+</style>
+<section id="resizable">
+  <div class="page-header">
+    <h1>Resizable</h1>
+  </div>
+  <h3>What?</h3>
+
+  <p>Easily make a div element resizable.</p>
+
+  <div class="well">
+    <div class="well" ui-resizable>
+        <div class="well" ui-resizable="{containment: 'parent'}">I'm contained in my parent!</div>
+        Resize me!
+    </div>
+  </div>
+
+  <h3>How?</h3>
+<pre class="prettyprint">
+&lt;link rel="stylesheet" type="text/css" href="resizable.css"&gt;
+[...]
+&lt;div class="well"&gt;
+    &lt;div class="well" ui-resizable&gt;
+        &lt;div class="well" ui-resizable="{containment: 'parent'}"&gt;I'm contained in my parent!&lt;/div&gt;
+        Resize me!
+    &lt;/div&gt;
+&lt;/div&gt;
+</pre>
+</section>
