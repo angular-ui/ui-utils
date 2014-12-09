@@ -1,3 +1,5 @@
+'use strict';
+
 /**
  * Add a clear button to form inputs to reset their value
  */

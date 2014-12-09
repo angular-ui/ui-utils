@@ -1,3 +1,5 @@
+'use strict';
+
 /**
  * Converts variable-esque naming conventions to something presentational, capitalized words separated by space.
  * @param {String} value The value to be parsed and prettified.
@@ -33,7 +35,7 @@ angular.module('ui.inflector',[]).filter('inflector', function () {
     }
   };
 
-  return function (text, inflector, separator) {
+  return function (text, inflector) {
     if (inflector !== false && angular.isString(text)) {
       inflector = inflector || 'humanize';
       return inflectors[inflector](text);

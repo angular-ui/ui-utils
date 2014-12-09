@@ -1,11 +1,19 @@
-/*global angular, $, document*/
+'use strict';
+
 /**
  * Adds a 'ui-scrollfix' class to the element when the page scrolls past it's position.
  * @param [offset] {int} optional Y-offset to override the detected offset.
  *   Takes 300 (absolute) or -300 or +300 (relative to detected)
  */
 angular.module('ui.scrollfix',[]).directive('uiScrollfix', ['$window', function ($window) {
-  'use strict';
+  function getWindowScrollTop() {
+    if (angular.isDefined($window.pageYOffset)) {
+      return $window.pageYOffset;
+    } else {
+      var iebody = (document.compatMode && document.compatMode !== 'BackCompat') ? document.documentElement : document.body;
+      return iebody.scrollTop;
+    }
+  }
   return {
     require: '^?uiScrollfixTarget',
     link: function (scope, elm, attrs, uiScrollfixTarget) {
@@ -25,13 +33,7 @@ angular.module('ui.scrollfix',[]).directive('uiScrollfix', ['$window', function 
 
       function onScroll() {
         // if pageYOffset is defined use it, otherwise use other crap for IE
-        var offset;
-        if (angular.isDefined($window.pageYOffset)) {
-          offset = $window.pageYOffset;
-        } else {
-          var iebody = (document.compatMode && document.compatMode !== "BackCompat") ? document.documentElement : document.body;
-          offset = iebody.scrollTop;
-        }
+        var offset = uiScrollfixTarget ? $target[0].scrollTop : getWindowScrollTop();
         if (!elm.hasClass('ui-scrollfix') && offset > attrs.uiScrollfix) {
           elm.addClass('ui-scrollfix');
         } else if (elm.hasClass('ui-scrollfix') && offset < attrs.uiScrollfix) {
@@ -48,7 +50,6 @@ angular.module('ui.scrollfix',[]).directive('uiScrollfix', ['$window', function 
     }
   };
 }]).directive('uiScrollfixTarget', [function () {
-  'use strict';
   return {
     controller: ['$element', function($element) {
       this.$element = $element;

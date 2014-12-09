@@ -1,4 +1,6 @@
 describe('inflector', function () {
+  'use strict';
+
   var inflectorFilter, testPhrase = 'here isMy_phone_number';
 
   beforeEach(module('ui.inflector'));
@@ -33,7 +35,7 @@ describe('inflector', function () {
       expect(inflectorFilter(testPhrase, 'variable')).toEqual('hereIsMyPhoneNumber');
     });
     it('should do nothing if already formatted properly', function () {
-      expect(inflectorFilter("hereIsMyPhoneNumber", 'variable')).toEqual('hereIsMyPhoneNumber');
+      expect(inflectorFilter('hereIsMyPhoneNumber', 'variable')).toEqual('hereIsMyPhoneNumber');
     });
   });
 });

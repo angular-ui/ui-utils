@@ -1,3 +1,5 @@
+'use strict';
+
 /*
  Attaches input mask onto input element
  */
@@ -9,7 +11,7 @@ angular.module('ui.mask', [])
       '*': /[a-zA-Z0-9]/
     }
   })
-  .directive('uiMask', ['uiMaskConfig', function (maskConfig) {
+  .directive('uiMask', ['uiMaskConfig', '$parse', function (maskConfig, $parse) {
     return {
       priority: 100,
       require: 'ngModel',
@@ -77,7 +79,7 @@ angular.module('ui.mask', [])
             // to be out-of-sync with what the controller's $viewValue is set to.
             controller.$viewValue = value.length ? maskValue(value) : '';
             controller.$setValidity('mask', isValid);
-            if (value === '' && controller.$error.required !== undefined) {
+            if (value === '' && iAttrs.required) {
                 controller.$setValidity('required', !controller.$error.required);
             }
             return isValid ? value : undefined;
@@ -108,6 +110,18 @@ angular.module('ui.mask', [])
 
           iAttrs.$observe('uiMask', initialize);
           iAttrs.$observe('placeholder', initPlaceholder);
+          var modelViewValue = false;
+          iAttrs.$observe('modelViewValue', function(val) {
+            if(val === 'true') {
+              modelViewValue = true;
+            }
+          });
+          scope.$watch(iAttrs.ngModel, function(val) {
+            if(modelViewValue && val) {
+              var model = $parse(iAttrs.ngModel);
+              model.assign(scope, controller.$viewValue);
+            }
+          });
           controller.$formatters.push(formatter);
           controller.$parsers.push(parser);
 
@@ -213,10 +227,10 @@ angular.module('ui.mask', [])
           function getPlaceholderChar(i) {
             var placeholder = iAttrs.placeholder;
 
-            if (typeof placeholder !== "undefined" && placeholder[i]) {
+            if (typeof placeholder !== 'undefined' && placeholder[i]) {
               return placeholder[i];
             } else {
-              return "_";
+              return '_';
             }
           }
 
@@ -243,7 +257,7 @@ angular.module('ui.mask', [])
               minRequiredLength = 0;
 
               var isOptional = false,
-                  splitMask  = mask.split("");
+                  splitMask  = mask.split('');
 
               angular.forEach(splitMask, function (chr, i){
                 if (linkOptions.maskDefinitions[chr]) {
@@ -258,7 +272,7 @@ angular.module('ui.mask', [])
                     minRequiredLength++;
                   }
                 }
-                else if (chr === "?") {
+                else if (chr === '?') {
                   isOptional = true;
                 }
                 else {
@@ -297,11 +311,13 @@ angular.module('ui.mask', [])
           iElement.bind('mousedown mouseup', mouseDownUpHandler);
 
           function mouseoutHandler(){
+            /*jshint validthis: true */
             oldSelectionLength = getSelectionLength(this);
             iElement.unbind('mouseout', mouseoutHandler);
           }
 
           function eventHandler(e){
+            /*jshint validthis: true */
             e = e || {};
             // Allows more efficient minification
             var eventWhich = e.which,
@@ -412,19 +428,21 @@ angular.module('ui.mask', [])
           function isValidCaretPosition(pos){ return maskCaretMap.indexOf(pos) > -1; }
 
           function getCaretPosition(input){
+            if (!input) return 0;
             if (input.selectionStart !== undefined) {
               return input.selectionStart;
             } else if (document.selection) {
               // Curse you IE
               input.focus();
               var selection = document.selection.createRange();
-              selection.moveStart('character', -input.value.length);
+              selection.moveStart('character', input.value ? -input.value.length : 0);
               return selection.text.length;
             }
             return 0;
           }
 
           function setCaretPosition(input, pos){
+            if (!input) return 0;
             if (input.offsetWidth === 0 || input.offsetHeight === 0) {
               return; // Input's hidden
             }
@@ -443,6 +461,7 @@ angular.module('ui.mask', [])
           }
 
           function getSelectionLength(input){
+            if (!input) return 0;
             if (input.selectionStart !== undefined) {
               return (input.selectionEnd - input.selectionStart);
             }
@@ -455,7 +474,6 @@ angular.module('ui.mask', [])
           // https://developer.mozilla.org/en-US/docs/JavaScript/Reference/Global_Objects/Array/indexOf
           if (!Array.prototype.indexOf) {
             Array.prototype.indexOf = function (searchElement /*, fromIndex */){
-              "use strict";
               if (this === null) {
                 throw new TypeError();
               }

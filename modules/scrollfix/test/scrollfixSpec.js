@@ -53,4 +53,21 @@ describe('uiScrollfix', function () {
       expect(element.hasClass('ui-scrollfix')).toBe(false);
     });
   });
+  describe('scrolling the target', function() {
+    var target, element;
+    beforeEach(function() {
+      target = $compile('<div style="height:100px;overflow:auto;" ui-scrollfix-target><div ui-scrollfix="100"></div><div style="height: 400px;"></div></div>')(scope);
+      element = target.find('[ui-scrollfix]');
+      target.appendTo('body');
+    });
+    afterEach(function() {
+      target.remove();
+    });
+    it('should get scroll position from target', function() {
+      target[0].scrollTop = 150;
+      //force firing scroll event
+      target.trigger('scroll');
+      expect(element.hasClass('ui-scrollfix')).toBe(true);
+    });
+  });
 });

@@ -1,3 +1,4 @@
+'use strict';
 
 /**
  * A replacement utility for internationalization very similar to sprintf.
@@ -23,13 +24,13 @@ angular.module('ui.format',[]).filter('format', function(){
         var rlen = replace.length;
         var rfx = function (str, i) {
           i = parseInt(i, 10);
-          return (i>=0 && i<rlen) ? replace[i] : str;
+          return (i >= 0 && i < rlen) ? replace[i] : str;
         };
         target = target.replace(/\$([0-9]+)/g, rfx);
       }
       else {
         angular.forEach(replace, function(value, key){
-          target = target.split(':'+key).join(value);
+          target = target.split(':' + key).join(value);
         });
       }
     }

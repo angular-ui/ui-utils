@@ -1,3 +1,4 @@
+/* global $: false*/
 describe('\njqLite: testing against jQuery\n', function () {
 	'use strict';
 
@@ -92,13 +93,6 @@ describe('\njqLite: testing against jQuery\n', function () {
 				'<div style="margin: 3pt">some text w margin</div>',
 				'<div style="line-height: 1.1em">some text w line height</div>'
 			], function(element) {
-
-				function validateHeight(element) {
-					expect(extras.prototype.height.call(element)).toBe(element.height());
-					var h = element.height();
-					extras.prototype.height.call(element, h*2);
-					expect(extras.prototype.height.call(element)).toBe(h*2);
-				}
 
 				it('height(value) for ' + element, function() {
 						(function (element) {

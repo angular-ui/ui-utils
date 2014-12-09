@@ -1,4 +1,6 @@
 describe('format', function() {
+  'use strict';
+
   var formatFilter;
 
   beforeEach(module('ui.format'));

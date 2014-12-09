@@ -4,7 +4,7 @@ describe('uiReset', function () {
 
   var scope, $compile;
   beforeEach(module('ui.reset'));
-  beforeEach(inject(function (_$rootScope_, _$compile_, _$window_) {
+  beforeEach(inject(function (_$rootScope_, _$compile_) {
     scope = _$rootScope_.$new();
     $compile = _$compile_;
   }));
