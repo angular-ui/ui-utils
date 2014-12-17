@@ -70,7 +70,7 @@ angular.module('ui.mask', []).value('uiMaskConfig', {
             controller.$viewValue = value.length ? maskValue(value) : '';
             controller.$setValidity('mask', isValid);
             if (value === '' && iAttrs.required) {
-              controller.$setValidity('required', false);
+              controller.$setValidity('required', !controller.$error.required);
             }
             return isValid ? value : undefined;
           }
