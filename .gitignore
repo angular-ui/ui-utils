@@ -5,3 +5,4 @@ dist/
 
 # don't track generated/copied html demo files
 demo/*.html
+.DS_Store
