@@ -100,22 +100,21 @@ angular.module('ui.format',[]).filter('format', function(){
  * @param search {string} needle to search for
  * @param [caseSensitive] {boolean} optional boolean to use case-sensitive searching
  */
-angular.module('ui.highlight',[]).filter('highlight', function () {
+angular.module('ui.highlight',[]).filter('highlight', [ '$sce' , function ($sce) {
   return function (text, search, caseSensitive) {
-    if (text && (search || angular.isNumber(search))) {
+    if (search || angular.isNumber(search)) {
       text = text.toString();
       search = search.toString();
       if (caseSensitive) {
-        return text.split(search).join('<span class="ui-match">' + search + '</span>');
+        return $sce.trustAsHtml(text.split(search).join('<span class="ui-match">' + search + '</span>'));
       } else {
-        return text.replace(new RegExp(search, 'gi'), '<span class="ui-match">$&</span>');
+        return $sce.trustAsHtml(text.replace(new RegExp(search, 'gi'), '<span class="ui-match">$&</span>'));
       }
     } else {
-      return text;
+      return $sce.trustAsHtml(text);
     }
   };
-});
-
+}]);
 'use strict';
 
 // modeled after: angular-1.0.7/src/ng/directive/ngInclude.js
