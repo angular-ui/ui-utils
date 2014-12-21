@@ -42,8 +42,8 @@ This will copy the UI.Utils files into a `bower_components` folder, along with i
 <script type="text/javascript" src="bower_components/angular-ui-utils/ui-utils.js"></script>
 
 <!-- or just specific one-->
-<script type="text/javascript" src="bower_components/angular-ui-event/event.js"></script>
-<script type="text/javascript" src="bower_components/angular-ui-keypress/keypress.js"></script>
+<script type="text/javascript" src="bower_components/angular-ui-utils/event.js"></script>
+<script type="text/javascript" src="bower_components/angular-ui-utils/keypress.js"></script>
 <!-- ... -->
 ```
 
