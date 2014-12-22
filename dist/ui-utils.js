@@ -221,27 +221,30 @@ angular.module('ui.indeterminate',[]).directive('uiIndeterminate', [
  *          {{ 'Here Is my_phoneNumber' | inflector:'variable' }} => hereIsMyPhoneNumber
  */
 angular.module('ui.inflector',[]).filter('inflector', function () {
-  function ucwords(text) {
-    return text.replace(/^([a-z])|\s+([a-z])/g, function ($1) {
-      return $1.toUpperCase();
-    });
+
+  function tokenize(text) {
+    text = text.replace(/([A-Z])|([\-|\_])/g, function(_, $1) { return ' ' + ($1 || ''); });
+    return text.replace(/\s\s+/g, ' ').trim().toLowerCase().split(' ');
   }
 
-  function breakup(text, separator) {
-    return text.replace(/[A-Z]/g, function (match) {
-      return separator + match;
+  function capitalizeTokens(tokens) {
+    var result = [];
+    angular.forEach(tokens, function(token) {
+      result.push(token.charAt(0).toUpperCase() + token.substr(1));
     });
+    return result;
   }
 
   var inflectors = {
     humanize: function (value) {
-      return ucwords(breakup(value, ' ').split('_').join(' '));
+      return capitalizeTokens(tokenize(value)).join(' ');
     },
     underscore: function (value) {
-      return value.substr(0, 1).toLowerCase() + breakup(value.substr(1), '_').toLowerCase().split(' ').join('_');
+      return tokenize(value).join('_');
     },
     variable: function (value) {
-      value = value.substr(0, 1).toLowerCase() + ucwords(value.split('_').join(' ')).substr(1).split(' ').join('');
+      value = tokenize(value);
+      value = value[0] + capitalizeTokens(value.slice(1)).join('');
       return value;
     }
   };
