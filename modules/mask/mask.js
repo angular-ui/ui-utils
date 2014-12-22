@@ -11,13 +11,15 @@ angular.module('ui.mask', [])
       '*': /[a-zA-Z0-9]/
     }
   })
-  .directive('uiMask', ['uiMaskConfig', '$parse', function (maskConfig, $parse) {
+  .value('uiMaskRaw', true)
+  .directive('uiMask', ['uiMaskConfig', 'uiMaskRaw', '$parse', function (maskConfig, maskRaw, $parse) {
     return {
       priority: 100,
       require: 'ngModel',
       restrict: 'A',
       compile: function uiMaskCompilingFunction(){
-        var options = maskConfig;
+        var options = maskConfig,
+            globalMaskRaw = maskRaw;
 
         return function uiMaskLinkingFunction(scope, iElement, iAttrs, controller){
           var maskProcessed = false, eventsBound = false,
@@ -29,7 +31,10 @@ angular.module('ui.mask', [])
             originalPlaceholder = iAttrs.placeholder,
             originalMaxlength = iAttrs.maxlength,
           // Vars used exclusively in eventHandler()
-            oldValue, oldValueUnmasked, oldCaretPosition, oldSelectionLength;
+            oldValue, oldValueUnmasked, oldCaretPosition, oldSelectionLength,
+          // Var to override locally the uiMaskRaw global config.
+            localMaskRaw = globalMaskRaw
+          ;
 
           function initialize(maskAttr){
             if (!angular.isDefined(maskAttr)) {
@@ -77,7 +82,12 @@ angular.module('ui.mask', [])
             // value performed by eventHandler() doesn't happen until after
             // this parser is called, which causes what the user sees in the input
             // to be out-of-sync with what the controller's $viewValue is set to.
-            controller.$viewValue = value.length ? maskValue(value) : '';
+            if (localMaskRaw === true) {
+                controller.$viewValue = value.length ? maskValue(value) : '';
+            } else {
+                value = value.length ? maskValue(value) : '';
+                controller.$viewValue = value;
+            }
             controller.$setValidity('mask', isValid);
             if (value === '' && iAttrs.required) {
                 controller.$setValidity('required', !controller.$error.required);
@@ -109,6 +119,10 @@ angular.module('ui.mask', [])
           }
 
           iAttrs.$observe('uiMask', initialize);
+          iAttrs.$observe('uiMaskRaw', function (val) {
+              if (val !== undefined)
+                  localMaskRaw = (val != 'false');
+          });
           iAttrs.$observe('placeholder', initPlaceholder);
           var modelViewValue = false;
           iAttrs.$observe('modelViewValue', function(val) {
