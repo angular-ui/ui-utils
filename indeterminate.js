@@ -1,10 +1,10 @@
-'use strict';
 /**
  * Provides an easy way to toggle a checkboxes indeterminate property
  *
  * @example <input type="checkbox" ui-indeterminate="isUnkown">
  */
 angular.module('ui.indeterminate', []).directive('uiIndeterminate', [function () {
+    'use strict';
     return {
       compile: function (tElm, tAttrs) {
         if (!tAttrs.type || tAttrs.type.toLowerCase() !== 'checkbox') {
