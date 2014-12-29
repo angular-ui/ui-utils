@@ -1,4 +1,3 @@
-'use strict';
 /**
  * General-purpose validator for ngModel.
  * angular.js comes with several built-in validation mechanism for input fields (ngRequired, ngPattern etc.) but using
@@ -16,6 +15,7 @@
  * In both cases validator function should take a value to validate as its argument and should return true/false indicating a validation result.
  */
 angular.module('ui.validate', []).directive('uiValidate', function () {
+  'use strict';
   return {
     restrict: 'A',
     require: 'ngModel',
