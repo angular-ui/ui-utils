@@ -1,4 +1,3 @@
-'use strict';
 /**
  * A replacement utility for internationalization very similar to sprintf.
  *
@@ -13,6 +12,7 @@
  * @example: '$0 agrees to all mentions $0 makes in the event that $0 hits a tree while $0 is driving drunk'.format('Bob')
  */
 angular.module('ui.format', []).filter('format', function () {
+  'use strict';
   return function (value, replace) {
     var target = value;
     if (angular.isString(target) && replace !== undefined) {
