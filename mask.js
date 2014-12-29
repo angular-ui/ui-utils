@@ -6,7 +6,8 @@ angular.module('ui.mask', []).value('uiMaskConfig', {
     '9': /\d/,
     'A': /[a-zA-Z]/,
     '*': /[a-zA-Z0-9]/
-  }
+  },
+  'clearOnBlur': true
 }).directive('uiMask', [
   'uiMaskConfig',
   '$parse',
@@ -82,7 +83,7 @@ angular.module('ui.mask', []).value('uiMaskConfig', {
               linkOptions = function (original, current) {
                 for (var i in original) {
                   if (Object.prototype.hasOwnProperty.call(original, i)) {
-                    if (!current[i]) {
+                    if (current[i] === undefined) {
                       current[i] = angular.copy(original[i]);
                     } else {
                       angular.extend(current[i], original[i]);
@@ -246,11 +247,15 @@ angular.module('ui.mask', []).value('uiMaskConfig', {
             maskProcessed = maskCaretMap.length > 1 ? true : false;
           }
           function blurHandler() {
-            oldCaretPosition = 0;
-            oldSelectionLength = 0;
+            if (linkOptions.clearOnBlur) {
+              oldCaretPosition = 0;
+              oldSelectionLength = 0;
+            }
             if (!isValid || value.length === 0) {
-              valueMasked = '';
-              iElement.val('');
+              if (linkOptions.clearOnBlur) {
+                valueMasked = '';
+                iElement.val('');
+              }
               scope.$apply(function () {
                 controller.$setViewValue('');
               });
