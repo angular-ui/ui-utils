@@ -1,4 +1,3 @@
-'use strict';
 /*
 globals: angular, window
 
@@ -14,6 +13,7 @@ globals: angular, window
 angular.module('ui.scroll', []).directive('uiScrollViewport', [
   '$log',
   function () {
+    'use strict';
     return {
       controller: [
         '$scope',
@@ -31,6 +31,7 @@ angular.module('ui.scroll', []).directive('uiScrollViewport', [
   '$rootScope',
   '$timeout',
   function (console, $injector, $rootScope, $timeout) {
+    'use strict';
     return {
       require: ['?^uiScrollViewport'],
       transclude: 'element',

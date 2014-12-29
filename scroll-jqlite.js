@@ -1,8 +1,8 @@
-'use strict';
 angular.module('ui.scroll.jqlite', ['ui.scroll']).service('jqLiteExtras', [
   '$log',
   '$window',
   function (console, window) {
+    'use strict';
     return {
       registerFor: function (element) {
         var convertToPx, css, getMeasurements, getStyle, getWidthHeight, isWindow, scrollTo;
@@ -233,6 +233,7 @@ angular.module('ui.scroll.jqlite', ['ui.scroll']).service('jqLiteExtras', [
   '$window',
   'jqLiteExtras',
   function (console, window, jqLiteExtras) {
+    'use strict';
     if (!window.jQuery) {
       return jqLiteExtras.registerFor(angular.element);
     }
