@@ -1,4 +1,3 @@
-'use strict';
 /**
  * Set a $uiRoute boolean to see if the current route matches
  */
@@ -6,6 +5,7 @@ angular.module('ui.route', []).directive('uiRoute', [
   '$location',
   '$parse',
   function ($location, $parse) {
+    'use strict';
     return {
       restrict: 'AC',
       scope: true,
