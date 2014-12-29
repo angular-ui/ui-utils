@@ -1,7 +1,7 @@
-'use strict';
 angular.module('ui.keypress', []).factory('keypressHelper', [
   '$parse',
   function keypress($parse) {
+    'use strict';
     var keysByCode = {
         8: 'backspace',
         9: 'tab',
@@ -78,6 +78,7 @@ angular.module('ui.keypress', []).factory('keypressHelper', [
 angular.module('ui.keypress').directive('uiKeydown', [
   'keypressHelper',
   function (keypressHelper) {
+    'use strict';
     return {
       link: function (scope, elm, attrs) {
         keypressHelper('keydown', scope, elm, attrs);
@@ -88,6 +89,7 @@ angular.module('ui.keypress').directive('uiKeydown', [
 angular.module('ui.keypress').directive('uiKeypress', [
   'keypressHelper',
   function (keypressHelper) {
+    'use strict';
     return {
       link: function (scope, elm, attrs) {
         keypressHelper('keypress', scope, elm, attrs);
@@ -98,6 +100,7 @@ angular.module('ui.keypress').directive('uiKeypress', [
 angular.module('ui.keypress').directive('uiKeyup', [
   'keypressHelper',
   function (keypressHelper) {
+    'use strict';
     return {
       link: function (scope, elm, attrs) {
         keypressHelper('keyup', scope, elm, attrs);
