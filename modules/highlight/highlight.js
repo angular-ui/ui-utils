@@ -1,5 +1,3 @@
-'use strict';
-
 /**
  * Wraps the
  * @param text {string} haystack to search through
@@ -7,6 +5,8 @@
  * @param [caseSensitive] {boolean} optional boolean to use case-sensitive searching
  */
 angular.module('ui.highlight',[]).filter('highlight', function () {
+  'use strict';
+
   return function (text, search, caseSensitive) {
     if (text && (search || angular.isNumber(search))) {
       text = text.toString();

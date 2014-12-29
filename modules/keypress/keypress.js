@@ -1,7 +1,7 @@
-'use strict';
-
 angular.module('ui.keypress',[]).
 factory('keypressHelper', ['$parse', function keypress($parse){
+  'use strict';
+
   var keysByCode = {
     8: 'backspace',
     9: 'tab',
@@ -92,6 +92,8 @@ factory('keypressHelper', ['$parse', function keypress($parse){
  * @example <input ui-keypress="{enter:'x = 1', 'ctrl-shift-space':'foo()', 'shift-13':'bar()'}" /> <input ui-keypress="foo = 2 on ctrl-13 and bar('hello') on shift-esc" />
  **/
 angular.module('ui.keypress').directive('uiKeydown', ['keypressHelper', function(keypressHelper){
+  'use strict';
+
   return {
     link: function (scope, elm, attrs) {
       keypressHelper('keydown', scope, elm, attrs);
@@ -100,6 +102,8 @@ angular.module('ui.keypress').directive('uiKeydown', ['keypressHelper', function
 }]);
 
 angular.module('ui.keypress').directive('uiKeypress', ['keypressHelper', function(keypressHelper){
+  'use strict';
+
   return {
     link: function (scope, elm, attrs) {
       keypressHelper('keypress', scope, elm, attrs);
@@ -108,6 +112,8 @@ angular.module('ui.keypress').directive('uiKeypress', ['keypressHelper', functio
 }]);
 
 angular.module('ui.keypress').directive('uiKeyup', ['keypressHelper', function(keypressHelper){
+  'use strict';
+
   return {
     link: function (scope, elm, attrs) {
       keypressHelper('keyup', scope, elm, attrs);

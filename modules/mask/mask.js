@@ -1,5 +1,3 @@
-'use strict';
-
 /*
  Attaches input mask onto input element
  */
@@ -12,6 +10,8 @@ angular.module('ui.mask', [])
     }
   })
   .directive('uiMask', ['uiMaskConfig', '$parse', function (maskConfig, $parse) {
+    'use strict';
+
     return {
       priority: 100,
       require: 'ngModel',

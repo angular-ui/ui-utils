@@ -1,5 +1,3 @@
-'use strict';
-
 /**
  * Converts variable-esque naming conventions to something presentational, capitalized words separated by space.
  * @param {String} value The value to be parsed and prettified.
@@ -10,6 +8,7 @@
  *          {{ 'Here Is my_phoneNumber' | inflector:'variable' }} => hereIsMyPhoneNumber
  */
 angular.module('ui.inflector',[]).filter('inflector', function () {
+  'use strict';
 
   function tokenize(text) {
     text = text.replace(/([A-Z])|([\-|\_])/g, function(_, $1) { return ' ' + ($1 || ''); });

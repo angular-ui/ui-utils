@@ -1,4 +1,3 @@
-'use strict';
 /*
  * Author: Remy Alain Ticona Carbajal http://realtica.org
  * Description: The main objective of ng-uploader is to have a user control,
@@ -11,6 +10,8 @@ angular.module('ui.uploader', []).service('uiUploader', uiUploader);
 uiUploader.$inject = ['$log'];
 
 function uiUploader($log) {
+    'use strict';
+
     /*jshint validthis: true */
     var self = this;
     self.files = [];
