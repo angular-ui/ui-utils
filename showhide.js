@@ -1,4 +1,3 @@
-'use strict';
 /**
  * uiShow Directive
  *
@@ -8,6 +7,7 @@
  * @param expression {boolean} evaluated expression to determine if the class should be added
  */
 angular.module('ui.showhide', []).directive('uiShow', [function () {
+    'use strict';
     return function (scope, elm, attrs) {
       scope.$watch(attrs.uiShow, function (newVal) {
         if (newVal) {
@@ -18,6 +18,7 @@ angular.module('ui.showhide', []).directive('uiShow', [function () {
       });
     };
   }]).directive('uiHide', [function () {
+    'use strict';
     return function (scope, elm, attrs) {
       scope.$watch(attrs.uiHide, function (newVal) {
         if (newVal) {
@@ -28,6 +29,7 @@ angular.module('ui.showhide', []).directive('uiShow', [function () {
       });
     };
   }]).directive('uiToggle', [function () {
+    'use strict';
     return function (scope, elm, attrs) {
       scope.$watch(attrs.uiToggle, function (newVal) {
         if (newVal) {
