@@ -1,4 +1,3 @@
-'use strict';
 /**
  * General-purpose Event binding. Bind any event not natively supported by Angular
  * Pass an object with keynames for events to ui-event
@@ -12,6 +11,7 @@
 angular.module('ui.event', []).directive('uiEvent', [
   '$parse',
   function ($parse) {
+    'use strict';
     return function ($scope, elm, attrs) {
       var events = $scope.$eval(attrs.uiEvent);
       angular.forEach(events, function (uiEvent, eventName) {
