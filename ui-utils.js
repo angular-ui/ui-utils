@@ -4,9 +4,9 @@
  * @link http://angular-ui.github.com
  * @license MIT License, http://www.opensource.org/licenses/MIT
  */
-'use strict';
-
 angular.module('ui.alias', []).config(['$compileProvider', 'uiAliasConfig', function($compileProvider, uiAliasConfig){
+  'use strict';
+
   uiAliasConfig = uiAliasConfig || {};
   angular.forEach(uiAliasConfig, function(config, alias){
     if (angular.isString(config)) {
@@ -21,8 +21,6 @@ angular.module('ui.alias', []).config(['$compileProvider', 'uiAliasConfig', func
   });
 }]);
 
-'use strict';
-
 /**
  * General-purpose Event binding. Bind any event not natively supported by Angular
  * Pass an object with keynames for events to ui-event
@@ -35,6 +33,8 @@ angular.module('ui.alias', []).config(['$compileProvider', 'uiAliasConfig', func
  */
 angular.module('ui.event',[]).directive('uiEvent', ['$parse',
   function ($parse) {
+    'use strict';
+
     return function ($scope, elm, attrs) {
       var events = $scope.$eval(attrs.uiEvent);
       angular.forEach(events, function (uiEvent, eventName) {
@@ -52,8 +52,6 @@ angular.module('ui.event',[]).directive('uiEvent', ['$parse',
     };
   }]);
 
-'use strict';
-
 /**
  * A replacement utility for internationalization very similar to sprintf.
  *
@@ -68,6 +66,8 @@ angular.module('ui.event',[]).directive('uiEvent', ['$parse',
  * @example: '$0 agrees to all mentions $0 makes in the event that $0 hits a tree while $0 is driving drunk'.format('Bob')
  */
 angular.module('ui.format',[]).filter('format', function(){
+  'use strict';
+
   return function(value, replace) {
     var target = value;
     if (angular.isString(target) && replace !== undefined) {
@@ -92,8 +92,6 @@ angular.module('ui.format',[]).filter('format', function(){
   };
 });
 
-'use strict';
-
 /**
  * Wraps the
  * @param text {string} haystack to search through
@@ -101,6 +99,8 @@ angular.module('ui.format',[]).filter('format', function(){
  * @param [caseSensitive] {boolean} optional boolean to use case-sensitive searching
  */
 angular.module('ui.highlight',[]).filter('highlight', function () {
+  'use strict';
+
   return function (text, search, caseSensitive) {
     if (text && (search || angular.isNumber(search))) {
       text = text.toString();
@@ -116,12 +116,12 @@ angular.module('ui.highlight',[]).filter('highlight', function () {
   };
 });
 
-'use strict';
-
 // modeled after: angular-1.0.7/src/ng/directive/ngInclude.js
 angular.module('ui.include',[])
 .directive('uiInclude', ['$http', '$templateCache', '$anchorScroll', '$compile',
                  function($http,   $templateCache,   $anchorScroll,   $compile) {
+  'use strict';
+
   return {
     restrict: 'ECA',
     terminal: true,
@@ -185,8 +185,6 @@ angular.module('ui.include',[])
   };
 }]);
 
-'use strict';
-
 /**
  * Provides an easy way to toggle a checkboxes indeterminate property
  *
@@ -194,6 +192,8 @@ angular.module('ui.include',[])
  */
 angular.module('ui.indeterminate',[]).directive('uiIndeterminate', [
   function () {
+    'use strict';
+
     return {
       compile: function(tElm, tAttrs) {
         if (!tAttrs.type || tAttrs.type.toLowerCase() !== 'checkbox') {
@@ -209,8 +209,6 @@ angular.module('ui.indeterminate',[]).directive('uiIndeterminate', [
     };
   }]);
 
-'use strict';
-
 /**
  * Converts variable-esque naming conventions to something presentational, capitalized words separated by space.
  * @param {String} value The value to be parsed and prettified.
@@ -221,6 +219,7 @@ angular.module('ui.indeterminate',[]).directive('uiIndeterminate', [
  *          {{ 'Here Is my_phoneNumber' | inflector:'variable' }} => hereIsMyPhoneNumber
  */
 angular.module('ui.inflector',[]).filter('inflector', function () {
+  'use strict';
 
   function tokenize(text) {
     text = text.replace(/([A-Z])|([\-|\_])/g, function(_, $1) { return ' ' + ($1 || ''); });
@@ -259,8 +258,6 @@ angular.module('ui.inflector',[]).filter('inflector', function () {
   };
 });
 
-'use strict';
-
 /**
  * General-purpose jQuery wrapper. Simply pass the plugin name as the expression.
  *
@@ -279,6 +276,8 @@ angular.module('ui.inflector',[]).filter('inflector', function () {
 angular.module('ui.jq',[]).
   value('uiJqConfig',{}).
   directive('uiJq', ['uiJqConfig', '$timeout', function uiJqInjectingFunction(uiJqConfig, $timeout) {
+  'use strict';
+
 
   return {
     restrict: 'A',
@@ -328,10 +327,10 @@ angular.module('ui.jq',[]).
   };
 }]);
 
-'use strict';
-
 angular.module('ui.keypress',[]).
 factory('keypressHelper', ['$parse', function keypress($parse){
+  'use strict';
+
   var keysByCode = {
     8: 'backspace',
     9: 'tab',
@@ -422,6 +421,8 @@ factory('keypressHelper', ['$parse', function keypress($parse){
  * @example <input ui-keypress="{enter:'x = 1', 'ctrl-shift-space':'foo()', 'shift-13':'bar()'}" /> <input ui-keypress="foo = 2 on ctrl-13 and bar('hello') on shift-esc" />
  **/
 angular.module('ui.keypress').directive('uiKeydown', ['keypressHelper', function(keypressHelper){
+  'use strict';
+
   return {
     link: function (scope, elm, attrs) {
       keypressHelper('keydown', scope, elm, attrs);
@@ -430,6 +431,8 @@ angular.module('ui.keypress').directive('uiKeydown', ['keypressHelper', function
 }]);
 
 angular.module('ui.keypress').directive('uiKeypress', ['keypressHelper', function(keypressHelper){
+  'use strict';
+
   return {
     link: function (scope, elm, attrs) {
       keypressHelper('keypress', scope, elm, attrs);
@@ -438,14 +441,14 @@ angular.module('ui.keypress').directive('uiKeypress', ['keypressHelper', functio
 }]);
 
 angular.module('ui.keypress').directive('uiKeyup', ['keypressHelper', function(keypressHelper){
+  'use strict';
+
   return {
     link: function (scope, elm, attrs) {
       keypressHelper('keyup', scope, elm, attrs);
     }
   };
 }]);
-
-'use strict';
 
 /*
  Attaches input mask onto input element
@@ -459,6 +462,8 @@ angular.module('ui.mask', [])
     }
   })
   .directive('uiMask', ['uiMaskConfig', '$parse', function (maskConfig, $parse) {
+    'use strict';
+
     return {
       priority: 100,
       require: 'ngModel',
@@ -957,12 +962,12 @@ angular.module('ui.mask', [])
   }
 ]);
 
-'use strict';
-
 /**
  * Add a clear button to form inputs to reset their value
  */
 angular.module('ui.reset',[]).value('uiResetConfig',null).directive('uiReset', ['uiResetConfig', function (uiResetConfig) {
+  'use strict';
+
   var resetValue = null;
   if (uiResetConfig !== undefined){
       resetValue = uiResetConfig;
@@ -988,12 +993,12 @@ angular.module('ui.reset',[]).value('uiResetConfig',null).directive('uiReset', [
   };
 }]);
 
-'use strict';
-
 /**
  * Set a $uiRoute boolean to see if the current route matches
  */
 angular.module('ui.route', []).directive('uiRoute', ['$location', '$parse', function ($location, $parse) {
+  'use strict';
+
   return {
     restrict: 'AC',
     scope: true,
@@ -1071,9 +1076,10 @@ angular.module('ui.route', []).directive('uiRoute', ['$location', '$parse', func
   };
 }]);
 
-'use strict';
 angular.module('ui.scroll.jqlite', ['ui.scroll']).service('jqLiteExtras', [
   '$log', '$window', function(console, window) {
+    'use strict';
+
     return {
       registerFor: function(element) {
         var convertToPx, css, getMeasurements, getStyle, getWidthHeight, isWindow, scrollTo;
@@ -1290,6 +1296,8 @@ angular.module('ui.scroll.jqlite', ['ui.scroll']).service('jqLiteExtras', [
   }
 ]).run([
   '$log', '$window', 'jqLiteExtras', function(console, window, jqLiteExtras) {
+    'use strict';
+
     if (!window.jQuery) {
       return jqLiteExtras.registerFor(angular.element);
     }
@@ -1301,7 +1309,6 @@ angular.module('ui.scroll.jqlite', ['ui.scroll']).service('jqLiteExtras', [
 */
 
 
-'use strict';
 /*
 globals: angular, window
 
@@ -1317,6 +1324,8 @@ globals: angular, window
 
 angular.module('ui.scroll', []).directive('uiScrollViewport', [
   '$log', function() {
+    'use strict';
+
     return {
       controller: [
         '$scope', '$element', function(scope, element) {
@@ -1328,6 +1337,8 @@ angular.module('ui.scroll', []).directive('uiScrollViewport', [
   }
 ]).directive('uiScroll', [
   '$log', '$injector', '$rootScope', '$timeout', function(console, $injector, $rootScope, $timeout) {
+    'use strict';
+
     return {
       require: ['?^uiScrollViewport'],
       transclude: 'element',
@@ -1890,14 +1901,14 @@ angular.module('ui.scroll', []).directive('uiScrollViewport', [
 */
 
 
-'use strict';
-
 /**
  * Adds a 'ui-scrollfix' class to the element when the page scrolls past it's position.
  * @param [offset] {int} optional Y-offset to override the detected offset.
  *   Takes 300 (absolute) or -300 or +300 (relative to detected)
  */
 angular.module('ui.scrollfix',[]).directive('uiScrollfix', ['$window', function ($window) {
+  'use strict';
+
   function getWindowScrollTop() {
     if (angular.isDefined($window.pageYOffset)) {
       return $window.pageYOffset;
@@ -1942,14 +1953,13 @@ angular.module('ui.scrollfix',[]).directive('uiScrollfix', ['$window', function 
     }
   };
 }]).directive('uiScrollfixTarget', [function () {
+  'use strict';
   return {
     controller: ['$element', function($element) {
       this.$element = $element;
     }]
   };
 }]);
-
-'use strict';
 
 /**
  * uiShow Directive
@@ -1961,6 +1971,8 @@ angular.module('ui.scrollfix',[]).directive('uiScrollfix', ['$window', function 
  */
 angular.module('ui.showhide',[])
 .directive('uiShow', [function () {
+  'use strict';
+
   return function (scope, elm, attrs) {
     scope.$watch(attrs.uiShow, function (newVal) {
       if (newVal) {
@@ -1981,6 +1993,8 @@ angular.module('ui.showhide',[])
  * @param expression {boolean} evaluated expression to determine if the class should be added
  */
 .directive('uiHide', [function () {
+  'use strict';
+
   return function (scope, elm, attrs) {
     scope.$watch(attrs.uiHide, function (newVal) {
       if (newVal) {
@@ -2002,6 +2016,8 @@ angular.module('ui.showhide',[])
  * @param expression {boolean} evaluated expression to determine if the class should be added
  */
 .directive('uiToggle', [function () {
+  'use strict';
+
   return function (scope, elm, attrs) {
     scope.$watch(attrs.uiToggle, function (newVal) {
       if (newVal) {
@@ -2013,8 +2029,6 @@ angular.module('ui.showhide',[])
   };
 }]);
 
-'use strict';
-
 /**
  * Filters out all duplicate items from an array by checking the specified key
  * @param [key] {string} the name of the attribute of each object to compare for uniqueness
@@ -2023,6 +2037,7 @@ angular.module('ui.showhide',[])
  * @return {array}
  */
 angular.module('ui.unique',[]).filter('unique', ['$parse', function ($parse) {
+  'use strict';
 
   return function (items, filterOn) {
 
@@ -2104,7 +2119,6 @@ angular.module('ui.unique',[]).filter('unique', ['$parse', function ($parse) {
         });
     }
 })();
-'use strict';
 /*
  * Author: Remy Alain Ticona Carbajal http://realtica.org
  * Description: The main objective of ng-uploader is to have a user control,
@@ -2117,6 +2131,8 @@ angular.module('ui.uploader', []).service('uiUploader', uiUploader);
 uiUploader.$inject = ['$log'];
 
 function uiUploader($log) {
+    'use strict';
+
     /*jshint validthis: true */
     var self = this;
     self.files = [];
@@ -2224,7 +2240,6 @@ function uiUploader($log) {
     }
 
 }
-'use strict';
 
 /**
  * General-purpose validator for ngModel.
@@ -2243,6 +2258,7 @@ function uiUploader($log) {
  * In both cases validator function should take a value to validate as its argument and should return true/false indicating a validation result.
  */
 angular.module('ui.validate',[]).directive('uiValidate', function () {
+  'use strict';
 
   return {
     restrict: 'A',
