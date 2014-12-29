@@ -1,4 +1,3 @@
-'use strict';
 /**
  * Adds a 'ui-scrollfix' class to the element when the page scrolls past it's position.
  * @param [offset] {int} optional Y-offset to override the detected offset.
@@ -7,6 +6,7 @@
 angular.module('ui.scrollfix', []).directive('uiScrollfix', [
   '$window',
   function ($window) {
+    'use strict';
     function getWindowScrollTop() {
       if (angular.isDefined($window.pageYOffset)) {
         return $window.pageYOffset;
@@ -47,6 +47,7 @@ angular.module('ui.scrollfix', []).directive('uiScrollfix', [
     };
   }
 ]).directive('uiScrollfixTarget', [function () {
+    'use strict';
     return {
       controller: [
         '$element',
