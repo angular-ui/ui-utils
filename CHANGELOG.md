@@ -1,3 +1,10 @@
+<a name="v0.2.1"></a>
+### v0.2.1 (2015-01-02)
+
+#### Bug Fixes
+
+* exclude demo code from final build ([5440d6fa](http://github.com/angular-ui/ui-utils/commit/8c91c5e1f4e43baf9bb910e39640586497ac06d0))
+
 <a name="v0.2.0"></a>
 ## v0.2.0 (2014-12-31)
 
