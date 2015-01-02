@@ -123,7 +123,7 @@ module.exports = function (grunt) {
         dest: 'demo/demos.html'
       },
       tmp: {
-        files: {  'tmp/dep.js': [ 'modules/**/*.js', '!modules/utils.js', '!modules/ie-shiv/*.js', '!modules/**/test/*.js']}
+        files: {  'tmp/dep.js': [ 'modules/**/*.js', '!modules/utils.js', '!modules/ie-shiv/*.js', '!modules/**/test/*.js', '!modules/**/demo/*.js']}
       },
       modules: {
         options: {banner: '<%= meta.banner %>'},
