@@ -7,7 +7,7 @@ module.exports = function (grunt) {
 
   // Default task.
   grunt.registerTask('default', ['jshint', 'karma:unit']);
-  grunt.registerTask('serve', [ 'karma:continuous', 'dist:main', 'dist:demo', 'build:gh-pages', 'connect:continuous', 'watch']);
+  grunt.registerTask('serve', ['karma:continuous', 'dist:main', 'dist:demo', 'build:gh-pages', 'connect:continuous', 'watch']);
 
   grunt.registerTask('dist', ['dist:main', 'dist:sub', 'dist:demo']);
   grunt.registerTask('dist:main', ['concat:tmp', 'concat:modules', 'clean:rm_tmp', 'uglify:main']);
@@ -16,15 +16,16 @@ module.exports = function (grunt) {
 
 
   // HACK TO ACCESS TO THE COMPONENT-PUBLISHER
-  function fakeTargetTask(prefix){
-    return function(){
+  function fakeTargetTask(prefix) {
+    return function () {
 
-      if (this.args.length !== 1) return grunt.log.fail('Just give the name of the ' + prefix + ' you want like :\ngrunt ' + prefix + ':bower');
+      if (this.args.length !== 1)
+        return grunt.log.fail('Just give the name of the ' + prefix + ' you want like :\ngrunt ' + prefix + ':bower');
 
       var done = this.async();
       var spawn = require('child_process').spawn;
-      spawn('./node_modules/.bin/gulp', [ prefix, '--branch='+this.args[0] ].concat(grunt.option.flags()), {
-        cwd : './node_modules/angular-ui-publisher',
+      spawn('./node_modules/.bin/gulp', [prefix, '--branch=' + this.args[0]].concat(grunt.option.flags()), {
+        cwd: './node_modules/angular-ui-publisher',
         stdio: 'inherit'
       }).on('close', done);
     };
@@ -32,14 +33,12 @@ module.exports = function (grunt) {
 
   grunt.registerTask('build', fakeTargetTask('build'));
   grunt.registerTask('publish', fakeTargetTask('publish'));
-  //
-
 
   // HACK TO LIST ALL THE MODULE NAMES
-  var moduleNames = grunt.file.expand({ cwd: 'modules' }, ['*','!utils.js']);
-  function ngMinModulesConfig(memo, moduleName){
+  var moduleNames = grunt.file.expand({cwd: 'modules'}, ['*', '!utils.js']);
+  function ngMinModulesConfig(memo, moduleName) {
 
-     memo[moduleName]= {
+    memo[moduleName] = {
       expand: true,
       cwd: 'modules/' + moduleName,
       src: ['*.js'],
@@ -48,22 +47,18 @@ module.exports = function (grunt) {
 
     return memo;
   }
-  //
-
 
   // HACK TO MAKE TRAVIS WORK
-  var testConfig = function(configFile, customOptions) {
-    var options = { configFile: configFile, singleRun: true };
-    var travisOptions = process.env.TRAVIS && { browsers: ['Firefox', 'PhantomJS'], reporters: ['dots'] };
+  var testConfig = function (configFile, customOptions) {
+    var options = {configFile: configFile, singleRun: true};
+    var travisOptions = process.env.TRAVIS && {browsers: ['Firefox', 'PhantomJS'], reporters: ['dots']};
     return grunt.util._.extend(options, customOptions, travisOptions);
   };
-  //
-
 
   // Project configuration.
   grunt.initConfig({
     bower: 'bower_components',
-    dist : '<%= bower %>/angular-ui-docs',
+    dist: '<%= bower %>/angular-ui-docs',
     pkg: grunt.file.readJSON('package.json'),
     meta: {
       banner: ['/**',
@@ -74,9 +69,7 @@ module.exports = function (grunt) {
         ' */',
         ''].join('\n')
     },
-
     watch: {
-
       src: {
         files: ['modules/**/*.js', '!modules/**/test/*Spec.js', 'demo/**/*.js'],
         tasks: ['jshint:src', 'karma:unit:run', 'dist:main', 'dist:demo', 'build:gh-pages']
@@ -91,26 +84,23 @@ module.exports = function (grunt) {
       },
       livereload: {
         files: ['out/built/gh-pages/**/*'],
-        options: { livereload: true }
+        options: {livereload: true}
       }
     },
-
     connect: {
       options: {
-        base : 'out/built/gh-pages',
+        base: 'out/built/gh-pages',
         open: true,
         livereload: true
       },
-      server: { options: { keepalive: true } },
-      continuous: { options: { keepalive: false } }
+      server: {options: {keepalive: true}},
+      continuous: {options: {keepalive: false}}
     },
-
     karma: {
       unit: testConfig('test/karma.conf.js'),
       server: {configFile: 'test/karma.conf.js'},
-      continuous: {configFile: 'test/karma.conf.js',  background: true }
+      continuous: {configFile: 'test/karma.conf.js', background: true}
     },
-
     concat: {
       html_doc: {
         options: {
@@ -118,18 +108,18 @@ module.exports = function (grunt) {
             '================================================== -->',
             '<div id="utils" ng-app="doc.ui-utils">', ''
           ].join('\n  '),
-          footer : '</div>'},
-        src: [ 'modules/**/demo/index.html'],
+          footer: '</div>'},
+        src: ['modules/**/demo/index.html'],
         dest: 'demo/demos.html'
       },
       tmp: {
-        files: {  'tmp/dep.js': [ 'modules/**/*.js', '!modules/utils.js', '!modules/ie-shiv/*.js', '!modules/**/test/*.js', '!modules/**/demo/*.js']}
+        files: {'tmp/dep.js': ['modules/**/*.js', '!modules/utils.js', '!modules/ie-shiv/*.js', '!modules/**/test/*.js', '!modules/**/demo/*.js']}
       },
       modules: {
         options: {banner: '<%= meta.banner %>'},
         files: {
           'dist/main/ui-utils.js': ['tmp/dep.js', 'modules/utils.js'],
-          'dist/main/ui-utils-ieshiv.js' : ['modules/ie-shiv/*.js']
+          'dist/main/ui-utils-ieshiv.js': ['modules/ie-shiv/*.js']
         }
       }
     },
@@ -154,18 +144,17 @@ module.exports = function (grunt) {
     },
     jshint: {
       src: {
-        files:{ src : ['modules/**/*.js', '!modules/**/test/*Spec.js','demo/**/*.js'] },
-        options: { jshintrc: '.jshintrc' }
+        files: {src: ['modules/**/*.js', '!modules/**/test/*Spec.js', 'demo/**/*.js']},
+        options: {jshintrc: '.jshintrc'}
       },
       test: {
-        files:{ src : [ 'modules/**/test/*Spec.js', 'gruntFile.js'] },
+        files: {src: ['modules/**/test/*Spec.js', 'gruntFile.js']},
         options: grunt.util._.extend({}, grunt.file.readJSON('.jshintrc'), {
           node: true,
           globals: {
             angular: false,
             inject: false,
             jQuery: false,
-
             jasmine: false,
             afterEach: false,
             beforeEach: false,
@@ -189,9 +178,8 @@ module.exports = function (grunt) {
         ]
       }
     },
-
     ngmin: moduleNames.reduce(ngMinModulesConfig, {}),
-    changelog: { options: { dest: 'CHANGELOG.md' } }
+    changelog: {options: {dest: 'CHANGELOG.md'}}
   });
 
 };
