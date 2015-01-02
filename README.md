@@ -85,3 +85,8 @@ It's equal to run separately:
 * `grunt karma:server` : giving you a Karma server to run tests (at [http://localhost:9876/](http://localhost:9876/) by default). You can force a test on this server with `grunt karma:unit:run`.
 
 * `grunt watch` : will automatically test your code and build your demo.  You can demo generation with `grunt build:gh-pages`.
+* 
+
+### How to release
+
+Manually update version in ``package.json`` and ``bower.json``, run ``grunt changelog`` to generate changelog. Commit all three files, tag it as a version number (eg: v0.2.0) and ``git push --tags origin master`` everything to GitHub. Travis will take care of building and publishing everything else (demo pages, bower packages, etc.)
