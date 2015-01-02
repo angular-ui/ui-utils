@@ -1,6 +1,6 @@
 {
   "name": "angular-ui-inflector",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "main": "./inflector.js",
   "dependencies": {
     "angular": ">= 1.0.2"
