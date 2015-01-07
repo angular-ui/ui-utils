@@ -1041,7 +1041,7 @@ id: 1, gender: &#x27;Male&#x27; },
   <div class="row">
     <div class="span6">
         <h3>What?</h3>
-      <p>The <code>ui-uploader</code> is a single/multiple and high customizable file uploader and the most important is very easy to implement.</p>
+      <p>The <code>ui-uploader</code> is a single/multiple and highly customizable file uploader and most importantly, is very easy to implement.</p>
 
       <div class="well" ng-controller="UploaderCtrl">
         <div style="width: 400px;border-style: groove;padding: 10px;">
@@ -1061,7 +1061,7 @@ id: 1, gender: &#x27;Male&#x27; },
       </div>
       <h3>Why?</h3>
 
-      <p>AngularJS don't count with a built-in file uploader nowadays.</p>
+      <p>AngularJS doesn’t rely on a built-in file uploader nowadays.</p>
     </div>
     <div class="span6">
 
@@ -1079,15 +1079,15 @@ id: 1, gender: &#x27;Male&#x27; },
  }
 </pre>
         
-        <p>First you have to use the <code>addFiles</code> method for add files in queue, also could use <code>getFiles</code> method if you need know what files are in queue.</p>
+        <p>First you have to use the <code>addFiles</code> method for add files in queue, and you can also use the <code>getFiles</code> method if you need know what files are in queue.</p>
         <pre class="prettyprint">var input_file = document.getElementById('file1');
 input_file.addEventListener('change', function(e) {
     var files = e.target.files;
     $uiUploader.addFiles(files);
     $scope.files = $uiUploader.getFiles();
 });</pre>
-        <p>Then you have to use  
-            <code>startUpload</code> method to setting up initials values like <code>url</code>, <code>concurrency</code>(how many files will be upload at same time), and define 2 listeners <code>onProgress</code> and <code>onCompleted</code> callbacks.</p>
+        <p>Then you have to use the 
+            <code>startUpload</code> method to set up initials values like <code>url</code>, <code>concurrency</code>(how many files will be uploaded at same time), and define 2 listeners <code>onProgress</code> and <code>onCompleted</code> callbacks.</p>
 <pre class="prettyprint">$uiUploader.startUpload({
     url: '/url_file_manager',
     concurrency: 2,
