@@ -78,7 +78,7 @@ $uiUploader.startUpload({
 The result:
 -----------
 
-![alt text](https://raw.githubusercontent.com/realtica/ui-uploader/master/logos/ui-uploader.png "Gadget ui-uploader")
+![alt text](https://raw.githubusercontent.com/realtica/ui-utils/realtica-ng-uploader/modules/uploader/uploader.png "Gadget ui-uploader")
 
 
 Next Features 
