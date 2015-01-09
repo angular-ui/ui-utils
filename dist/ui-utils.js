@@ -2336,5 +2336,6 @@ angular.module('ui.utils',  [
   'ui.scroll.jqlite',
   'ui.showhide',
   'ui.unique',
-  'ui.validate'
+  'ui.validate',
+  'ui.uploader'    
 ]);
