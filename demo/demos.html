@@ -1,4 +1,4 @@
-<!-- Le content - v0.1.1 - 2014-03-28
+<!-- Le content - v0.2.1 - 2015-01-07
   ================================================== -->
   <div id="utils" ng-app="doc.ui-utils">
   <script>
@@ -129,14 +129,14 @@ $scope.tokens = { name:&#39;Bob&#39;, subject:&#39;wife&#39; };
 
     <p><input placeholder="Enter some text to highlight" ng-model="highlightText"></p>
 
-    <p ng-bind-html-unsafe="'Hello there, how are you today? I\'m fine thank you.' | highlight:highlightText:caseSensitive"></p>
+    <p ng-bind-html="'Hello there, how are you today? I\'m fine thank you.' | highlight:highlightText:caseSensitive"></p>
   </div>
 
   <h3>How?</h3>
 <pre class="prettyprint">
 &lt;label&gt;&lt;input type=&quot;checkbox&quot; ng-model=&quot;caseSensitive&quot;&gt; Case Sensitive?&lt;/label&gt;
 &lt;input placeholder=&quot;Enter some text to highlight&quot; value=&quot;you&quot; ng-model=&quot;highlightText&quot;&gt;
-&lt;p ng-bind-html-unsafe=&quot;&#x27;Hello there, how are you today? I\'m fine thank you.&#x27; | highlight:highlightText:caseSensitive&quot;&gt;&lt;/p&gt;
+&lt;p ng-bind-html=&quot;&#x27;Hello there, how are you today? I\'m fine thank you.&#x27; | highlight:highlightText:caseSensitive&quot;&gt;&lt;/p&gt;
 
 &lt;style&gt;
 .ui-match { background: yellow; }
@@ -661,8 +661,8 @@ $scope.inflectorType = &#x27;humanize&#x27;;
                 Items can be of any complexity and can vary in any possible way. They are dynamically instantiated as they become visible and $destroyed as they are scrolled out of view.
             </p>
 
-            <div class="my-viewport" ng-scroll-viewport>
-                <div ng-scroll="item in datasource">{{$index + ' ' + item}}</div>
+            <div class="my-viewport" ui-scroll-viewport>
+                <div ui-scroll="item in datasource">{{$index + ' ' + item}}</div>
             </div>
         </div>
         <div class="span6">
@@ -686,13 +686,13 @@ $scope.inflectorType = &#x27;humanize&#x27;;
 
 <p>If all you want to use the entire window as the viewport, all you need is this:</p>
 <pre class="prettyprint">
-&lt;div ng-scroll=&quot;item in datasource&quot;&gt;{{item}}&lt;/div&gt;
+&lt;div ui-scroll=&quot;item in datasource&quot;&gt;{{item}}&lt;/div&gt;
 </pre>
 
 <p>If you want to control the viewport yourself you can do it like this:</p>
 <pre class="prettyprint">
-&lt;div ng-scroll-viewport style=&quot;height:200px;&quot; &gt;
-   &lt;div ng-scroll="item in datasource"&gt;{{item}}&lt;/div&gt;
+&lt;div ui-scroll-viewport style=&quot;height:200px;&quot; &gt;
+   &lt;div ui-scroll="item in datasource"&gt;{{item}}&lt;/div&gt;
 &lt;/div&gt;
 </pre>
 <p>Make sure that you always constrain the height of your viewport</p>
