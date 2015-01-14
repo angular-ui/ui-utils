@@ -10,7 +10,7 @@ angular.module('ui.highlight',[]).filter('highlight', function () {
   return function (text, search, caseSensitive) {
     if (text && (search || angular.isNumber(search))) {
       text = text.toString();
-      search = search.toString();
+      search = search.toString().replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, '\\$&');
       if (caseSensitive) {
         return text.split(search).join('<span class="ui-match">' + search + '</span>');
       } else {
