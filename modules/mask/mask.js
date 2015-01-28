@@ -298,10 +298,10 @@ angular.module('ui.mask', [])
               if (linkOptions.clearOnBlur) {
                 valueMasked = '';
                 iElement.val('');
+                scope.$apply(function () {
+                  controller.$setViewValue('');
+                });
               }
-              scope.$apply(function (){
-                controller.$setViewValue('');
-              });
             }
           }
 
