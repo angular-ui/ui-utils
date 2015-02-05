@@ -97,7 +97,7 @@
 ================================================== -->
 <div class="container">
 
-  <!-- Le content - v0.2.1 - 2015-01-07
+  <!-- Le content - v0.2.1 - 2015-02-05
   ================================================== -->
   <div id="utils" ng-app="doc.ui-utils">
   <script>
@@ -977,128 +977,6 @@ id: 1, gender: &#x27;Male&#x27; },
 ];
 &lt;/script&gt;
 </pre>
-    </div>
-  </div>
-</section>
-  <style>
-        .close-btn {
-            border: 2px solid #c2c2c2;
-            position: relative;
-            padding: 1px 5px;
-            top: -10px;
-            background-color: #605F61;
-            left: 10px;
-            border-radius: 20px;
-        }
-</style>    
-<script>
-    UploaderCtrl.$inject = ['$log', 'uiUploader', '$scope'];
-
-    function UploaderCtrl($log, $uiUploader, $scope) {
-        
-        $scope.btn_remove = function(file){
-            $log.info('deleting='+file);
-            $uiUploader.removeFile(file);
-        };
-        
-        $scope.btn_clean = function(){
-            $uiUploader.removeAll();
-        };
-
-        $scope.btn_upload = function() {
-            $log.info('uploading...');
-            $uiUploader.startUpload({
-                url: '',
-                concurrency: 2,
-                onProgress: function(file) {
-                    $log.info(file.name+'='+file.humanSize);
-                    $scope.$apply();
-                },
-                onCompleted: function(file) {
-                    $log.info(file);
-                }
-            });
-        };
-        
-        $scope.files=[];
-
-        var element = document.getElementById('file1');
-        element.addEventListener('change', function(e) {
-            var files = e.target.files;
-            $uiUploader.addFiles(files);
-            $scope.files = $uiUploader.getFiles();
-            $scope.$apply();
-        });
-    }
-</script>
-<section id="uploader" name="uploader">
-  <div class="page-header">
-    <h1>Uploader</h1>
-  </div>
-  
-
-  <div class="row">
-    <div class="span6">
-        <h3>What?</h3>
-      <p>The <code>ui-uploader</code> is a single/multiple and high customizable file uploader and the most important is very easy to implement.</p>
-
-      <div class="well" ng-controller="UploaderCtrl">
-        <div style="width: 400px;border-style: groove;padding: 10px;">
-            <div>
-                <input type="file" id="file1" multiple/>
-                <div style="float:right;">
-                <button ng-click="btn_upload()">Start</button>
-                <button ng-click="btn_clean()">Clean</button>
-                    </div>
-            </div>
-            <div ng-repeat="file in files" style="margin-top: 20px;border-bottom-color: antiquewhite;border-bottom-style: double;">
-                <div><span>{{file.name}}</span><div style="float:right;"><span>{{file.humanSize}}</span><span class="close-btn"><a ng-click="btn_remove(file)" href="#uploader">X</a></span></div>
-                </div>
-                <progress style="width:400px;" value="{{file.loaded}}" max="{{file.size}}"></progress>
-            </div>
-        </div>
-      </div>
-      <h3>Why?</h3>
-
-      <p>AngularJS don't count with a built-in file uploader nowadays.</p>
-    </div>
-    <div class="span6">
-
-      <h3>How?</h3>
-
-      <p>Just add 
-          <code>ui.uploader</code> in your module</p>
-<pre class="prettyprint">angular.module('myapp', ['ui.uploader']).controller('myCtrl', myCtrl);</pre>
-      <p>
-        <strong>And</strong> inject your controller to use it.
-      </p>
-<pre class="prettyprint">myCtrl.$inject = ['uiUploader', '$scope'];
- function myCtrl($uiUploader, $scope) {
- ...
- }
-</pre>
-        
-        <p>First you have to use the <code>addFiles</code> method for add files in queue, also could use <code>getFiles</code> method if you need know what files are in queue.</p>
-        <pre class="prettyprint">var input_file = document.getElementById('file1');
-input_file.addEventListener('change', function(e) {
-    var files = e.target.files;
-    $uiUploader.addFiles(files);
-    $scope.files = $uiUploader.getFiles();
-});</pre>
-        <p>Then you have to use  
-            <code>startUpload</code> method to setting up initials values like <code>url</code>, <code>concurrency</code>(how many files will be upload at same time), and define 2 listeners <code>onProgress</code> and <code>onCompleted</code> callbacks.</p>
-<pre class="prettyprint">$uiUploader.startUpload({
-    url: '/url_file_manager',
-    concurrency: 2,
-    onProgress: function(file) {
-                ...
-    },
-    onCompleted: function(file) {
-                ...
-    }
-});</pre>
-        
-
     </div>
   </div>
 </section>
