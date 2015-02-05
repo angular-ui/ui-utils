@@ -1,7 +1,7 @@
 /**
  * Adds a 'ui-scrollfix' class to the element when the page scrolls past it's position.
  * @param [offset] {int} optional Y-offset to override the detected offset.
- *   Takes 300 (absolute) or -300 or +300 (relative to detected)
+ *   Takes 300 (absolute) or -300 or +300 (relative to detected) or 0%-100% relative to browser viewport
  */
 angular.module('ui.scrollfix',[]).directive('uiScrollfix', ['$window', function ($window) {
   'use strict';
@@ -24,7 +24,9 @@ angular.module('ui.scrollfix',[]).directive('uiScrollfix', ['$window', function 
         attrs.uiScrollfix = top;
       } else if (typeof(attrs.uiScrollfix) === 'string') {
         // charAt is generally faster than indexOf: http://jsperf.com/indexof-vs-charat
-        if (attrs.uiScrollfix.charAt(0) === '-') {
+        if(attrs.uiScrollfix.slice(-1) === '%') {
+	        attrs.uiScrollfix = (document.body.offsetHeight * parseFloat(attrs.uiScrollfix)/100);
+        } else if (attrs.uiScrollfix.charAt(0) === '-') {
           attrs.uiScrollfix = top - parseFloat(attrs.uiScrollfix.substr(1));
         } else if (attrs.uiScrollfix.charAt(0) === '+') {
           attrs.uiScrollfix = top + parseFloat(attrs.uiScrollfix.substr(1));
