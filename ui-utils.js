@@ -1,6 +1,6 @@
 /**
  * angular-ui-utils - Swiss-Army-Knife of AngularJS tools (with no external dependencies!)
- * @version v0.2.1 - 2015-01-07
+ * @version v0.2.1 - 2015-02-05
  * @link http://angular-ui.github.com
  * @license MIT License, http://www.opensource.org/licenses/MIT
  */
@@ -600,7 +600,7 @@ angular.module('ui.mask', [])
           }
 
           function initializeElement(){
-            value = oldValueUnmasked = unmaskValue(controller.$modelValue || '');
+            value = oldValueUnmasked = unmaskValue(controller.$viewValue || '');
             valueMasked = oldValue = maskValue(value);
             isValid = validateValue(value);
             var viewValue = isValid && value.length ? valueMasked : '';
