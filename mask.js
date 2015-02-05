@@ -130,7 +130,7 @@ angular.module('ui.mask', []).value('uiMaskConfig', {
             return false;
           }
           function initializeElement() {
-            value = oldValueUnmasked = unmaskValue(controller.$modelValue || '');
+            value = oldValueUnmasked = unmaskValue(controller.$viewValue || '');
             valueMasked = oldValue = maskValue(value);
             isValid = validateValue(value);
             var viewValue = isValid && value.length ? valueMasked : '';
