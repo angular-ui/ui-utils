@@ -27,7 +27,7 @@
                     $scope.$apply();
                 },
                 onCompleted: function(file,response) {
-                    $log.info(file+"response"+response);
+                    $log.info(file+'response'+response);
                 }
             });
         };
