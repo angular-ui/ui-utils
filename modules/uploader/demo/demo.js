@@ -19,15 +19,15 @@
         $scope.btn_upload = function() {
             $log.info('uploading...');
             $uiUploader.startUpload({
-                url: 'http://localhost:3000/welcome/ui_uploader',
+                url: 'http://mydomain.com/demo_uploader',
                 concurrency: 2,
                 onProgress: function(file) {
                     $log.info(file.name+'='+file.humanSize);
                     //$log.info($scope.files.indexOf(file));
                     $scope.$apply();
                 },
-                onCompleted: function(file) {
-                    $log.info(file);
+                onCompleted: function(file,response) {
+                    $log.info(file+"response"+response);
                 }
             });
         };
