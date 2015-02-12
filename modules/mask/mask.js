@@ -300,7 +300,9 @@ angular.module('ui.mask', [])
                 iElement.val('');
               }
               scope.$apply(function (){
-                controller.$setViewValue('');
+                if (controller.$dirty) {
+                  controller.$setViewValue('');
+                }
               });
             }
           }
