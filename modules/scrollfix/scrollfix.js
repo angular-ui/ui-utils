@@ -18,8 +18,12 @@ angular.module('ui.scrollfix',[]).directive('uiScrollfix', ['$window', function 
     require: '^?uiScrollfixTarget',
     link: function (scope, elm, attrs, uiScrollfixTarget) {
       var top = elm[0].offsetTop,
+          curr = elm[0],
           $target = uiScrollfixTarget && uiScrollfixTarget.$element || angular.element($window);
 
+      while (curr = curr.offsetParent) {
+        top += curr.offsetTop;
+      }
       if (!attrs.uiScrollfix) {
         attrs.uiScrollfix = top;
       } else if (typeof(attrs.uiScrollfix) === 'string') {
