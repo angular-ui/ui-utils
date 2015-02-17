@@ -94,7 +94,7 @@ function uiUploader($log) {
         xhr.onload = function() {
             self.activeUploads -= 1;
             startUpload(self.options);
-            self.options.onCompleted(file);
+            self.options.onCompleted(file, xhr.responseText);
         };
 
         // Triggered when upload fails:
