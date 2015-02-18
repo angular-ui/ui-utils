@@ -14,6 +14,12 @@ You can use with html5, jquery or every library or framework:
 >  to have a user control, clean, simple, customizable,
 > and above all very easy to implement.
 
+Compatibility
+-------------
+
+Because this project use [FormData](http://caniuse.com/#search=formdata), it does **not** work on IE9 or earlier.
+
+
 Try the [DEMO](http://goo.gl/zmvA0j)
 --------------
 
