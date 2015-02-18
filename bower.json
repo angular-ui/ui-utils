@@ -1,6 +1,6 @@
 {
   "name": "angular-ui-include",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "main": "./include.js",
   "dependencies": {
     "angular": ">= 1.0.2"
