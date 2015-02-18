@@ -89,4 +89,4 @@ It's equal to run separately:
 
 ### How to release
 
-Manually update version in ``package.json`` and ``bower.json``, run ``grunt changelog`` to generate changelog. Commit all three files, tag it as a version number (eg: v0.2.0) and ``git push --tags origin master`` everything to GitHub. Travis will take care of building and publishing everything else (demo pages, bower packages, etc.)
+Manually update version in ``package.json`` and ``bower.json``, run ``grunt changelog`` to generate changelog. Commit all three files, and ``git push origin master`` everything to GitHub. Travis will take care of building and publishing everything else (demo pages, bower packages, etc.). Finally [create a release on GitHub](https://github.com/angular-ui/ui-utils/releases/new) from the tag created by Travis.
