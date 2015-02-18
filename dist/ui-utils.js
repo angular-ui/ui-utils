@@ -1,6 +1,6 @@
 /**
  * angular-ui-utils - Swiss-Army-Knife of AngularJS tools (with no external dependencies!)
- * @version v0.2.1 - 2015-02-17
+ * @version v0.2.1 - 2015-02-18
  * @link http://angular-ui.github.com
  * @license MIT License, http://www.opensource.org/licenses/MIT
  */
@@ -745,15 +745,13 @@ angular.module('ui.mask', [])
             if (linkOptions.clearOnBlur) {
               oldCaretPosition = 0;
               oldSelectionLength = 0;
-            }
-            if (!isValid || value.length === 0) {
-              if (linkOptions.clearOnBlur) {
+              if (!isValid || value.length === 0) {
                 valueMasked = '';
                 iElement.val('');
+                scope.$apply(function () {
+                  controller.$setViewValue('');
+                });
               }
-              scope.$apply(function (){
-                controller.$setViewValue('');
-              });
             }
           }
 
