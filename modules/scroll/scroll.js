@@ -36,6 +36,9 @@ angular.module('ui.scroll', []).directive('uiScrollViewport', [
       compile: function(elementTemplate, attr, linker) {
         return function($scope, element, $attr, controllers) {
           var adapter, adjustBuffer, adjustRowHeight, bof, bottomVisiblePos, buffer, bufferPadding, bufferSize, clipBottom, clipTop, datasource, datasourceName, doAdjustment, enqueueFetch, eof, eventListener, fetch, finalize, first, getValueChain, hideElementBeforeAppend, insert, isDatasource, isLoading, itemName, loading, log, match, next, pending, reload, removeFromBuffer, resizeHandler, ridActual, scrollHandler, scrollHeight, shouldLoadBottom, shouldLoadTop, showElementAfterRender, tempScope, topVisible, topVisibleElement, topVisibleItem, topVisiblePos, topVisibleScope, viewport, viewportScope, wheelHandler;
+          //save out the initial parent element for scroll height calculations
+          //in i.e. 10 parentElement isn't always there...
+          var parentElem = element[0].parentElement || element[0].parentNode;
           log = console.debug || console.log;
           match = $attr.uiScroll.match(/^\s*(\w+)\s+in\s+([\w\.]+)\s*$/);
           if (!match) {
@@ -69,8 +72,17 @@ angular.module('ui.scroll', []).directive('uiScrollViewport', [
             return viewport.outerHeight() * Math.max(0.1, +$attr.padding || 0.1);
           };
           scrollHeight = function(elem) {
-            var _ref;
-            return (_ref = elem[0].scrollHeight) != null ? _ref : elem[0].document.documentElement.scrollHeight;
+            var height = elem[0].scrollHeight;
+            if(height != null){
+              return height;
+            }
+            if(parentElem){
+              height = parentElem.scrollHeight;
+              if(height != null){
+                return height;
+              }
+            }
+            return elem[0].document.documentElement.scrollHeight;
           };
           adapter = null;
           linker(tempScope = $scope.$new(), function(template) {
@@ -97,10 +109,12 @@ angular.module('ui.scroll', []).directive('uiScrollViewport', [
                   result.paddingHeight = function() {
                     return div.height.apply(div, arguments);
                   };
+                  result.css({'min-height': '0px'});
                   return result;
                 default:
                   result = angular.element('<' + repeaterType + '></' + repeaterType + '>');
                   result.paddingHeight = result.height;
+                  result.css({'min-height': '0px'});
                   return result;
               }
             };
@@ -513,7 +527,13 @@ angular.module('ui.scroll', []).directive('uiScrollViewport', [
             eventListener.$destroy();
             viewport.unbind('resize', resizeHandler);
             viewport.unbind('scroll', scrollHandler);
-            return viewport.unbind('mousewheel', wheelHandler);
+            viewport.unbind('mousewheel', wheelHandler);
+            fetch = function(rid, scrolling) {};
+            removeFromBuffer(0, buffer.length);
+            adapter.topPadding(0);
+            adapter.bottomPadding(0);
+            pending = [];
+            removeFromBuffer(0, buffer.length);
           });
           eventListener.$on('update.items', function(event, locator, newItem) {
             var wrapper, _fn, _i, _len, _ref;
@@ -562,14 +582,14 @@ angular.module('ui.scroll', []).directive('uiScrollViewport', [
             }
             return adjustBuffer(null, false);
           });
-          return eventListener.$on('insert.item', function(event, locator, item) {
+          eventListener.$on('insert.item', function(event, locator, item) {
             var i, inserted, _i, _len, _ref;
             inserted = [];
             if (angular.isFunction(locator)) {
               throw new Error('not implemented - Insert with locator function');
             } else {
-              if ((0 <= (_ref = locator - first - 1) && _ref < buffer.length)) {
-                inserted.push(insert(locator, item));
+              if ((0 <= (_ref = locator - first) && _ref < buffer.length)) {
+                inserted.push(insert(locator - 1, item));
                 next++;
               }
             }
