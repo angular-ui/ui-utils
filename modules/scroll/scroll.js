@@ -563,7 +563,7 @@ angular.module('ui.scroll', []).directive('uiScrollViewport', [
                   inserted = applyUpdate(buffer[arg1 - first], arg2);
                 }
               } else {
-                throw new Error("applyUpdates - " + arg1 + " is not a valid index or outside of range");
+                throw new Error('applyUpdates - ' + arg1 + ' is not a valid index or outside of range');
               }
             }
             return adjustBuffer(ridActual, inserted);
@@ -641,13 +641,13 @@ angular.module('ui.scroll', []).directive('uiScrollViewport', [
             }
             return adjustBuffer(null, inserted);
           };
-          eventListener.$on("insert.item", function(event, locator, item) {
+          eventListener.$on('insert.item', function(event, locator, item) {
             return doInsert(locator, item);
           });
-          eventListener.$on("update.items", function(event, locator, newItem) {
+          eventListener.$on('update.items', function(event, locator, newItem) {
             return doUpdate(locator, newItem);
           });
-          return eventListener.$on("delete.items", function(event, locator) {
+          return eventListener.$on('delete.items', function(event, locator) {
             return doDelete(locator);
           });
         };
