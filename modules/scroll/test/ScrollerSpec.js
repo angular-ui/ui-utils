@@ -140,7 +140,7 @@ describe('uiScroll', function () {
 						expect($._data($window, 'events')).toBeDefined();
 					}, {
 						noFlush: true, //empty data-set; nothing to render
-						cleanupTest: function ($window, scope) {
+						cleanupTest: function ($window) {
 							expect($.fn.unbind.calls.length).toBe(3);
 							expect($.fn.unbind.calls[0].args[0]).toBe('resize');
 							expect($.fn.unbind.calls[0].object[0]).toBe($window);
