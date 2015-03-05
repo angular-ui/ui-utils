@@ -1,15 +1,15 @@
 /*
-globals: angular, window
+ globals: angular, window
 
-	List of used element methods available in JQuery but not in JQuery Lite
+ List of used element methods available in JQuery but not in JQuery Lite
 
-		element.before(elem)
-		element.height()
-		element.outerHeight(true)
-		element.height(value) = only for Top/Bottom padding elements
-		element.scrollTop()
-		element.scrollTop(value)
-*/
+ element.before(elem)
+ element.height()
+ element.outerHeight(true)
+ element.height(value) = only for Top/Bottom padding elements
+ element.scrollTop()
+ element.scrollTop(value)
+ */
 
 angular.module('ui.scroll', []).directive('uiScrollViewport', [
   '$log', function() {
@@ -35,7 +35,7 @@ angular.module('ui.scroll', []).directive('uiScrollViewport', [
       terminal: true,
       compile: function(elementTemplate, attr, linker) {
         return function($scope, element, $attr, controllers) {
-          var adapter, adjustBuffer, adjustRowHeight, bof, bottomVisiblePos, buffer, bufferPadding, bufferSize, clipBottom, clipTop, datasource, datasourceName, doAdjustment, enqueueFetch, eof, eventListener, fetch, finalize, first, getValueChain, hideElementBeforeAppend, insert, isDatasource, isLoading, itemName, loading, log, match, next, pending, reload, removeFromBuffer, resizeHandler, ridActual, scrollHandler, scrollHeight, shouldLoadBottom, shouldLoadTop, showElementAfterRender, tempScope, topVisible, topVisibleElement, topVisibleItem, topVisiblePos, topVisibleScope, viewport, viewportScope, wheelHandler;
+          var adapter, adapterOnScope, adjustBuffer, adjustRowHeight, applyUpdate, bof, bottomVisiblePos, buffer, bufferPadding, bufferSize, builder, clipBottom, clipTop, datasource, datasourceName, doAdjustment, doDelete, doInsert, doUpdate, enqueueFetch, eof, eventListener, fetch, finalize, first, getValueChain, hideElementBeforeAppend, insert, isDatasourceValid, itemName, loading, log, match, next, pending, reload, removeFromBuffer, resizeAndScrollHandler, ridActual, scrollHeight, setValueChain, shouldLoadBottom, shouldLoadTop, showElementAfterRender, topVisible, topVisiblePos, viewport, viewportScope, wheelHandler;
           log = console.debug || console.log;
           match = $attr.uiScroll.match(/^\s*(\w+)\s+in\s+([\w\.]+)\s*$/);
           if (!match) {
@@ -43,13 +43,10 @@ angular.module('ui.scroll', []).directive('uiScrollViewport', [
           }
           itemName = match[1];
           datasourceName = match[2];
-          isDatasource = function(datasource) {
-            return angular.isObject(datasource) && datasource.get && angular.isFunction(datasource.get);
-          };
           getValueChain = function(targetScope, target) {
             var chain;
             if (!targetScope) {
-              return null;
+              return;
             }
             chain = target.match(/^([\w]+)\.(.+)$/);
             if (!chain || chain.length !== 3) {
@@ -57,10 +54,34 @@ angular.module('ui.scroll', []).directive('uiScrollViewport', [
             }
             return getValueChain(targetScope[chain[1]], chain[2]);
           };
+          setValueChain = function(targetScope, target, value, doNotSet) {
+            var chain;
+            if (!targetScope || !target) {
+              return;
+            }
+            if (!(chain = target.match(/^([\w]+)\.(.+)$/))) {
+              if (target.indexOf('.') !== -1) {
+                return;
+              }
+            }
+            if (!chain || chain.length !== 3) {
+              if (!angular.isObject(targetScope[target]) && !doNotSet) {
+                return targetScope[target] = value;
+              }
+              return targetScope[target] = value;
+            }
+            if (!angular.isObject(targetScope[chain[1]]) && !doNotSet) {
+              targetScope[chain[1]] = {};
+            }
+            return setValueChain(targetScope[chain[1]], chain[2], value, doNotSet);
+          };
           datasource = getValueChain($scope, datasourceName);
-          if (!isDatasource(datasource)) {
+          isDatasourceValid = function() {
+            return angular.isObject(datasource) && typeof datasource.get === 'function';
+          };
+          if (!isDatasourceValid()) {
             datasource = $injector.get(datasourceName);
-            if (!isDatasource(datasource)) {
+            if (!isDatasourceValid()) {
               throw new Error('' + datasourceName + ' is not a valid datasource');
             }
           }
@@ -72,8 +93,8 @@ angular.module('ui.scroll', []).directive('uiScrollViewport', [
             var _ref;
             return (_ref = elem[0].scrollHeight) != null ? _ref : elem[0].document.documentElement.scrollHeight;
           };
-          adapter = null;
-          linker(tempScope = $scope.$new(), function(template) {
+          builder = null;
+          linker($scope.$new(), function(template) {
             var bottomPadding, createPadding, padding, repeaterType, topPadding, viewport;
             repeaterType = template[0].localName;
             if (repeaterType === 'dl') {
@@ -123,8 +144,8 @@ angular.module('ui.scroll', []).directive('uiScrollViewport', [
             };
             topPadding = createPadding(padding(repeaterType), element, 'top');
             bottomPadding = createPadding(padding(repeaterType), element, 'bottom');
-            tempScope.$destroy();
-            return adapter = {
+            $scope.$on('$destroy', template.remove);
+            return builder = {
               viewport: viewport,
               topPadding: topPadding.paddingHeight,
               bottomPadding: bottomPadding.paddingHeight,
@@ -138,51 +159,34 @@ angular.module('ui.scroll', []).directive('uiScrollViewport', [
               }
             };
           });
-          viewport = adapter.viewport;
+          viewport = builder.viewport;
           viewportScope = viewport.scope() || $rootScope;
-          if (angular.isDefined($attr.topVisible)) {
-            topVisibleItem = function(item) {
-              return viewportScope[$attr.topVisible] = item;
-            };
-          }
-          if (angular.isDefined($attr.topVisibleElement)) {
-            topVisibleElement = function(element) {
-              return viewportScope[$attr.topVisibleElement] = element;
-            };
-          }
-          if (angular.isDefined($attr.topVisibleScope)) {
-            topVisibleScope = function(scope) {
-              return viewportScope[$attr.topVisibleScope] = scope;
-            };
-          }
           topVisible = function(item) {
-            if (topVisibleItem) {
-              topVisibleItem(item.scope[itemName]);
+            adapter.topVisible = item.scope[itemName];
+            adapter.topVisibleElement = item.element;
+            adapter.topVisibleScope = item.scope;
+            if ($attr.topVisible) {
+              setValueChain(viewportScope, $attr.topVisible, adapter.topVisible);
             }
-            if (topVisibleElement) {
-              topVisibleElement(item.element);
+            if ($attr.topVisibleElement) {
+              setValueChain(viewportScope, $attr.topVisibleElement, adapter.topVisibleElement);
             }
-            if (topVisibleScope) {
-              topVisibleScope(item.scope);
+            if ($attr.topVisibleScope) {
+              setValueChain(viewportScope, $attr.topVisibleScope, adapter.topVisibleScope);
             }
-            if (datasource.topVisible) {
+            if (typeof datasource.topVisible === 'function') {
               return datasource.topVisible(item);
             }
           };
-          if (angular.isDefined($attr.isLoading)) {
-            loading = function(value) {
-              viewportScope[$attr.isLoading] = value;
-              if (datasource.loading) {
-                return datasource.loading(value);
-              }
-            };
-          } else {
-            loading = function(value) {
-              if (datasource.loading) {
-                return datasource.loading(value);
-              }
-            };
-          }
+          loading = function(value) {
+            adapter.isLoading = value;
+            if ($attr.isLoading) {
+              setValueChain($scope, $attr.isLoading, value);
+            }
+            if (typeof datasource.loading === 'function') {
+              return datasource.loading(value);
+            }
+          };
           ridActual = 0;
           first = 1;
           next = 1;
@@ -190,7 +194,6 @@ angular.module('ui.scroll', []).directive('uiScrollViewport', [
           pending = [];
           eof = false;
           bof = false;
-          isLoading = false;
           removeFromBuffer = function(start, stop) {
             var i, _i;
             for (i = _i = start; start <= stop ? _i < stop : _i > stop; i = start <= stop ? ++_i : --_i) {
@@ -204,12 +207,12 @@ angular.module('ui.scroll', []).directive('uiScrollViewport', [
             first = 1;
             next = 1;
             removeFromBuffer(0, buffer.length);
-            adapter.topPadding(0);
-            adapter.bottomPadding(0);
+            builder.topPadding(0);
+            builder.bottomPadding(0);
             pending = [];
             eof = false;
             bof = false;
-            return adjustBuffer(ridActual, false);
+            return adjustBuffer(ridActual);
           };
           bottomVisiblePos = function() {
             return viewport.scrollTop() + viewport.outerHeight();
@@ -218,7 +221,7 @@ angular.module('ui.scroll', []).directive('uiScrollViewport', [
             return viewport.scrollTop();
           };
           shouldLoadBottom = function() {
-            return !eof && adapter.bottomDataPos() < bottomVisiblePos() + bufferPadding();
+            return !eof && builder.bottomDataPos() < bottomVisiblePos() + bufferPadding();
           };
           clipBottom = function() {
             var bottomHeight, i, item, itemHeight, itemTop, newRow, overage, rowTop, _i, _ref;
@@ -232,7 +235,7 @@ angular.module('ui.scroll', []).directive('uiScrollViewport', [
               if (newRow) {
                 itemHeight = item.element.outerHeight(true);
               }
-              if (adapter.bottomDataPos() - bottomHeight - itemHeight > bottomVisiblePos() + bufferPadding()) {
+              if (builder.bottomDataPos() - bottomHeight - itemHeight > bottomVisiblePos() + bufferPadding()) {
                 if (newRow) {
                   bottomHeight += itemHeight;
                 }
@@ -246,14 +249,13 @@ angular.module('ui.scroll', []).directive('uiScrollViewport', [
               }
             }
             if (overage > 0) {
-              adapter.bottomPadding(adapter.bottomPadding() + bottomHeight);
+              builder.bottomPadding(builder.bottomPadding() + bottomHeight);
               removeFromBuffer(buffer.length - overage, buffer.length);
-              next -= overage;
-              return log('clipped off bottom ' + overage + ' bottom padding ' + (adapter.bottomPadding()));
+              return next -= overage;
             }
           };
           shouldLoadTop = function() {
-            return !bof && (adapter.topDataPos() > topVisiblePos() - bufferPadding());
+            return !bof && (builder.topDataPos() > topVisiblePos() - bufferPadding());
           };
           clipTop = function() {
             var item, itemHeight, itemTop, newRow, overage, rowTop, topHeight, _i, _len;
@@ -267,7 +269,7 @@ angular.module('ui.scroll', []).directive('uiScrollViewport', [
               if (newRow) {
                 itemHeight = item.element.outerHeight(true);
               }
-              if (adapter.topDataPos() + topHeight + itemHeight < topVisiblePos() - bufferPadding()) {
+              if (builder.topDataPos() + topHeight + itemHeight < topVisiblePos() - bufferPadding()) {
                 if (newRow) {
                   topHeight += itemHeight;
                 }
@@ -281,19 +283,17 @@ angular.module('ui.scroll', []).directive('uiScrollViewport', [
               }
             }
             if (overage > 0) {
-              adapter.topPadding(adapter.topPadding() + topHeight);
+              builder.topPadding(builder.topPadding() + topHeight);
               removeFromBuffer(0, overage);
-              first += overage;
-              return log('clipped off top ' + overage + ' top padding ' + (adapter.topPadding()));
+              return first += overage;
             }
           };
-          enqueueFetch = function(rid, direction, scrolling) {
-            if (!isLoading) {
-              isLoading = true;
+          enqueueFetch = function(rid, direction) {
+            if (!adapter.isLoading) {
               loading(true);
             }
             if (pending.push(direction) === 1) {
-              return fetch(rid, scrolling);
+              return fetch(rid);
             }
           };
           hideElementBeforeAppend = function(element) {
@@ -322,7 +322,7 @@ angular.module('ui.scroll', []).directive('uiScrollViewport', [
               if (toBeAppended) {
                 if (index === next) {
                   hideElementBeforeAppend(clone);
-                  adapter.append(clone);
+                  builder.append(clone);
                   return buffer.push(wrapper);
                 } else {
                   buffer[index - first].element.after(clone);
@@ -330,7 +330,7 @@ angular.module('ui.scroll', []).directive('uiScrollViewport', [
                 }
               } else {
                 hideElementBeforeAppend(clone);
-                adapter.prepend(clone);
+                builder.prepend(clone);
                 return buffer.unshift(wrapper);
               }
             });
@@ -342,24 +342,23 @@ angular.module('ui.scroll', []).directive('uiScrollViewport', [
           adjustRowHeight = function(appended, wrapper) {
             var newHeight;
             if (appended) {
-              return adapter.bottomPadding(Math.max(0, adapter.bottomPadding() - wrapper.element.outerHeight(true)));
+              return builder.bottomPadding(Math.max(0, builder.bottomPadding() - wrapper.element.outerHeight(true)));
             } else {
-              newHeight = adapter.topPadding() - wrapper.element.outerHeight(true);
+              newHeight = builder.topPadding() - wrapper.element.outerHeight(true);
               if (newHeight >= 0) {
-                return adapter.topPadding(newHeight);
+                return builder.topPadding(newHeight);
               } else {
                 return viewport.scrollTop(viewport.scrollTop() + wrapper.element.outerHeight(true));
               }
             }
           };
-          doAdjustment = function(rid, scrolling, finalize) {
+          doAdjustment = function(rid, finalize) {
             var item, itemHeight, itemTop, newRow, rowTop, topHeight, _i, _len, _results;
-            log('top {actual=' + (adapter.topDataPos()) + ' visible from=' + (topVisiblePos()) + ' bottom {visible through=' + (bottomVisiblePos()) + ' actual=' + (adapter.bottomDataPos()) + '}');
             if (shouldLoadBottom()) {
-              enqueueFetch(rid, true, scrolling);
+              enqueueFetch(rid, true);
             } else {
               if (shouldLoadTop()) {
-                enqueueFetch(rid, false, scrolling);
+                enqueueFetch(rid, false);
               }
             }
             if (finalize) {
@@ -376,7 +375,7 @@ angular.module('ui.scroll', []).directive('uiScrollViewport', [
                 if (newRow) {
                   itemHeight = item.element.outerHeight(true);
                 }
-                if (newRow && (adapter.topDataPos() + topHeight + itemHeight < topVisiblePos())) {
+                if (newRow && (builder.topDataPos() + topHeight + itemHeight < topVisiblePos())) {
                   _results.push(topHeight += itemHeight);
                 } else {
                   if (newRow) {
@@ -388,16 +387,16 @@ angular.module('ui.scroll', []).directive('uiScrollViewport', [
               return _results;
             }
           };
-          adjustBuffer = function(rid, scrolling, newItems, finalize) {
+          adjustBuffer = function(rid, newItems, finalize) {
             if (newItems && newItems.length) {
               return $timeout(function() {
-                var itemTop, row, rowTop, rows, _i, _j, _len, _len1;
+                var elt, itemTop, row, rowTop, rows, _i, _j, _len, _len1;
                 rows = [];
                 for (_i = 0, _len = newItems.length; _i < _len; _i++) {
                   row = newItems[_i];
-                  element = row.wrapper.element;
-                  showElementAfterRender(element);
-                  itemTop = element.offset().top;
+                  elt = row.wrapper.element;
+                  showElementAfterRender(elt);
+                  itemTop = elt.offset().top;
                   if (rowTop !== itemTop) {
                     rows.push(row);
                     rowTop = itemTop;
@@ -407,39 +406,38 @@ angular.module('ui.scroll', []).directive('uiScrollViewport', [
                   row = rows[_j];
                   adjustRowHeight(row.appended, row.wrapper);
                 }
-                return doAdjustment(rid, scrolling, finalize);
+                return doAdjustment(rid, finalize);
               });
             } else {
-              return doAdjustment(rid, scrolling, finalize);
+              return doAdjustment(rid, finalize);
             }
           };
-          finalize = function(rid, scrolling, newItems) {
-            return adjustBuffer(rid, scrolling, newItems, function() {
+          finalize = function(rid, newItems) {
+            return adjustBuffer(rid, newItems, function() {
               pending.shift();
               if (pending.length === 0) {
-                isLoading = false;
                 return loading(false);
               } else {
-                return fetch(rid, scrolling);
+                return fetch(rid);
               }
             });
           };
-          fetch = function(rid, scrolling) {
+          fetch = function(rid) {
             var direction;
             direction = pending[0];
             if (direction) {
               if (buffer.length && !shouldLoadBottom()) {
-                return finalize(rid, scrolling);
+                return finalize(rid);
               } else {
                 return datasource.get(next, bufferSize, function(result) {
                   var item, newItems, _i, _len;
-                  if (rid && rid !== ridActual) {
+                  if ((rid && rid !== ridActual) || $scope.$$destroyed) {
                     return;
                   }
                   newItems = [];
                   if (result.length < bufferSize) {
                     eof = true;
-                    adapter.bottomPadding(0);
+                    builder.bottomPadding(0);
                   }
                   if (result.length > 0) {
                     clipTop();
@@ -448,22 +446,22 @@ angular.module('ui.scroll', []).directive('uiScrollViewport', [
                       newItems.push(insert(++next, item));
                     }
                   }
-                  return finalize(rid, scrolling, newItems);
+                  return finalize(rid, newItems);
                 });
               }
             } else {
               if (buffer.length && !shouldLoadTop()) {
-                return finalize(rid, scrolling);
+                return finalize(rid);
               } else {
                 return datasource.get(first - bufferSize, bufferSize, function(result) {
                   var i, newItems, _i, _ref;
-                  if (rid && rid !== ridActual) {
+                  if ((rid && rid !== ridActual) || $scope.$$destroyed) {
                     return;
                   }
                   newItems = [];
                   if (result.length < bufferSize) {
                     bof = true;
-                    adapter.topPadding(0);
+                    builder.topPadding(0);
                   }
                   if (result.length > 0) {
                     if (buffer.length) {
@@ -473,25 +471,17 @@ angular.module('ui.scroll', []).directive('uiScrollViewport', [
                       newItems.unshift(insert(--first, result[i]));
                     }
                   }
-                  return finalize(rid, scrolling, newItems);
+                  return finalize(rid, newItems);
                 });
               }
             }
           };
-          resizeHandler = function() {
-            if (!$rootScope.$$phase && !isLoading) {
-              adjustBuffer(null, false);
+          resizeAndScrollHandler = function() {
+            if (!$rootScope.$$phase && !adapter.isLoading) {
+              adjustBuffer();
               return $scope.$apply();
             }
           };
-          viewport.bind('resize', resizeHandler);
-          scrollHandler = function() {
-            if (!$rootScope.$$phase && !isLoading) {
-              adjustBuffer(null, true);
-              return $scope.$apply();
-            }
-          };
-          viewport.bind('scroll', scrollHandler);
           wheelHandler = function(event) {
             var scrollTop, yMax;
             scrollTop = viewport[0].scrollTop;
@@ -500,22 +490,94 @@ angular.module('ui.scroll', []).directive('uiScrollViewport', [
               return event.preventDefault();
             }
           };
+          viewport.bind('resize', resizeAndScrollHandler);
+          viewport.bind('scroll', resizeAndScrollHandler);
           viewport.bind('mousewheel', wheelHandler);
-          $scope.$watch(datasource.revision, function() {
-            return reload();
-          });
+          $scope.$watch(datasource.revision, reload);
           if (datasource.scope) {
             eventListener = datasource.scope.$new();
           } else {
             eventListener = $scope.$new();
           }
           $scope.$on('$destroy', function() {
-            eventListener.$destroy();
-            viewport.unbind('resize', resizeHandler);
-            viewport.unbind('scroll', scrollHandler);
+            var item, _i, _len;
+            for (_i = 0, _len = buffer.length; _i < _len; _i++) {
+              item = buffer[_i];
+              item.scope.$destroy();
+              item.element.remove();
+            }
+            viewport.unbind('resize', resizeAndScrollHandler);
+            viewport.unbind('scroll', resizeAndScrollHandler);
             return viewport.unbind('mousewheel', wheelHandler);
           });
-          eventListener.$on('update.items', function(event, locator, newItem) {
+          adapter = {};
+          adapter.isLoading = false;
+          applyUpdate = function(wrapper, newItems) {
+            var i, inserted, item, ndx, newItem, oldItemNdx, _i, _j, _k, _len, _len1, _len2;
+            inserted = [];
+            if (angular.isArray(newItems)) {
+              if (newItems.length) {
+                if (newItems.length === 1 && newItems[0] === wrapper.scope[itemName]) {
+                  return inserted;
+                } else {
+                  ndx = wrapper.scope.$index;
+                  if (ndx > first) {
+                    oldItemNdx = ndx - first;
+                  } else {
+                    oldItemNdx = 1;
+                  }
+                  for (i = _i = 0, _len = newItems.length; _i < _len; i = ++_i) {
+                    newItem = newItems[i];
+                    inserted.push(insert(ndx + i, newItem));
+                  }
+                  removeFromBuffer(oldItemNdx, oldItemNdx + 1);
+                  for (i = _j = 0, _len1 = buffer.length; _j < _len1; i = ++_j) {
+                    item = buffer[i];
+                    item.scope.$index = first + i;
+                  }
+                }
+              } else {
+                removeFromBuffer(wrapper.scope.$index - first, wrapper.scope.$index - first + 1);
+                next--;
+                for (i = _k = 0, _len2 = buffer.length; _k < _len2; i = ++_k) {
+                  item = buffer[i];
+                  item.scope.$index = first + i;
+                }
+              }
+            }
+            return inserted;
+          };
+          adapter.applyUpdates = function(arg1, arg2) {
+            var inserted, wrapper, _i, _len, _ref, _ref1;
+            inserted = [];
+            ridActual++;
+            if (angular.isFunction(arg1)) {
+              _ref = buffer.slice(0);
+              for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+                wrapper = _ref[_i];
+                inserted.concat(inserted, applyUpdate(wrapper, arg1(wrapper.scope[itemName], wrapper.scope, wrapper.element)));
+              }
+            } else {
+              if (arg1 % 1 === 0) {
+                if ((0 <= (_ref1 = arg1 - first - 1) && _ref1 < buffer.length)) {
+                  inserted = applyUpdate(buffer[arg1 - first], arg2);
+                }
+              } else {
+                throw new Error('applyUpdates - ' + arg1 + ' is not a valid index or outside of range');
+              }
+            }
+            return adjustBuffer(ridActual, inserted);
+          };
+          if ($attr.adapter) {
+            adapterOnScope = getValueChain($scope, $attr.adapter);
+            if (!adapterOnScope) {
+              setValueChain($scope, $attr.adapter, {});
+              adapterOnScope = getValueChain($scope, $attr.adapter);
+            }
+            angular.extend(adapterOnScope, adapter);
+            adapter = adapterOnScope;
+          }
+          doUpdate = function(locator, newItem) {
             var wrapper, _fn, _i, _len, _ref;
             if (angular.isFunction(locator)) {
               _fn = function(wrapper) {
@@ -531,8 +593,8 @@ angular.module('ui.scroll', []).directive('uiScrollViewport', [
               }
             }
             return null;
-          });
-          eventListener.$on('delete.items', function(event, locator) {
+          };
+          doDelete = function(locator) {
             var i, item, temp, wrapper, _fn, _i, _j, _k, _len, _len1, _len2, _ref;
             if (angular.isFunction(locator)) {
               temp = [];
@@ -560,9 +622,9 @@ angular.module('ui.scroll', []).directive('uiScrollViewport', [
               item = buffer[i];
               item.scope.$index = first + i;
             }
-            return adjustBuffer(null, false);
-          });
-          return eventListener.$on('insert.item', function(event, locator, item) {
+            return adjustBuffer();
+          };
+          doInsert = function(locator, item) {
             var i, inserted, _i, _len, _ref;
             inserted = [];
             if (angular.isFunction(locator)) {
@@ -577,7 +639,16 @@ angular.module('ui.scroll', []).directive('uiScrollViewport', [
               item = buffer[i];
               item.scope.$index = first + i;
             }
-            return adjustBuffer(null, false, inserted);
+            return adjustBuffer(null, inserted);
+          };
+          eventListener.$on('insert.item', function(event, locator, item) {
+            return doInsert(locator, item);
+          });
+          eventListener.$on('update.items', function(event, locator, newItem) {
+            return doUpdate(locator, newItem);
+          });
+          return eventListener.$on('delete.items', function(event, locator) {
+            return doDelete(locator);
           });
         };
       }
