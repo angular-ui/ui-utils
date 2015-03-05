@@ -110,7 +110,6 @@ describe('uiScroll', function () {
 				runTest($window, sandbox);
 
 				sandbox.remove();
-				scope.$destroy();
 
 				if (cleanupTest) {
 					cleanupTest($window, scope);
@@ -122,7 +121,7 @@ describe('uiScroll', function () {
 	describe('basic setup', function() {
 			var html = '<div ui-scroll="item in myEmptyDatasource">{{$index}}: {{item}}</div>';
 
-				it('should bind to window scroll and resize events and unbind upon scope destroy', function(){
+				it('should bind to window scroll and resize events', function(){
 				spyOn($.fn, 'bind').andCallThrough();
 				spyOn($.fn, 'unbind').andCallThrough();
 				runTest(html,
@@ -135,16 +134,7 @@ describe('uiScroll', function () {
 						expect($.fn.bind.calls[2].args[0]).toBe('mousewheel');
 						expect($.fn.bind.calls[2].object[0]).toBe($window);
 						expect($._data($window, 'events')).toBeDefined();
-					},
-					function($window) {
-						expect($.fn.unbind.calls.length).toBe(3);
-						expect($.fn.unbind.calls[0].args[0]).toBe('resize');
-						expect($.fn.unbind.calls[0].object[0]).toBe($window);
-						expect($.fn.unbind.calls[1].args[0]).toBe('scroll');
-						expect($.fn.unbind.calls[1].object[0]).toBe($window);
-						expect($.fn.unbind.calls[2].args[0]).toBe('mousewheel');
-						expect($.fn.unbind.calls[2].object[0]).toBe($window);
-					},
+					}, null,
 					{
 						noFlush: true //empty data-set; nothing to render
 					}
