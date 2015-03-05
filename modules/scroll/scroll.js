@@ -518,7 +518,7 @@ angular.module('ui.scroll', []).directive('uiScrollViewport', [
             if (angular.isArray(newItems)) {
               if (newItems.length) {
                 if (newItems.length === 1 && newItems[0] === wrapper.scope[itemName]) {
-
+                  var doNothing; // update inplace
                 } else {
                   ndx = wrapper.scope.$index;
                   if (ndx > first) {
