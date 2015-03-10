@@ -85,7 +85,6 @@ It's equal to run separately:
 * `grunt karma:server` : giving you a Karma server to run tests (at [http://localhost:9876/](http://localhost:9876/) by default). You can force a test on this server with `grunt karma:unit:run`.
 
 * `grunt watch` : will automatically test your code and build your demo.  You can demo generation with `grunt build:gh-pages`.
-* 
 
 ### How to release
 
