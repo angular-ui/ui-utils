@@ -223,11 +223,11 @@ angular.module('ui.mask', []).value('uiMaskConfig', {
             maskPlaceholder = '';
             if (typeof mask === 'string') {
               minRequiredLength = 0;
-              var isOptional = false, splitMask = mask.split('');
+              var isOptional = false, numberOfOptionalCharacters = 0, splitMask = mask.split('');
               angular.forEach(splitMask, function (chr, i) {
                 if (linkOptions.maskDefinitions[chr]) {
                   maskCaretMap.push(characterCount);
-                  maskPlaceholder += getPlaceholderChar(i);
+                  maskPlaceholder += getPlaceholderChar(i - numberOfOptionalCharacters);
                   maskPatterns.push(linkOptions.maskDefinitions[chr]);
                   characterCount++;
                   if (!isOptional) {
@@ -235,6 +235,7 @@ angular.module('ui.mask', []).value('uiMaskConfig', {
                   }
                 } else if (chr === '?') {
                   isOptional = true;
+                  numberOfOptionalCharacters++;
                 } else {
                   maskPlaceholder += chr;
                   characterCount++;
