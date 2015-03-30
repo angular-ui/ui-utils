@@ -1,6 +1,6 @@
 {
   "name": "angular-ui-highlight",
-  "version": "0.2.2",
+  "version": "0.2.3",
   "main": "./highlight.js",
   "dependencies": {
     "angular": ">= 1.0.2"
