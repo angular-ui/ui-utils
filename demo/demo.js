@@ -1,5 +1,3 @@
-angular.module('doc.ui-utils', ['ui.utils', 'prettifyDirective' ]);
-
 angular.module('ui.scroll')
     .factory('datasource', [
     '$log', '$timeout', function(console, $timeout) {
@@ -20,3 +18,5 @@ angular.module('ui.scroll')
         };
     }
 ]);
+
+angular.module('doc.ui-utils', ['ui.utils', 'prettifyDirective', 'ui.uploader']);
