@@ -1,6 +1,6 @@
 {
   "name": "angular-ui-unique",
-  "version": "0.2.2",
+  "version": "0.2.3",
   "main": "./unique.js",
   "dependencies": {
     "angular": ">= 1.0.2"
