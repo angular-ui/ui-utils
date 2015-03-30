@@ -1,6 +1,6 @@
 {
   "name": "angular-ui-indeterminate",
-  "version": "0.2.2",
+  "version": "0.2.3",
   "main": "./indeterminate.js",
   "dependencies": {
     "angular": ">= 1.0.2"
