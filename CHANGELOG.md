@@ -1,3 +1,29 @@
+<a name="v0.2.3"></a>
+### v0.2.3 (2015-03-30)
+
+
+#### Bug Fixes
+
+* **dep:** correct jquery 2.1.0 component path ([fd03855a](http://github.com/angular-ui/ui-utils/commit/fd03855ac336d00ce19685f4df90b862e2f5c9b4))
+* **gh-pages:** wrong download link ([d575856e](http://github.com/angular-ui/ui-utils/commit/d575856e9ce575d40015d532d8a3684521f5d26d), closes [#186](http://github.com/angular-ui/ui-utils/issues/186))
+* **scrollfix:** get scrollTop from scrollfix-target ([0724d1d4](http://github.com/angular-ui/ui-utils/commit/0724d1d41593d3d89ecd015026576570360f2f20))
+* **travis:** fix jslint errors in mask.js ([41534729](http://github.com/angular-ui/ui-utils/commit/415347293d7200d8fc4a14b99e9744249e6c80da))
+
+
+#### Features
+
+* **scroll:** Rename ui-scroll* files to scroll* ([9dbb1b18](http://github.com/angular-ui/ui-utils/commit/9dbb1b185ac51bdce834405f7b43e514ad29d978))
+
+
+#### Breaking Changes
+
+* if you rely on ui-mask to invalidate an empty viewValue
+this will no longer work. Please use the required attribute or ng-required
+directive to specify whether the input is required.
+
+fixes #198
+ ([781e59e5](http://github.com/angular-ui/ui-utils/commit/781e59e5a1fa72db91eca6a257408ffe72da0c57))
+
 <a name="v0.2.2"></a>
 ### v0.2.2 (2015-02-18)
 
