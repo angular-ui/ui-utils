@@ -11,7 +11,7 @@ describe('uiEvent', function () {
 
   //helper for creating event elements
   function eventElement(scope, eventObject) {
-    scope._uiEvent = eventObject || {};
+    scope._uiEvent = eventObject;
     return $compile('<span ui-event="_uiEvent">')(scope);
   }
 
@@ -75,6 +75,25 @@ describe('uiEvent', function () {
       };
       var elm = eventElement($scope, {'stuff': 'onStuff($event, $params)'});
       elm.triggerHandler('stuff', ['foo', 'bar']);
+    });
+
+    it('should work if eventObject is undefined on compile step and/or updated at runtime', function () {
+      $scope = $rootScope.$new();
+      $scope.amount = 1;
+
+      var elm = eventElement($scope);
+      elm.triggerHandler('stuff');
+      expect($scope.amount).toBe(1);
+
+      $scope._uiEvent = {'stuff': 'amount = amount + 1'};
+      $scope.$digest();
+      elm.triggerHandler('stuff');
+      expect($scope.amount).toBe(2);
+
+      $scope._uiEvent = {'stuff': 'amount = amount + 2'};
+      $scope.$digest();
+      elm.triggerHandler('stuff');
+      expect($scope.amount).toBe(4);
     });
   });
 
