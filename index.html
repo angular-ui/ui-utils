@@ -572,9 +572,15 @@ $scope.inflectorType = &#x27;humanize&#x27;;
     </div>
     <div class="span6">
       <h3>How?</h3>
-
-      <p> TODO !!
 <pre class="prettyprint">
+  &lt;input name=&quot;masked&quot; ui-mask=&quot;{{maskPattern}}&quot; ng-model=&quot;maskedValue&quot; placeholder=&quot;Write a mask or click a button&quot;&gt;<br/>  <br/>
+  Model value: {{ maskedValue }}  <br/>
+  NgModelController.$viewValue: {{ masked.$viewValue }}  <br/>
+  <br/>
+  &lt;input ng-model=&quot;maskPattern&quot;><br/>
+  &lt;button ng-click=&quot;maskPattern = undefined&quot;&gt;Set to undefined (uninitialize)&lt;/button&gt;<br/>
+  &lt;button ng-click=&quot;maskPattern = '(999) 999-9999 ext. 999'&quot;&gt;Set to (999) 999-9999 ext. 999&lt;/button&gt;<br/>
+  &lt;button ng-click=&quot;maskPattern = '(999) 999-9999'&quot;&gt;Set to (999) 999-9999&lt;/button&gt;<br/>
 </pre>
     </div>
   </div>
@@ -918,7 +924,7 @@ $scope.inflectorType = &#x27;humanize&#x27;;
       { firstName: 'Dan', lastName: 'Doyon',
         id: 6, gender: 'Male' },
       { firstName: 'Andy', lastName: 'Joslin',
-        id: 1, gender: 'Male' },
+        id: 1, gender: 'Male' }
     ];
   }
 </script>
