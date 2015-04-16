@@ -29,7 +29,7 @@ function uiUploader($log) {
         return self.files;
     }
 
-    function startUpload(options) {
+    function startUpload(options, authorizationHeader) {
         self.options = options;
         for (var i = 0; i < self.files.length; i++) {
             if (self.activeUploads == self.options.concurrency) {
@@ -37,7 +37,7 @@ function uiUploader($log) {
             }
             if (self.files[i].active)
                 continue;
-            ajaxUpload(self.files[i], self.options.url);
+            ajaxUpload(self.files[i], self.options.url, authorizationHeader);
         }
     }
     
@@ -64,7 +64,7 @@ function uiUploader($log) {
         return (bytes / Math.pow(1024, i)).toFixed(i ? 1 : 0) + ' ' + sizes[isNaN(bytes) ? 0 : i + 1];
     }
 
-    function ajaxUpload(file, url) {
+    function ajaxUpload(file, url, authorizationHeader) {
         var xhr, formData, prop, data = '',
             key = '' || 'file';
         self.activeUploads += 1;
@@ -72,6 +72,11 @@ function uiUploader($log) {
         xhr = new window.XMLHttpRequest();
         formData = new window.FormData();
         xhr.open('POST', url);
+
+        // Add authorization header
+        if( authorizationHeader ) {
+            xhr.setRequestHeader('Authorization', authorizationHeader);
+        }
 
         // Triggered when upload starts:
         xhr.upload.onloadstart = function() {};
