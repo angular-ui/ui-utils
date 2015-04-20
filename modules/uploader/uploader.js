@@ -18,7 +18,7 @@ function uiUploader($log) {
     self.options = {};
     self.activeUploads = 0;
     $log.info('uiUploader loaded');
-    
+
     function addFiles(files) {
         for (var i = 0; i < files.length; i++) {
             self.files.push(files[i]);
@@ -29,7 +29,7 @@ function uiUploader($log) {
         return self.files;
     }
 
-    function startUpload(options) {
+    function startUpload(options, headers) {
         self.options = options;
         for (var i = 0; i < self.files.length; i++) {
             if (self.activeUploads == self.options.concurrency) {
@@ -37,18 +37,18 @@ function uiUploader($log) {
             }
             if (self.files[i].active)
                 continue;
-            ajaxUpload(self.files[i], self.options.url);
+            ajaxUpload(self.files[i], self.options.url, headers);
         }
     }
-    
+
     function removeFile(file){
         self.files.splice(self.files.indexOf(file),1);
     }
-    
+
     function removeAll(){
         self.files.splice(0,self.files.length);
     }
-    
+
     return {
         addFiles: addFiles,
         getFiles: getFiles,
@@ -57,14 +57,14 @@ function uiUploader($log) {
         removeFile: removeFile,
         removeAll:removeAll
     };
-    
+
     function getHumanSize(bytes) {
         var sizes = ['n/a', 'bytes', 'KiB', 'MiB', 'GiB', 'TB', 'PB', 'EiB', 'ZiB', 'YiB'];
         var i = +Math.floor(Math.log(bytes) / Math.log(1024));
         return (bytes / Math.pow(1024, i)).toFixed(i ? 1 : 0) + ' ' + sizes[isNaN(bytes) ? 0 : i + 1];
     }
 
-    function ajaxUpload(file, url) {
+    function ajaxUpload(file, url, headers) {
         var xhr, formData, prop, data = '',
             key = '' || 'file';
         self.activeUploads += 1;
@@ -72,6 +72,13 @@ function uiUploader($log) {
         xhr = new window.XMLHttpRequest();
         formData = new window.FormData();
         xhr.open('POST', url);
+
+        // Add header parameters
+        for( var key in headers ) {
+          if ( headers.hasOwnProperty(key) ) {
+            xhr.setRequestHeader(key, headers[key]);
+          }
+        }
 
         // Triggered when upload starts:
         xhr.upload.onloadstart = function() {};
