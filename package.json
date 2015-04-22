@@ -19,7 +19,9 @@
     "grunt-conventional-changelog": "~1.0.0",
     "grunt-karma": "~0.6.2",
     "load-grunt-tasks": "~0.2.0",
-    "grunt-ngmin": "0.0.3"
+    "grunt-ngmin": "0.0.3",
+    "grunt-exec": "^0.4.6",
+    "spacejam": "^1.1.1"
   },
   "scripts": {},
   "main": "./modules/utils.js",

@@ -14,6 +14,10 @@ module.exports = function (grunt) {
   grunt.registerTask('dist:sub', ['ngmin', 'uglify:sub']);
   grunt.registerTask('dist:demo', ['concat:html_doc', 'copy']);
 
+  // Meteor build tasks
+  grunt.registerTask('meteor-publish', ['dist', 'exec:meteor-init', 'exec:meteor-publish']);
+  grunt.registerTask('meteor', ['exec:meteor-init', 'exec:meteor-publish']);
+
 
   // HACK TO ACCESS TO THE COMPONENT-PUBLISHER
   function fakeTargetTask(prefix) {
@@ -140,7 +144,18 @@ module.exports = function (grunt) {
       }
     },
     clean: {
-      rm_tmp: {src: ['tmp']}
+      rm_tmp: {src: ['tmp']},
+      meteor: ['.build.*', 'versions.json']
+    },
+    exec: {
+      'meteor-init': {
+        command: [
+          'type meteor >/dev/null 2>&1 || { curl https://install.meteor.com/ | sh; }'
+        ].join(';')
+      },
+      'meteor-publish': {
+        command: 'meteor publish'
+      }
     },
     jshint: {
       src: {
