@@ -52,6 +52,7 @@ angular.module('ui.scrollfix',[]).directive('uiScrollfix', ['$window', function 
       }
 
       $target.on('scroll', onScroll);
+      onScroll();
 
       // Unbind scroll event handler when directive is removed
       scope.$on('$destroy', function() {
