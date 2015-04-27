@@ -35,6 +35,11 @@ angular.module('ui.validate',[]).directive('uiValidate', function () {
           var expression = scope.$eval(exprssn, { '$value' : valueToValidate });
           if (angular.isObject(expression) && angular.isFunction(expression.then)) {
             // expression is a promise
+            if (angular.isUndefined(ctrl.$pending)) {
+              ctrl.$pending = {};
+            }
+            // set pending state until promise is resolved
+            ctrl.$pending[key] = true;
             expression.then(function(){
               ctrl.$setValidity(key, true);
             }, function(){
