@@ -22,7 +22,7 @@ function uiUploader($log) {
   function getFiles() {
     return self.files;
   }
-  function startUpload(options, headers) {
+  function startUpload(options) {
     self.options = options;
     for (var i = 0; i < self.files.length; i++) {
       if (self.activeUploads == self.options.concurrency) {
@@ -30,7 +30,7 @@ function uiUploader($log) {
       }
       if (self.files[i].active)
         continue;
-      ajaxUpload(self.files[i], self.options.url, headers);
+      ajaxUpload(self.files[i], self.options.url);
     }
   }
   function removeFile(file) {
@@ -63,21 +63,13 @@ function uiUploader($log) {
     var i = +Math.floor(Math.log(bytes) / Math.log(1024));
     return (bytes / Math.pow(1024, i)).toFixed(i ? 1 : 0) + ' ' + sizes[isNaN(bytes) ? 0 : i + 1];
   }
-  function ajaxUpload(file, url, headers) {
+  function ajaxUpload(file, url) {
     var xhr, formData, prop, data = '', key = '' || 'file';
     self.activeUploads += 1;
     file.active = true;
     xhr = new window.XMLHttpRequest();
     formData = new window.FormData();
     xhr.open('POST', url);
-
-    // Add header parameters
-    for( var headerKey in headers ) {
-      if ( headers.hasOwnProperty( headerKey ) ) {
-        xhr.setRequestHeader( headerKey, headers[headerKey] );
-      }
-    }
-
     // Triggered when upload starts:
     xhr.upload.onloadstart = function () {
     };
