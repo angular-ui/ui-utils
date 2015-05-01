@@ -1,6 +1,6 @@
 /**
  * angular-ui-utils - Swiss-Army-Knife of AngularJS tools (with no external dependencies!)
- * @version v0.2.3 - 2015-03-30
+ * @version v0.2.3 - 2015-05-01
  * @link http://angular-ui.github.com
  * @license MIT License, http://www.opensource.org/licenses/MIT
  */
@@ -2322,6 +2322,11 @@ angular.module('ui.validate',[]).directive('uiValidate', function () {
           var expression = scope.$eval(exprssn, { '$value' : valueToValidate });
           if (angular.isObject(expression) && angular.isFunction(expression.then)) {
             // expression is a promise
+            if (angular.isUndefined(ctrl.$pending)) {
+              ctrl.$pending = {};
+            }
+            // set pending state until promise is resolved
+            ctrl.$pending[key] = true;
             expression.then(function(){
               ctrl.$setValidity(key, true);
             }, function(){
