@@ -5,6 +5,7 @@
   "version": "0.2.3",
   "homepage": "http://angular-ui.github.com",
   "main": "./modules/utils.js",
+  "license": "MIT",
   "dependencies": {
     "angular": ">= 1.0.2"
   },
