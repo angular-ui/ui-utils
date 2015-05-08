@@ -632,7 +632,7 @@ angular.module('ui.scroll', []).directive('uiScrollViewport', [
             if (angular.isFunction(locator)) {
               throw new Error('not implemented - Insert with locator function');
             } else {
-              if (0 <= (_ref = locator - first - 1) && _ref < buffer.length) {
+              if ((_ref = locator - first - 1) && _ref < buffer.length) {
                 inserted.push(insert(locator, item));
                 next++;
               }
