@@ -37,7 +37,7 @@ function uiUploader($log) {
             }
             if (self.files[i].active)
                 continue;
-            ajaxUpload(self.files[i], self.options.url);
+            ajaxUpload(self.files[i], self.options.url, self.options.data);
         }
     }
     
