@@ -52,7 +52,7 @@ Step 2
 Include ui-uploader service.
 
 ```javascript
-angular.module('myapp', ['ui-uploader']);
+angular.module('myapp', ['ui.uploader']);
 ```
 Step 3
 ------
