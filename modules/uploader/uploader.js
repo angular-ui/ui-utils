@@ -37,7 +37,7 @@ function uiUploader($log) {
             }
             if (self.files[i].active)
                 continue;
-            ajaxUpload(self.files[i], self.options.url);
+            ajaxUpload(self.files[i], self.options.url, self.options.data);
         }
     }
     
@@ -64,9 +64,10 @@ function uiUploader($log) {
         return (bytes / Math.pow(1024, i)).toFixed(i ? 1 : 0) + ' ' + sizes[isNaN(bytes) ? 0 : i + 1];
     }
 
-    function ajaxUpload(file, url) {
-        var xhr, formData, prop, data = '',
-            key = '' || 'file';
+    function ajaxUpload(file, url, data) {
+        var xhr, formData, prop, key = '' || 'file';
+        data = data || {};
+        
         self.activeUploads += 1;
         file.active = true;
         xhr = new window.XMLHttpRequest();
