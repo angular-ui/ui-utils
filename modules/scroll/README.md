@@ -188,6 +188,9 @@ Do not ask me why this woodoo is necessary, but as of Chrome version 30 it is ju
 
 ###History
 
+####v1.1.1
+* Fixed jqlite on $destroy error.
+
 ####v1.1.0
 * Introduced API to dynamically update scroller content.
 * Deep 'name' properties access via dot-notation in template.
