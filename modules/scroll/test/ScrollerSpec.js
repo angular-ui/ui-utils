@@ -27,6 +27,20 @@ describe('uiScroll', function () {
 			}
 		])
 
+		.factory('myObjectDatasource', [
+			'$log', '$timeout', '$rootScope', function () {
+				return {
+					get: function (index, count, success) {
+						if (index === 1) {
+							success([{text: 'one'}, {text: 'two'}, {text: 'three'}]);
+						} else {
+							success([]);
+						}
+					}
+				};
+			}
+		])
+
 		.factory('myMultipageDatasource', [
 			'$log', '$timeout', '$rootScope', function () {
 				return {
@@ -96,10 +110,18 @@ describe('uiScroll', function () {
 		var viewportStyle = ' style="height:' + (settings.viewportHeight || 200) + 'px"';
 		var itemStyle = settings.itemHeight ? ' style="height:' + settings.itemHeight + 'px"' : '';
 		var bufferSize = settings.bufferSize ? ' buffer-size="' + settings.bufferSize + '"' : '';
-		return '<div ui-scroll-viewport' + viewportStyle + '><div ui-scroll="item in ' + settings.datasource + '"' + itemStyle + bufferSize + '>{{$index}}: {{item}}</div></div>';
+		var adapter = settings.adapter ? ' adapter="' + settings.adapter + '"' : '';
+		var template = settings.template ? settings.template : '{{$index}}: {{item}}';
+		return '<div ui-scroll-viewport' + viewportStyle + '>' +
+			'<div ui-scroll="item in ' + settings.datasource + '"' +
+			adapter +
+			itemStyle + bufferSize + '>' +
+			template +
+			'</div>' +
+			'</div>';
 	};
 
-	var runTest = function (scrollSettings, runTest, options) {
+	var runTest = function (scrollSettings, run, options) {
 		inject(function ($rootScope, $compile, $window, $timeout) {
 				var scroller = angular.element(createHtml(scrollSettings));
 				var scope = $rootScope.$new();
@@ -112,12 +134,12 @@ describe('uiScroll', function () {
 					$timeout.flush();
 				}
 
-				runTest(scroller);
+				run(scroller, scope, $timeout);
 
 				scroller.remove();
 
 				if (options && typeof options.cleanupTest === 'function') {
-					if (options.flashOnCleanup) {
+					if (options.flushOnCleanup) {
 						$timeout(function () {
 							options.cleanupTest(scroller, scope);
 						});
@@ -132,7 +154,7 @@ describe('uiScroll', function () {
 
 	describe('basic setup', function () {
 
-			var scrollSettings = { datasource: 'myEmptyDatasource' };
+			var scrollSettings = {datasource: 'myEmptyDatasource'};
 
 			it('should bind to window scroll and resize events and unbind them after the scope is destroyed', function () {
 				spyOn($.fn, 'bind').andCallThrough();
@@ -148,7 +170,7 @@ describe('uiScroll', function () {
 						expect($.fn.bind.calls[2].object[0]).toBe(viewport[0]);
 					}, {
 						noFlush: true, //empty data-set, nothing to render
-						flashOnCleanup: true,
+						flushOnCleanup: true,
 						cleanupTest: function (viewport) {
 							expect($.fn.unbind.calls.length).toBe(3);
 							expect($.fn.unbind.calls[0].args[0]).toBe('resize');
@@ -201,7 +223,7 @@ describe('uiScroll', function () {
 	);
 
 	describe('datasource with only 3 elements', function () {
-		var scrollSettings = { datasource: 'myOnePageDatasource' };
+		var scrollSettings = {datasource: 'myOnePageDatasource'};
 
 		it('should create 3 divs with data (+ 2 padding divs)', function () {
 			runTest(scrollSettings,
@@ -238,6 +260,825 @@ describe('uiScroll', function () {
 
 		});
 	});
+
+	describe('applyUpdates tests', function () {
+		var scrollSettings = {datasource: 'myOnePageDatasource', adapter: 'adapter'};
+
+		it('should create adapter object', function () {
+			runTest(scrollSettings,
+				function (viewport, scope) {
+					expect(viewport.children().length).toBe(5);
+
+					var row1 = viewport.children()[1];
+					expect(row1.tagName.toLowerCase()).toBe('div');
+					expect(row1.innerHTML).toBe('1: one');
+
+					var row2 = viewport.children()[2];
+					expect(row2.tagName.toLowerCase()).toBe('div');
+					expect(row2.innerHTML).toBe('2: two');
+
+					var row3 = viewport.children()[3];
+					expect(row3.tagName.toLowerCase()).toBe('div');
+					expect(row3.innerHTML).toBe('3: three');
+
+					expect(scope.adapter).toBeTruthy();
+					expect(scope.adapter.topVisibleElement[0].innerHTML).toBe('1: one');
+				}
+			);
+		});
+
+		it('should update rows in place', function () {
+			runTest(scrollSettings,
+				function (viewport, scope, $timeout) {
+
+					scope.adapter.applyUpdates(
+						function (item, scope) {
+							return [item + ' *' + scope.$index];
+						}
+					);
+
+					$timeout.flush();
+
+					expect(viewport.children().length).toBe(5);
+					var row1 = viewport.children()[1];
+					expect(row1.tagName.toLowerCase()).toBe('div');
+					expect(row1.innerHTML).toBe('1: one *1');
+
+					var row2 = viewport.children()[2];
+					expect(row2.tagName.toLowerCase()).toBe('div');
+					expect(row2.innerHTML).toBe('2: two *2');
+
+					var row3 = viewport.children()[3];
+					expect(row3.tagName.toLowerCase()).toBe('div');
+					expect(row3.innerHTML).toBe('3: three *3');
+
+					expect(scope.adapter).toBeTruthy();
+					expect(scope.adapter.topVisibleElement[0].innerHTML).toBe('1: one *1');
+				}
+			);
+		});
+
+		it('should update selected (first) row', function () {
+			runTest(scrollSettings,
+				function (viewport, scope, $timeout) {
+
+					scope.adapter.applyUpdates(
+						function (item, scope) {
+							if (item === 'one')
+								return [item + ' *' + scope.$index];
+						}
+					);
+
+					$timeout.flush();
+
+					expect(viewport.children().length).toBe(5);
+
+					var row1 = viewport.children()[1];
+					expect(row1.tagName.toLowerCase()).toBe('div');
+					expect(row1.innerHTML).toBe('1: one *1');
+
+					var row2 = viewport.children()[2];
+					expect(row2.tagName.toLowerCase()).toBe('div');
+					expect(row2.innerHTML).toBe('2: two');
+
+					var row3 = viewport.children()[3];
+					expect(row3.tagName.toLowerCase()).toBe('div');
+					expect(row3.innerHTML).toBe('3: three');
+
+					expect(scope.adapter).toBeTruthy();
+					expect(scope.adapter.topVisibleElement[0].innerHTML).toBe('1: one *1');
+				}
+			);
+		});
+
+		it('should update selected (middle) row', function () {
+			runTest(scrollSettings,
+				function (viewport, scope) {
+
+					scope.adapter.applyUpdates(
+						function (item, scope) {
+							if (item === 'two')
+								return [item + ' *' + scope.$index];
+						}
+					);
+
+					scope.$apply();
+
+					expect(viewport.children().length).toBe(5);
+
+					var row1 = viewport.children()[1];
+					expect(row1.tagName.toLowerCase()).toBe('div');
+					expect(row1.innerHTML).toBe('1: one');
+
+					var row2 = viewport.children()[2];
+					expect(row2.tagName.toLowerCase()).toBe('div');
+					expect(row2.innerHTML).toBe('2: two *2');
+
+					var row3 = viewport.children()[3];
+					expect(row3.tagName.toLowerCase()).toBe('div');
+					expect(row3.innerHTML).toBe('3: three');
+
+					expect(scope.adapter).toBeTruthy();
+					expect(scope.adapter.topVisibleElement[0].innerHTML).toBe('1: one');
+				}
+			);
+		});
+
+		it('should update selected (last) row', function () {
+			runTest(scrollSettings,
+				function (viewport, scope) {
+
+					scope.adapter.applyUpdates(
+						function (item, scope) {
+							if (item === 'three')
+								return [item + ' *' + scope.$index];
+						}
+					);
+
+					scope.$apply();
+
+					expect(viewport.children().length).toBe(5);
+
+					var row1 = viewport.children()[1];
+					expect(row1.tagName.toLowerCase()).toBe('div');
+					expect(row1.innerHTML).toBe('1: one');
+
+					var row2 = viewport.children()[2];
+					expect(row2.tagName.toLowerCase()).toBe('div');
+					expect(row2.innerHTML).toBe('2: two');
+
+					var row3 = viewport.children()[3];
+					expect(row3.tagName.toLowerCase()).toBe('div');
+					expect(row3.innerHTML).toBe('3: three *3');
+
+					expect(scope.adapter).toBeTruthy();
+					expect(scope.adapter.topVisibleElement[0].innerHTML).toBe('1: one');
+				}
+			);
+		});
+
+		it('should delete selected (first) row', function () {
+			runTest(scrollSettings,
+				function (viewport, scope) {
+
+					scope.adapter.applyUpdates(
+						function (item, scope) {
+							if (item === 'one')
+								return [];
+						}
+					);
+
+					scope.$apply();
+
+					expect(viewport.children().length).toBe(4);
+
+					var row2 = viewport.children()[1];
+					expect(row2.tagName.toLowerCase()).toBe('div');
+					expect(row2.innerHTML).toBe('1: two');
+
+					var row3 = viewport.children()[2];
+					expect(row3.tagName.toLowerCase()).toBe('div');
+					expect(row3.innerHTML).toBe('2: three');
+
+					expect(scope.adapter).toBeTruthy();
+					expect(scope.adapter.topVisibleElement[0].innerHTML).toBe('1: two');
+				}
+			);
+		});
+
+		it('should delete selected (middle) row', function () {
+			runTest(scrollSettings,
+				function (viewport, scope) {
+
+					scope.adapter.applyUpdates(
+						function (item, scope) {
+							if (item === 'two')
+								return [];
+						}
+					);
+
+					scope.$apply();
+
+					expect(viewport.children().length).toBe(4);
+
+					var row1 = viewport.children()[1];
+					expect(row1.tagName.toLowerCase()).toBe('div');
+					expect(row1.innerHTML).toBe('1: one');
+
+					var row2 = viewport.children()[2];
+					expect(row2.tagName.toLowerCase()).toBe('div');
+					expect(row2.innerHTML).toBe('2: three');
+
+					expect(scope.adapter).toBeTruthy();
+					expect(scope.adapter.topVisibleElement[0].innerHTML).toBe('1: one');
+				}
+			);
+		});
+
+		it('should delete selected (last) row', function () {
+			runTest(scrollSettings,
+				function (viewport, scope) {
+
+					scope.adapter.applyUpdates(
+						function (item, scope) {
+							if (item === 'three')
+								return [];
+						}
+					);
+
+					scope.$apply();
+
+					expect(viewport.children().length).toBe(4);
+
+					var row1 = viewport.children()[1];
+					expect(row1.tagName.toLowerCase()).toBe('div');
+					expect(row1.innerHTML).toBe('1: one');
+
+					var row2 = viewport.children()[2];
+					expect(row2.tagName.toLowerCase()).toBe('div');
+					expect(row2.innerHTML).toBe('2: two');
+
+					expect(scope.adapter).toBeTruthy();
+					expect(scope.adapter.topVisibleElement[0].innerHTML).toBe('1: one');
+				}
+			);
+		});
+
+		it('should insert a new element before selected (first) row', function () {
+			runTest(scrollSettings,
+				function (viewport, scope, $timeout) {
+
+					scope.adapter.applyUpdates(
+						function (item, scope) {
+							if (item === 'one')
+								return ['before one', item];
+						}
+					);
+
+					$timeout.flush();
+
+					expect(viewport.children().length).toBe(6);
+
+					var row0 = viewport.children()[1];
+					expect(row0.tagName.toLowerCase()).toBe('div');
+					expect(row0.innerHTML).toBe('1: before one');
+
+					var row1 = viewport.children()[2];
+					expect(row1.tagName.toLowerCase()).toBe('div');
+					expect(row1.innerHTML).toBe('2: one');
+
+					var row2 = viewport.children()[3];
+					expect(row2.tagName.toLowerCase()).toBe('div');
+					expect(row2.innerHTML).toBe('3: two');
+
+					var row3 = viewport.children()[4];
+					expect(row3.tagName.toLowerCase()).toBe('div');
+					expect(row3.innerHTML).toBe('4: three');
+
+					expect(scope.adapter).toBeTruthy();
+					expect(scope.adapter.topVisibleElement[0].innerHTML).toBe('1: before one');
+				}
+			);
+		});
+
+		it('should insert a new element after selected (first) row', function () {
+			runTest(scrollSettings,
+				function (viewport, scope) {
+
+					scope.adapter.applyUpdates(
+						function (item, scope) {
+							if (item === 'one')
+								return [item, 'after one'];
+						}
+					);
+
+					scope.$apply();
+
+					expect(viewport.children().length).toBe(6);
+
+					var row0 = viewport.children()[1];
+					expect(row0.tagName.toLowerCase()).toBe('div');
+					expect(row0.innerHTML).toBe('1: one');
+
+					var row1 = viewport.children()[2];
+					expect(row1.tagName.toLowerCase()).toBe('div');
+					expect(row1.innerHTML).toBe('2: after one');
+
+					var row2 = viewport.children()[3];
+					expect(row2.tagName.toLowerCase()).toBe('div');
+					expect(row2.innerHTML).toBe('3: two');
+
+					var row3 = viewport.children()[4];
+					expect(row3.tagName.toLowerCase()).toBe('div');
+					expect(row3.innerHTML).toBe('4: three');
+
+					expect(scope.adapter).toBeTruthy();
+					expect(scope.adapter.topVisibleElement[0].innerHTML).toBe('1: one');
+				}
+			);
+		});
+
+		it('should insert a new element before selected (middle) row', function () {
+			runTest(scrollSettings,
+				function (viewport, scope) {
+
+					scope.adapter.applyUpdates(
+						function (item, scope) {
+							if (item === 'two')
+								return ['before two', item];
+						}
+					);
+
+					scope.$apply();
+
+					expect(viewport.children().length).toBe(6);
+
+					var row0 = viewport.children()[1];
+					expect(row0.tagName.toLowerCase()).toBe('div');
+					expect(row0.innerHTML).toBe('1: one');
+
+					var row1 = viewport.children()[2];
+					expect(row1.tagName.toLowerCase()).toBe('div');
+					expect(row1.innerHTML).toBe('2: before two');
+
+					var row2 = viewport.children()[3];
+					expect(row2.tagName.toLowerCase()).toBe('div');
+					expect(row2.innerHTML).toBe('3: two');
+
+					var row3 = viewport.children()[4];
+					expect(row3.tagName.toLowerCase()).toBe('div');
+					expect(row3.innerHTML).toBe('4: three');
+
+					expect(scope.adapter).toBeTruthy();
+					expect(scope.adapter.topVisibleElement[0].innerHTML).toBe('1: one');
+				}
+			);
+		});
+
+		it('should insert a new element after selected (last) row', function () {
+			runTest(scrollSettings,
+				function (viewport, scope) {
+
+					scope.adapter.applyUpdates(
+						function (item, scope) {
+							if (item === 'three')
+								return [item, 'after three'];
+						}
+					);
+
+					scope.$apply();
+
+					expect(viewport.children().length).toBe(6);
+
+					var row0 = viewport.children()[1];
+					expect(row0.tagName.toLowerCase()).toBe('div');
+					expect(row0.innerHTML).toBe('1: one');
+
+					var row1 = viewport.children()[2];
+					expect(row1.tagName.toLowerCase()).toBe('div');
+					expect(row1.innerHTML).toBe('2: two');
+
+					var row2 = viewport.children()[3];
+					expect(row2.tagName.toLowerCase()).toBe('div');
+					expect(row2.innerHTML).toBe('3: three');
+
+					var row3 = viewport.children()[4];
+					expect(row3.tagName.toLowerCase()).toBe('div');
+					expect(row3.innerHTML).toBe('4: after three');
+
+					expect(scope.adapter).toBeTruthy();
+					expect(scope.adapter.topVisibleElement[0].innerHTML).toBe('1: one');
+				}
+			);
+		});
+
+	});
+
+
+
+
+	describe('applyUpdates tests (index based)', function () {
+		var scrollSettings = {datasource: 'myOnePageDatasource', adapter: 'adapter'};
+
+		it('should update selected (first) row', function () {
+			runTest(scrollSettings,
+				function (viewport, scope) {
+
+					scope.adapter.applyUpdates(1, ['one *1']);
+
+					scope.$apply();
+
+					expect(viewport.children().length).toBe(5);
+
+					var row1 = viewport.children()[1];
+					expect(row1.tagName.toLowerCase()).toBe('div');
+					expect(row1.innerHTML).toBe('1: one *1');
+
+					var row2 = viewport.children()[2];
+					expect(row2.tagName.toLowerCase()).toBe('div');
+					expect(row2.innerHTML).toBe('2: two');
+
+					var row3 = viewport.children()[3];
+					expect(row3.tagName.toLowerCase()).toBe('div');
+					expect(row3.innerHTML).toBe('3: three');
+
+					expect(scope.adapter).toBeTruthy();
+//                    expect(scope.adapter.topVisibleElement[0].innerHTML).toBe('1: one *1');
+				}
+			);
+		});
+
+		it('should ignore out of bound indexes', function () {
+			runTest(scrollSettings,
+				function (viewport, scope) {
+
+					scope.adapter.applyUpdates(0, ['invalid']);
+
+					scope.$apply();
+
+					expect(viewport.children().length).toBe(5);
+
+					var row1 = viewport.children()[1];
+					expect(row1.tagName.toLowerCase()).toBe('div');
+					expect(row1.innerHTML).toBe('1: one');
+
+					var row2 = viewport.children()[2];
+					expect(row2.tagName.toLowerCase()).toBe('div');
+					expect(row2.innerHTML).toBe('2: two');
+
+					var row3 = viewport.children()[3];
+					expect(row3.tagName.toLowerCase()).toBe('div');
+					expect(row3.innerHTML).toBe('3: three');
+
+					expect(scope.adapter).toBeTruthy();
+					expect(scope.adapter.topVisibleElement[0].innerHTML).toBe('1: one');
+				}
+			);
+		});
+
+		it('should ignore out of bound indexes 2', function () {
+			runTest(scrollSettings,
+				function (viewport, scope) {
+
+					scope.adapter.applyUpdates(4, ['invalid']);
+
+					scope.$apply();
+
+					expect(viewport.children().length).toBe(5);
+
+					var row1 = viewport.children()[1];
+					expect(row1.tagName.toLowerCase()).toBe('div');
+					expect(row1.innerHTML).toBe('1: one');
+
+					var row2 = viewport.children()[2];
+					expect(row2.tagName.toLowerCase()).toBe('div');
+					expect(row2.innerHTML).toBe('2: two');
+
+					var row3 = viewport.children()[3];
+					expect(row3.tagName.toLowerCase()).toBe('div');
+					expect(row3.innerHTML).toBe('3: three');
+
+					expect(scope.adapter).toBeTruthy();
+					expect(scope.adapter.topVisibleElement[0].innerHTML).toBe('1: one');
+				}
+			);
+		});
+
+		it('should update selected (middle) row', function () {
+			runTest(scrollSettings,
+				function (viewport, scope) {
+
+					scope.adapter.applyUpdates(2, ['two *2']);
+
+					scope.$apply();
+
+					expect(viewport.children().length).toBe(5);
+
+					var row1 = viewport.children()[1];
+					expect(row1.tagName.toLowerCase()).toBe('div');
+					expect(row1.innerHTML).toBe('1: one');
+
+					var row2 = viewport.children()[2];
+					expect(row2.tagName.toLowerCase()).toBe('div');
+					expect(row2.innerHTML).toBe('2: two *2');
+
+					var row3 = viewport.children()[3];
+					expect(row3.tagName.toLowerCase()).toBe('div');
+					expect(row3.innerHTML).toBe('3: three');
+
+					expect(scope.adapter).toBeTruthy();
+					expect(scope.adapter.topVisibleElement[0].innerHTML).toBe('1: one');
+				}
+			);
+		});
+
+		it('should update selected (last) row', function () {
+			runTest(scrollSettings,
+				function (viewport, scope) {
+
+					scope.adapter.applyUpdates(3, ['three *3']);
+
+					scope.$apply();
+
+					expect(viewport.children().length).toBe(5);
+
+					var row1 = viewport.children()[1];
+					expect(row1.tagName.toLowerCase()).toBe('div');
+					expect(row1.innerHTML).toBe('1: one');
+
+					var row2 = viewport.children()[2];
+					expect(row2.tagName.toLowerCase()).toBe('div');
+					expect(row2.innerHTML).toBe('2: two');
+
+					var row3 = viewport.children()[3];
+					expect(row3.tagName.toLowerCase()).toBe('div');
+					expect(row3.innerHTML).toBe('3: three *3');
+
+					expect(scope.adapter).toBeTruthy();
+					expect(scope.adapter.topVisibleElement[0].innerHTML).toBe('1: one');
+				}
+			);
+		});
+
+		it('should delete selected (first) row', function () {
+			runTest(scrollSettings,
+				function (viewport, scope) {
+
+					scope.adapter.applyUpdates(1, []);
+
+					scope.$apply();
+
+					expect(viewport.children().length).toBe(4);
+
+					var row2 = viewport.children()[1];
+					expect(row2.tagName.toLowerCase()).toBe('div');
+					expect(row2.innerHTML).toBe('1: two');
+
+					var row3 = viewport.children()[2];
+					expect(row3.tagName.toLowerCase()).toBe('div');
+					expect(row3.innerHTML).toBe('2: three');
+
+					expect(scope.adapter).toBeTruthy();
+					expect(scope.adapter.topVisibleElement[0].innerHTML).toBe('1: two');
+				}
+			);
+		});
+
+		it('should delete selected (middle) row', function () {
+			runTest(scrollSettings,
+				function (viewport, scope) {
+
+					scope.adapter.applyUpdates(2, []);
+
+					scope.$apply();
+
+					expect(viewport.children().length).toBe(4);
+
+					var row1 = viewport.children()[1];
+					expect(row1.tagName.toLowerCase()).toBe('div');
+					expect(row1.innerHTML).toBe('1: one');
+
+					var row2 = viewport.children()[2];
+					expect(row2.tagName.toLowerCase()).toBe('div');
+					expect(row2.innerHTML).toBe('2: three');
+
+					expect(scope.adapter).toBeTruthy();
+					expect(scope.adapter.topVisibleElement[0].innerHTML).toBe('1: one');
+				}
+			);
+		});
+
+		it('should delete selected (last) row', function () {
+			runTest(scrollSettings,
+				function (viewport, scope) {
+
+					scope.adapter.applyUpdates(3, []);
+
+					scope.$apply();
+
+					expect(viewport.children().length).toBe(4);
+
+					var row1 = viewport.children()[1];
+					expect(row1.tagName.toLowerCase()).toBe('div');
+					expect(row1.innerHTML).toBe('1: one');
+
+					var row2 = viewport.children()[2];
+					expect(row2.tagName.toLowerCase()).toBe('div');
+					expect(row2.innerHTML).toBe('2: two');
+
+					expect(scope.adapter).toBeTruthy();
+					expect(scope.adapter.topVisibleElement[0].innerHTML).toBe('1: one');
+				}
+			);
+		});
+
+		it('should insert a new element before selected (first) row', function () {
+			runTest(scrollSettings,
+				function (viewport, scope) {
+
+					scope.adapter.applyUpdates(1, ['before one', 'one']);
+
+					scope.$apply();
+
+					expect(viewport.children().length).toBe(6);
+
+					var row0 = viewport.children()[1];
+					expect(row0.tagName.toLowerCase()).toBe('div');
+					expect(row0.innerHTML).toBe('1: before one');
+
+					var row1 = viewport.children()[2];
+					expect(row1.tagName.toLowerCase()).toBe('div');
+					expect(row1.innerHTML).toBe('2: one');
+
+					var row2 = viewport.children()[3];
+					expect(row2.tagName.toLowerCase()).toBe('div');
+					expect(row2.innerHTML).toBe('3: two');
+
+					var row3 = viewport.children()[4];
+					expect(row3.tagName.toLowerCase()).toBe('div');
+					expect(row3.innerHTML).toBe('4: three');
+
+					expect(scope.adapter).toBeTruthy();
+//                    expect(scope.adapter.topVisibleElement[0].innerHTML).toBe('1: before one');
+				}
+			);
+		});
+
+		it('should insert a new element after selected (first) row', function () {
+			runTest(scrollSettings,
+				function (viewport, scope) {
+
+					scope.adapter.applyUpdates(1, ['one', 'after one']);
+
+					scope.$apply();
+
+					expect(viewport.children().length).toBe(6);
+
+					var row0 = viewport.children()[1];
+					expect(row0.tagName.toLowerCase()).toBe('div');
+					expect(row0.innerHTML).toBe('1: one');
+
+					var row1 = viewport.children()[2];
+					expect(row1.tagName.toLowerCase()).toBe('div');
+					expect(row1.innerHTML).toBe('2: after one');
+
+					var row2 = viewport.children()[3];
+					expect(row2.tagName.toLowerCase()).toBe('div');
+					expect(row2.innerHTML).toBe('3: two');
+
+					var row3 = viewport.children()[4];
+					expect(row3.tagName.toLowerCase()).toBe('div');
+					expect(row3.innerHTML).toBe('4: three');
+
+					expect(scope.adapter).toBeTruthy();
+					expect(scope.adapter.topVisibleElement[0].innerHTML).toBe('1: one');
+				}
+			);
+		});
+
+		it('should insert a new element before selected (middle) row', function () {
+			runTest(scrollSettings,
+				function (viewport, scope) {
+
+					scope.adapter.applyUpdates(2, ['before two', 'two']);
+
+					scope.$apply();
+
+					expect(viewport.children().length).toBe(6);
+
+					var row0 = viewport.children()[1];
+					expect(row0.tagName.toLowerCase()).toBe('div');
+					expect(row0.innerHTML).toBe('1: one');
+
+					var row1 = viewport.children()[2];
+					expect(row1.tagName.toLowerCase()).toBe('div');
+					expect(row1.innerHTML).toBe('2: before two');
+
+					var row2 = viewport.children()[3];
+					expect(row2.tagName.toLowerCase()).toBe('div');
+					expect(row2.innerHTML).toBe('3: two');
+
+					var row3 = viewport.children()[4];
+					expect(row3.tagName.toLowerCase()).toBe('div');
+					expect(row3.innerHTML).toBe('4: three');
+
+					expect(scope.adapter).toBeTruthy();
+					expect(scope.adapter.topVisibleElement[0].innerHTML).toBe('1: one');
+				}
+			);
+		});
+
+		it('should insert a new element after selected (last) row', function () {
+			runTest(scrollSettings,
+				function (viewport, scope, $timeout) {
+
+					scope.adapter.applyUpdates(3, ['three', 'after three']);
+
+					scope.$apply();
+					$timeout.flush();
+
+					expect(viewport.children().length).toBe(6);
+
+					var row0 = viewport.children()[1];
+					expect(row0.tagName.toLowerCase()).toBe('div');
+					expect(row0.innerHTML).toBe('1: one');
+
+					var row1 = viewport.children()[2];
+					expect(row1.tagName.toLowerCase()).toBe('div');
+					expect(row1.innerHTML).toBe('2: two');
+
+					var row2 = viewport.children()[3];
+					expect(row2.tagName.toLowerCase()).toBe('div');
+					expect(row2.innerHTML).toBe('3: three');
+
+					var row3 = viewport.children()[4];
+					expect(row3.tagName.toLowerCase()).toBe('div');
+					expect(row3.innerHTML).toBe('4: after three');
+					expect(row3.style.cssText).not.toBe('display: none;');
+
+					expect(scope.adapter).toBeTruthy();
+					expect(scope.adapter.topVisibleElement[0].innerHTML).toBe('1: one');
+				}
+			);
+		});
+
+	});
+
+	describe('applyUpdates tests with object items', function () {
+		var scrollSettings = {
+			datasource: 'myObjectDatasource',
+			adapter: 'adapter',
+			template: '{{$index}}: {{item.text}}'
+		};
+
+		it('should update existing item inplace', function () {
+			runTest(scrollSettings,
+				function (viewport, scope) {
+
+					scope.adapter.applyUpdates(
+						function (item, scope) {
+							item.text  += ' *' + scope.$index;
+						}
+					);
+
+					scope.$apply();
+
+					expect(viewport.children().length).toBe(5);
+					var row1 = viewport.children()[1];
+					expect(row1.tagName.toLowerCase()).toBe('div');
+					expect(row1.innerHTML).toBe('1: one *1');
+
+					var row2 = viewport.children()[2];
+					expect(row2.tagName.toLowerCase()).toBe('div');
+					expect(row2.innerHTML).toBe('2: two *2');
+
+					var row3 = viewport.children()[3];
+					expect(row3.tagName.toLowerCase()).toBe('div');
+					expect(row3.innerHTML).toBe('3: three *3');
+
+					expect(scope.adapter).toBeTruthy();
+					expect(scope.adapter.topVisibleElement[0].innerHTML).toBe('1: one *1');
+				}
+			);
+		});
+
+		it('should replace existing item with an updated one', function () {
+			runTest(scrollSettings,
+				function (viewport, scope, $timeout) {
+
+					scope.adapter.applyUpdates(
+						function (item, scope) {
+							return [
+								{
+									text: item.text + ' *' + scope.$index
+								}
+							];
+						}
+					);
+
+					$timeout.flush();
+
+					expect(viewport.children().length).toBe(5);
+					var row1 = viewport.children()[1];
+					expect(row1.tagName.toLowerCase()).toBe('div');
+					expect(row1.innerHTML).toBe('1: one *1');
+
+					var row2 = viewport.children()[2];
+					expect(row2.tagName.toLowerCase()).toBe('div');
+					expect(row2.innerHTML).toBe('2: two *2');
+
+					var row3 = viewport.children()[3];
+					expect(row3.tagName.toLowerCase()).toBe('div');
+					expect(row3.innerHTML).toBe('3: three *3');
+
+					expect(scope.adapter).toBeTruthy();
+					expect(scope.adapter.topVisibleElement[0].innerHTML).toBe('1: one *1');
+				}
+			);
+		});
+	});
+
+
 
 	describe('datasource with only 3 elements (negative index)', function () {
 		var scrollSettings = { datasource: 'anotherDatasource' };

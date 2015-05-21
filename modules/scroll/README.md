@@ -176,17 +176,13 @@ it to you to do it properly - whatever properly means in your book.
 
 See [index.html](http://rawgithub.com/Hill30/NGScroller/master/src/index.html)
 
-###Debugging coffeeScript directly in the browser
-
-With adding sourceURL setting the source maps for the coffeScript seem to be functional now - at least with Chrome. You can set breakpoints and inspect values form the coffeeScript source window. 
-
-There is one dirty trick though - to make the breakpoints stick, the first one to be hit **has** to be set from the javascript source window. With the way the sample source code is, open the source code dropdown and select the source called 'src/scripts/application.js' under 'no domain', and place the breakpoint on the second line of the code in this file. Because of source mapping the blue arrow indicating the breakpoint will be put in the corresponding place of the coffeeScript code (application.coffee in this case), so you will not see it in the application.js. Now, if you refresh the page, Chrome will break on the first line of the code in the application.coffee. 
-
-Once the first breakpoint set up this way is hit, the rest of them will work just fine. You can set and/or remove them directly in coffeeScript. Just do not remove the first one - as soon as you do, the rest of you breakpoints while still visible in the editor will cease to work.
-
-Do not ask me why this woodoo is necessary, but as of Chrome version 30 it is just the way it is.
-
 ###History
+
+####v1.1.2
+* Fixed inserting elements via applyUpdates error.
+
+####v1.1.1
+* Fixed jqlite on $destroy error.
 
 ####v1.1.0
 * Introduced API to dynamically update scroller content.
@@ -201,7 +197,7 @@ Do not ask me why this woodoo is necessary, but as of Chrome version 30 it is ju
 * Registration of ui-scroll in bower.
 
 ####v1.0.1
-* Deep datasource access via dot-notation in template. 
+* Deep datasource access via dot-notation in template.
 * [Angular 1.3.x breaking change](https://github.com/angular/angular.js/issues/8876) fix with backward compatibility.
 
 ####v1.0.0
