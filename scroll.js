@@ -86,7 +86,7 @@ angular.module('ui.scroll', []).directive('uiScrollViewport', [
           if (!isDatasourceValid()) {
             datasource = $injector.get(datasourceName);
             if (!isDatasourceValid()) {
-              throw new Error('' + datasourceName + ' is not a valid datasource');
+              throw new Error(datasourceName + ' is not a valid datasource');
             }
           }
           bufferSize = Math.max(3, +$attr.bufferSize || 10);
@@ -94,8 +94,8 @@ angular.module('ui.scroll', []).directive('uiScrollViewport', [
             return viewport.outerHeight() * Math.max(0.1, +$attr.padding || 0.1);
           };
           scrollHeight = function (elem) {
-            var _ref;
-            return (_ref = elem[0].scrollHeight) != null ? _ref : elem[0].document.documentElement.scrollHeight;
+            var ref;
+            return (ref = elem[0].scrollHeight) != null ? ref : elem[0].document.documentElement.scrollHeight;
           };
           builder = null;
           linker($scope.$new(), function (template) {
@@ -148,7 +148,9 @@ angular.module('ui.scroll', []).directive('uiScrollViewport', [
             };
             topPadding = createPadding(padding(repeaterType), element, 'top');
             bottomPadding = createPadding(padding(repeaterType), element, 'bottom');
-            $scope.$on('$destroy', template.remove);
+            $scope.$on('$destroy', function () {
+              return template.remove();
+            });
             return builder = {
               viewport: viewport,
               topPadding: topPadding.paddingHeight,
@@ -199,8 +201,8 @@ angular.module('ui.scroll', []).directive('uiScrollViewport', [
           eof = false;
           bof = false;
           removeFromBuffer = function (start, stop) {
-            var i, _i;
-            for (i = _i = start; start <= stop ? _i < stop : _i > stop; i = start <= stop ? ++_i : --_i) {
+            var i, j, ref, ref1;
+            for (i = j = ref = start, ref1 = stop; ref <= ref1 ? j < ref1 : j > ref1; i = ref <= ref1 ? ++j : --j) {
               buffer[i].scope.$destroy();
               buffer[i].element.remove();
             }
@@ -228,10 +230,10 @@ angular.module('ui.scroll', []).directive('uiScrollViewport', [
             return !eof && builder.bottomDataPos() < bottomVisiblePos() + bufferPadding();
           };
           clipBottom = function () {
-            var bottomHeight, i, item, itemHeight, itemTop, newRow, overage, rowTop, _i, _ref;
+            var bottomHeight, i, item, itemHeight, itemTop, j, newRow, overage, ref, rowTop;
             bottomHeight = 0;
             overage = 0;
-            for (i = _i = _ref = buffer.length - 1; _ref <= 0 ? _i <= 0 : _i >= 0; i = _ref <= 0 ? ++_i : --_i) {
+            for (i = j = ref = buffer.length - 1; ref <= 0 ? j <= 0 : j >= 0; i = ref <= 0 ? ++j : --j) {
               item = buffer[i];
               itemTop = item.element.offset().top;
               newRow = rowTop !== itemTop;
@@ -262,11 +264,11 @@ angular.module('ui.scroll', []).directive('uiScrollViewport', [
             return !bof && builder.topDataPos() > topVisiblePos() - bufferPadding();
           };
           clipTop = function () {
-            var item, itemHeight, itemTop, newRow, overage, rowTop, topHeight, _i, _len;
+            var item, itemHeight, itemTop, j, len, newRow, overage, rowTop, topHeight;
             topHeight = 0;
             overage = 0;
-            for (_i = 0, _len = buffer.length; _i < _len; _i++) {
-              item = buffer[_i];
+            for (j = 0, len = buffer.length; j < len; j++) {
+              item = buffer[j];
               itemTop = item.element.offset().top;
               newRow = rowTop !== itemTop;
               rowTop = itemTop;
@@ -355,7 +357,7 @@ angular.module('ui.scroll', []).directive('uiScrollViewport', [
             }
           };
           doAdjustment = function (rid, finalize) {
-            var item, itemHeight, itemTop, newRow, rowTop, topHeight, _i, _len, _results;
+            var item, itemHeight, itemTop, j, len, newRow, results, rowTop, topHeight;
             if (shouldLoadBottom()) {
               enqueueFetch(rid, true);
             } else {
@@ -368,9 +370,9 @@ angular.module('ui.scroll', []).directive('uiScrollViewport', [
             }
             if (pending.length === 0) {
               topHeight = 0;
-              _results = [];
-              for (_i = 0, _len = buffer.length; _i < _len; _i++) {
-                item = buffer[_i];
+              results = [];
+              for (j = 0, len = buffer.length; j < len; j++) {
+                item = buffer[j];
                 itemTop = item.element.offset().top;
                 newRow = rowTop !== itemTop;
                 rowTop = itemTop;
@@ -378,7 +380,7 @@ angular.module('ui.scroll', []).directive('uiScrollViewport', [
                   itemHeight = item.element.outerHeight(true);
                 }
                 if (newRow && builder.topDataPos() + topHeight + itemHeight < topVisiblePos()) {
-                  _results.push(topHeight += itemHeight);
+                  results.push(topHeight += itemHeight);
                 } else {
                   if (newRow) {
                     topVisible(item);
@@ -386,16 +388,16 @@ angular.module('ui.scroll', []).directive('uiScrollViewport', [
                   break;
                 }
               }
-              return _results;
+              return results;
             }
           };
           adjustBuffer = function (rid, newItems, finalize) {
             if (newItems && newItems.length) {
               return $timeout(function () {
-                var elt, itemTop, row, rowTop, rows, _i, _j, _len, _len1;
+                var elt, itemTop, j, k, len, len1, row, rowTop, rows;
                 rows = [];
-                for (_i = 0, _len = newItems.length; _i < _len; _i++) {
-                  row = newItems[_i];
+                for (j = 0, len = newItems.length; j < len; j++) {
+                  row = newItems[j];
                   elt = row.wrapper.element;
                   showElementAfterRender(elt);
                   itemTop = elt.offset().top;
@@ -404,8 +406,8 @@ angular.module('ui.scroll', []).directive('uiScrollViewport', [
                     rowTop = itemTop;
                   }
                 }
-                for (_j = 0, _len1 = rows.length; _j < _len1; _j++) {
-                  row = rows[_j];
+                for (k = 0, len1 = rows.length; k < len1; k++) {
+                  row = rows[k];
                   adjustRowHeight(row.appended, row.wrapper);
                 }
                 return doAdjustment(rid, finalize);
@@ -432,7 +434,7 @@ angular.module('ui.scroll', []).directive('uiScrollViewport', [
                 return finalize(rid);
               } else {
                 return datasource.get(next, bufferSize, function (result) {
-                  var item, newItems, _i, _len;
+                  var item, j, len, newItems;
                   if (rid && rid !== ridActual || $scope.$$destroyed) {
                     return;
                   }
@@ -443,8 +445,8 @@ angular.module('ui.scroll', []).directive('uiScrollViewport', [
                   }
                   if (result.length > 0) {
                     clipTop();
-                    for (_i = 0, _len = result.length; _i < _len; _i++) {
-                      item = result[_i];
+                    for (j = 0, len = result.length; j < len; j++) {
+                      item = result[j];
                       newItems.push(insert(++next, item));
                     }
                   }
@@ -456,7 +458,7 @@ angular.module('ui.scroll', []).directive('uiScrollViewport', [
                 return finalize(rid);
               } else {
                 return datasource.get(first - bufferSize, bufferSize, function (result) {
-                  var i, newItems, _i, _ref;
+                  var i, j, newItems, ref;
                   if (rid && rid !== ridActual || $scope.$$destroyed) {
                     return;
                   }
@@ -469,7 +471,7 @@ angular.module('ui.scroll', []).directive('uiScrollViewport', [
                     if (buffer.length) {
                       clipBottom();
                     }
-                    for (i = _i = _ref = result.length - 1; _ref <= 0 ? _i <= 0 : _i >= 0; i = _ref <= 0 ? ++_i : --_i) {
+                    for (i = j = ref = result.length - 1; ref <= 0 ? j <= 0 : j >= 0; i = ref <= 0 ? ++j : --j) {
                       newItems.unshift(insert(--first, result[i]));
                     }
                   }
@@ -502,9 +504,9 @@ angular.module('ui.scroll', []).directive('uiScrollViewport', [
             eventListener = $scope.$new();
           }
           $scope.$on('$destroy', function () {
-            var item, _i, _len;
-            for (_i = 0, _len = buffer.length; _i < _len; _i++) {
-              item = buffer[_i];
+            var item, j, len;
+            for (j = 0, len = buffer.length; j < len; j++) {
+              item = buffer[j];
               item.scope.$destroy();
               item.element.remove();
             }
@@ -515,7 +517,7 @@ angular.module('ui.scroll', []).directive('uiScrollViewport', [
           adapter = {};
           adapter.isLoading = false;
           applyUpdate = function (wrapper, newItems) {
-            var i, inserted, item, ndx, newItem, oldItemNdx, _i, _j, _k, _len, _len1, _len2;
+            var i, inserted, item, j, k, l, len, len1, len2, ndx, newItem, oldItemNdx;
             inserted = [];
             if (angular.isArray(newItems)) {
               if (newItems.length) {
@@ -528,12 +530,12 @@ angular.module('ui.scroll', []).directive('uiScrollViewport', [
                   } else {
                     oldItemNdx = 1;
                   }
-                  for (i = _i = 0, _len = newItems.length; _i < _len; i = ++_i) {
+                  for (i = j = 0, len = newItems.length; j < len; i = ++j) {
                     newItem = newItems[i];
                     inserted.push(insert(ndx + i, newItem));
                   }
                   removeFromBuffer(oldItemNdx, oldItemNdx + 1);
-                  for (i = _j = 0, _len1 = buffer.length; _j < _len1; i = ++_j) {
+                  for (i = k = 0, len1 = buffer.length; k < len1; i = ++k) {
                     item = buffer[i];
                     item.scope.$index = first + i;
                   }
@@ -541,7 +543,7 @@ angular.module('ui.scroll', []).directive('uiScrollViewport', [
               } else {
                 removeFromBuffer(wrapper.scope.$index - first, wrapper.scope.$index - first + 1);
                 next--;
-                for (i = _k = 0, _len2 = buffer.length; _k < _len2; i = ++_k) {
+                for (i = l = 0, len2 = buffer.length; l < len2; i = ++l) {
                   item = buffer[i];
                   item.scope.$index = first + i;
                 }
@@ -550,18 +552,18 @@ angular.module('ui.scroll', []).directive('uiScrollViewport', [
             return inserted;
           };
           adapter.applyUpdates = function (arg1, arg2) {
-            var inserted, wrapper, _i, _len, _ref, _ref1;
+            var inserted, j, len, ref, ref1, wrapper;
             inserted = [];
             ridActual++;
             if (angular.isFunction(arg1)) {
-              _ref = buffer.slice(0);
-              for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-                wrapper = _ref[_i];
-                inserted.concat(inserted, applyUpdate(wrapper, arg1(wrapper.scope[itemName], wrapper.scope, wrapper.element)));
+              ref = buffer.slice(0);
+              for (j = 0, len = ref.length; j < len; j++) {
+                wrapper = ref[j];
+                inserted = inserted.concat(inserted, applyUpdate(wrapper, arg1(wrapper.scope[itemName], wrapper.scope, wrapper.element)));
               }
             } else {
               if (arg1 % 1 === 0) {
-                if (0 <= (_ref1 = arg1 - first - 1) && _ref1 < buffer.length) {
+                if (0 <= (ref1 = arg1 - first) && ref1 < buffer.length) {
                   inserted = applyUpdate(buffer[arg1 - first], arg2);
                 }
               } else {
@@ -580,64 +582,64 @@ angular.module('ui.scroll', []).directive('uiScrollViewport', [
             adapter = adapterOnScope;
           }
           doUpdate = function (locator, newItem) {
-            var wrapper, _fn, _i, _len, _ref;
+            var fn, j, len, ref, wrapper;
             if (angular.isFunction(locator)) {
-              _fn = function (wrapper) {
+              fn = function (wrapper) {
                 return locator(wrapper.scope);
               };
-              for (_i = 0, _len = buffer.length; _i < _len; _i++) {
-                wrapper = buffer[_i];
-                _fn(wrapper);
+              for (j = 0, len = buffer.length; j < len; j++) {
+                wrapper = buffer[j];
+                fn(wrapper);
               }
             } else {
-              if (0 <= (_ref = locator - first - 1) && _ref < buffer.length) {
+              if (0 <= (ref = locator - first - 1) && ref < buffer.length) {
                 buffer[locator - first - 1].scope[itemName] = newItem;
               }
             }
             return null;
           };
           doDelete = function (locator) {
-            var i, item, temp, wrapper, _fn, _i, _j, _k, _len, _len1, _len2, _ref;
+            var fn, i, item, j, k, l, len, len1, len2, ref, temp, wrapper;
             if (angular.isFunction(locator)) {
               temp = [];
-              for (_i = 0, _len = buffer.length; _i < _len; _i++) {
-                item = buffer[_i];
+              for (j = 0, len = buffer.length; j < len; j++) {
+                item = buffer[j];
                 temp.unshift(item);
               }
-              _fn = function (wrapper) {
+              fn = function (wrapper) {
                 if (locator(wrapper.scope)) {
                   removeFromBuffer(temp.length - 1 - i, temp.length - i);
                   return next--;
                 }
               };
-              for (i = _j = 0, _len1 = temp.length; _j < _len1; i = ++_j) {
+              for (i = k = 0, len1 = temp.length; k < len1; i = ++k) {
                 wrapper = temp[i];
-                _fn(wrapper);
+                fn(wrapper);
               }
             } else {
-              if (0 <= (_ref = locator - first - 1) && _ref < buffer.length) {
+              if (0 <= (ref = locator - first - 1) && ref < buffer.length) {
                 removeFromBuffer(locator - first - 1, locator - first);
                 next--;
               }
             }
-            for (i = _k = 0, _len2 = buffer.length; _k < _len2; i = ++_k) {
+            for (i = l = 0, len2 = buffer.length; l < len2; i = ++l) {
               item = buffer[i];
               item.scope.$index = first + i;
             }
             return adjustBuffer();
           };
           doInsert = function (locator, item) {
-            var i, inserted, _i, _len, _ref;
+            var i, inserted, j, len, ref;
             inserted = [];
             if (angular.isFunction(locator)) {
               throw new Error('not implemented - Insert with locator function');
             } else {
-              if (0 <= (_ref = locator - first - 1) && _ref < buffer.length) {
+              if (0 <= (ref = locator - first - 1) && ref < buffer.length) {
                 inserted.push(insert(locator, item));
                 next++;
               }
             }
-            for (i = _i = 0, _len = buffer.length; _i < _len; i = ++_i) {
+            for (i = j = 0, len = buffer.length; j < len; i = ++j) {
               item = buffer[i];
               item.scope.$index = first + i;
             }
@@ -657,5 +659,5 @@ angular.module('ui.scroll', []).directive('uiScrollViewport', [
     };
   }
 ]);  /*
-//# sourceURL=src/scripts/ui-scroll.js
-*/
+ //# sourceURL=src/scripts/ui-scroll.js
+ */
