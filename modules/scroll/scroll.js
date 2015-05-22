@@ -38,7 +38,7 @@ angular.module('ui.scroll', []).directive('uiScrollViewport', [
 					log = console.debug || console.log;
 					match = $attr.uiScroll.match(/^\s*(\w+)\s+in\s+([\w\.]+)\s*$/);
 					if (!match) {
-						throw new Error("Expected uiScroll in form of '_item_ in _datasource_' but got '" + $attr.uiScroll + "'");
+						throw new Error('Expected uiScroll in form of \'_item_ in _datasource_\' but got \'' + $attr.uiScroll + '\'');
 					}
 					itemName = match[1];
 					datasourceName = match[2];
@@ -81,7 +81,7 @@ angular.module('ui.scroll', []).directive('uiScrollViewport', [
 					if (!isDatasourceValid()) {
 						datasource = $injector.get(datasourceName);
 						if (!isDatasourceValid()) {
-							throw new Error(datasourceName + " is not a valid datasource");
+							throw new Error(datasourceName + ' is not a valid datasource');
 						}
 					}
 					bufferSize = Math.max(3, +$attr.bufferSize || 10);
@@ -97,7 +97,7 @@ angular.module('ui.scroll', []).directive('uiScrollViewport', [
 						var bottomPadding, createPadding, padding, repeaterType, topPadding, viewport;
 						repeaterType = template[0].localName;
 						if (repeaterType === 'dl') {
-							throw new Error("ui-scroll directive does not support <" + template[0].localName + "> as a repeating tag: " + template[0].outerHTML);
+							throw new Error('ui-scroll directive does not support <' + template[0].localName + '> as a repeating tag: ' + template[0].outerHTML);
 						}
 						if (repeaterType !== 'li' && repeaterType !== 'tr') {
 							repeaterType = 'div';
@@ -119,7 +119,7 @@ angular.module('ui.scroll', []).directive('uiScrollViewport', [
 									};
 									return result;
 								default:
-									result = angular.element("<" + repeaterType + "></" + repeaterType + ">");
+									result = angular.element('<' + repeaterType + '></' + repeaterType + '>');
 									result.paddingHeight = result.height;
 									return result;
 							}
@@ -519,7 +519,7 @@ angular.module('ui.scroll', []).directive('uiScrollViewport', [
 						if (angular.isArray(newItems)) {
 							if (newItems.length) {
 								if (newItems.length === 1 && newItems[0] === wrapper.scope[itemName]) {
-
+									return inserted;
 								} else {
 									ndx = wrapper.scope.$index;
 									if (ndx > first) {
@@ -564,7 +564,7 @@ angular.module('ui.scroll', []).directive('uiScrollViewport', [
 									inserted = applyUpdate(buffer[arg1 - first], arg2);
 								}
 							} else {
-								throw new Error("applyUpdates - " + arg1 + " is not a valid index or outside of range");
+								throw new Error('applyUpdates - ' + arg1 + ' is not a valid index or outside of range');
 							}
 						}
 						return adjustBuffer(ridActual, inserted);
@@ -642,13 +642,13 @@ angular.module('ui.scroll', []).directive('uiScrollViewport', [
 						}
 						return adjustBuffer(null, inserted);
 					};
-					eventListener.$on("insert.item", function(event, locator, item) {
+					eventListener.$on('insert.item', function(event, locator, item) {
 						return doInsert(locator, item);
 					});
-					eventListener.$on("update.items", function(event, locator, newItem) {
+					eventListener.$on('update.items', function(event, locator, newItem) {
 						return doUpdate(locator, newItem);
 					});
-					return eventListener.$on("delete.items", function(event, locator) {
+					return eventListener.$on('delete.items', function(event, locator) {
 						return doDelete(locator);
 					});
 				};
