@@ -21,7 +21,7 @@ angular.module('ui.mask', [])
         var options = maskConfig;
 
         return function uiMaskLinkingFunction(scope, iElement, iAttrs, controller){
-          var maskProcessed = false, eventsBound = false,
+          var maskProcessed = false, eventsBound = false, maskOptions = {},
             maskCaretMap, maskPatterns, maskPlaceholder, maskComponents,
           // Minimum required length of the value to be considered valid
             minRequiredLength,
@@ -58,6 +58,18 @@ angular.module('ui.mask', [])
             }
           }
 
+          function initMaskOptions(maskOptionsAttr) {
+            if(! angular.isDefined(maskOptionsAttr) || maskOptionsAttr === '') {
+              return;
+            }
+            maskOptions = angular.fromJson(maskOptionsAttr);
+
+            // If the mask is processed, then we need to update the value
+            if (maskProcessed) {
+              eventHandler();
+            }
+          }
+
           function formatter(fromModelValue){
             if (!maskProcessed) {
               return fromModelValue;
@@ -83,7 +95,8 @@ angular.module('ui.mask', [])
             if (value === '' && iAttrs.required) {
                 controller.$setValidity('required', !controller.$error.required);
             }
-            return isValid ? value : undefined;
+            return !isValid ? undefined :
+              maskOptions.keepMask ? value = maskValueForModel(value) : value;
           }
 
           var linkOptions = {};
@@ -111,6 +124,7 @@ angular.module('ui.mask', [])
 
           iAttrs.$observe('uiMask', initialize);
           iAttrs.$observe('placeholder', initPlaceholder);
+          iAttrs.$observe('uiMaskOptions', initMaskOptions);
           var modelViewValue = false;
           iAttrs.$observe('modelViewValue', function(val) {
             if(val === 'true') {
@@ -224,6 +238,23 @@ angular.module('ui.mask', [])
             });
             return valueMasked;
           }
+
+          function maskValueForModel(unmaskedValue){
+            var valueMasked = '',
+              maskCaretMapCopy = maskCaretMap.slice();
+
+              angular.forEach(maskPlaceholder.split(''), function (chr, i) {
+                if (unmaskedValue.length) {
+                  if (i === maskCaretMapCopy[0]) {
+                    valueMasked  += unmaskedValue.charAt(0) || '';
+                    unmaskedValue = unmaskedValue.substr(1);
+                    maskCaretMapCopy.shift();
+                  } else {
+                    valueMasked += chr.replace('_', '');
+                  }
+              }});
+              return valueMasked;
+            }
 
           function getPlaceholderChar(i) {
             var placeholder = iAttrs.placeholder;
