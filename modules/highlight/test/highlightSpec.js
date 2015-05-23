@@ -26,6 +26,9 @@ describe('highlight', function () {
     it('should work correctly for number text', function () {
       expect(highlightFilter(3210123, '0')).toEqual('321<span class="ui-match">0</span>123');
     });
+    it('should work correctly for text containing regex literals', function () {
+      expect(highlightFilter('Prefix question? Suffix', '?')).toEqual('Prefix question<span class="ui-match">?</span> Suffix');
+    });
   });
   describe('case sensitive', function () {
     it('should highlight a matching phrase', function () {
