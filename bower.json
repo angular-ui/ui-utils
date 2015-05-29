@@ -2,14 +2,17 @@
   "author": "AngularUI Team",
   "name": "angular-ui-utils",
   "description": "AngularUI Utilities - Companion Suite for AngularJS",
+  "version": "1.0.0",
   "homepage": "http://angular-ui.github.com",
-  "main": "./modules/utils.js",
+  "main": "./index.js",
   "license": "MIT",
   "dependencies": {
-    "angular": ">= 1.0.2"
-  },
-  "devDependencies": {
-    "angular-mocks": "~1.0.5",
-    "jquery": ">=1.6"
+    "ui-virtualize": "angular-ui/ui-virtualize",
+    "ui-scrollpoint": "angular-ui/ui-scrollpoint",
+    "ui-event": "angular-ui/ui-event",
+    "ui-mask": "angular-ui/ui-mask",
+    "ui-validate": "angular-ui/ui-validate",
+    "ui-indeterminate": "angular-ui/ui-indeterminate",
+    "ui-uploader": "angular-ui/ui-uploader"
   }
 }
