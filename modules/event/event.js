@@ -21,7 +21,7 @@ angular.module('ui.event',[]).directive('uiEvent', ['$parse',
           //Take out first paramater (event object);
           params = params.splice(1);
           fn($scope, {$event: evt, $params: params});
-          if (!$scope.$$phase) {
+          if (!$scope.$root.$$phase) {
             $scope.$apply();
           }
         });
