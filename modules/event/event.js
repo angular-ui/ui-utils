@@ -19,7 +19,7 @@ angular.module('ui.event',[]).directive('uiEvent', ['$parse',
         elm.bind(eventName, function (evt) {
           var params = Array.prototype.slice.call(arguments);
           //Take out first paramater (event object);
-          params = params.splice(1);
+          params = params.splice(1, params.length-1);
           fn($scope, {$event: evt, $params: params});
           if (!$scope.$$phase) {
             $scope.$apply();
