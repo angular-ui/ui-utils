@@ -35,6 +35,14 @@ describe('uiKeyup', function () {
     expect($scope.event).toBe(true);
   });
 
+  it('should support single key press (alphabet)', function () {
+    // Keycode 106 = 'j'; Keycode 74 = 'J'
+    // Since the keycode is normalized (i.e. a-z -> A-Z), creating an element
+    // with keycode 106 should create a key event 74 (= 106 - 32).
+    createElement({'106': 'event=true'}).trigger(createKeyEvent(74));
+    expect($scope.event).toBe(true);
+  });
+
   it('should support combined key press', function () {
     createElement({'ctrl-shift-13': 'event=true'}).trigger(createKeyEvent(13, false, true, true, false));
     expect($scope.event).toBe(true);
