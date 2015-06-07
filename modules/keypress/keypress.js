@@ -24,9 +24,9 @@ factory('keypressHelper', ['$parse', function keypress($parse){
     return string.charAt(0).toUpperCase() + string.slice(1);
   };
 
-  return function(mode, scope, elm, attrs) {
-    var params, combinations = [];
-    params = scope.$eval(attrs['ui'+capitaliseFirstLetter(mode)]);
+  return function(mode, scope, elm, attrs, params) {
+    var combinations = [];
+    params = params || scope.$eval(attrs['ui'+capitaliseFirstLetter(mode)]);
 
     // Prepare combinations for simple checking
     angular.forEach(params, function (v, k) {
