@@ -5,6 +5,7 @@ factory('keypressHelper', ['$parse', function keypress($parse){
   var keysByCode = {
     8: 'backspace',
     9: 'tab',
+    10: 'enter',
     13: 'enter',
     27: 'esc',
     32: 'space',
