@@ -71,6 +71,8 @@ function uiUploader($log) {
         self.activeUploads += 1;
         file.active = true;
         xhr = new window.XMLHttpRequest();
+        xhr.withCredentials = true;
+        xhr.useXDomain = true;
         formData = new window.FormData();
         xhr.open('POST', url);
 
