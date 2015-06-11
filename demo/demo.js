@@ -5,10 +5,9 @@ angular.module('ui.scroll')
 
         var get = function(index, count, success) {
             return $timeout(function() {
-                var i, result, _i, _ref;
-                result = [];
-                for (i = _i = index, _ref = index + count - 1; index <= _ref ? _i <= _ref : _i >= _ref; i = index <= _ref ? ++_i : --_i) {
-                    result.push('item #' + i);
+                var result = [];
+                for (var i = index; i <= index + count - 1; i++){
+                  result.push('item #' + i);
                 }
                 return success(result);
             }, 100);
