@@ -188,7 +188,7 @@ angular.module('ui.mask', [])
 
           function validateValue(value){
             // Zero-length value validity is ngRequired's determination
-            return value.length ? value.length >= minRequiredLength : true;
+            return value.length ? value.length <= minRequiredLength : true;
           }
 
           function unmaskValue(value){
