@@ -437,7 +437,7 @@ angular.module('ui.mask', [])
             if (input.selectionStart !== undefined) {
               return input.selectionStart;
             } else if (document.selection) {
-              if ($(input).is(':focus')) {
+              if (iElement.is(':focus')) {
                 // Curse you IE
                 input.focus();
                 var selection = document.selection.createRange();
@@ -454,20 +454,18 @@ angular.module('ui.mask', [])
               return; // Input's hidden
             }
             if (input.setSelectionRange) {
-              if ($(input).is(':focus')) {
+              if (iElement.is(':focus')) {
                 input.focus();
                 input.setSelectionRange(pos, pos);
               }
             }
             else if (input.createTextRange) {
-              if ($(input).is(':focus')) {
                 // Curse you IE
                 var range = input.createTextRange();
                 range.collapse(true);
                 range.moveEnd('character', pos);
                 range.moveStart('character', pos);
                 range.select();
-              }
             }
           }
 
