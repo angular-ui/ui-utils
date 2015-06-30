@@ -513,6 +513,7 @@ angular.module('ui.scroll', []).directive('uiScrollViewport', [
 					});
 					adapter = {};
 					adapter.isLoading = false;
+					adapter.reload = reload;
 					applyUpdate = function(wrapper, newItems) {
 						var i, inserted, item, j, k, l, len, len1, len2, ndx, newItem, oldItemNdx;
 						inserted = [];
