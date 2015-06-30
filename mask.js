@@ -358,11 +358,13 @@ angular.module('ui.mask', []).value('uiMaskConfig', {
             if (input.selectionStart !== undefined) {
               return input.selectionStart;
             } else if (document.selection) {
-              // Curse you IE
-              input.focus();
-              var selection = document.selection.createRange();
-              selection.moveStart('character', input.value ? -input.value.length : 0);
-              return selection.text.length;
+              if (iElement.is(':focus')) {
+                // Curse you IE
+                input.focus();
+                var selection = document.selection.createRange();
+                selection.moveStart('character', input.value ? -input.value.length : 0);
+                return selection.text.length;
+              }
             }
             return 0;
           }
@@ -373,8 +375,10 @@ angular.module('ui.mask', []).value('uiMaskConfig', {
               return;  // Input's hidden
             }
             if (input.setSelectionRange) {
-              input.focus();
-              input.setSelectionRange(pos, pos);
+              if (iElement.is(':focus')) {
+                input.focus();
+                input.setSelectionRange(pos, pos);
+              }
             } else if (input.createTextRange) {
               // Curse you IE
               var range = input.createTextRange();
