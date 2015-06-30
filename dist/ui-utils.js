@@ -1,6 +1,6 @@
 /**
  * angular-ui-utils - Swiss-Army-Knife of AngularJS tools (with no external dependencies!)
- * @version v0.2.3 - 2015-05-22
+ * @version v0.2.3 - 2015-06-30
  * @link http://angular-ui.github.com
  * @license MIT License, http://www.opensource.org/licenses/MIT
  */
@@ -2183,6 +2183,7 @@ function uiUploader($log) {
     self.files = [];
     self.options = {};
     self.activeUploads = 0;
+    self.uploadedFiles = 0;
     $log.info('uiUploader loaded');
     
     function addFiles(files) {
@@ -2260,8 +2261,13 @@ function uiUploader($log) {
         // Triggered when upload is completed:
         xhr.onload = function() {
             self.activeUploads -= 1;
+            self.uploadedFiles += 1;
             startUpload(self.options);
             self.options.onCompleted(file, xhr.responseText);
+            if(self.uploadedFiles === self.files.length) {
+                self.uploadedFiles = 0;
+                self.options.onCompletedAll(self.files);
+            }
         };
 
         // Triggered when upload fails:
