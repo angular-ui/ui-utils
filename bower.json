@@ -1,6 +1,6 @@
 {
   "name": "angular-ui-jq",
-  "version": "0.2.3",
+  "version": "",
   "main": "./jq.js",
   "dependencies": {
     "angular": ">= 1.0.2"
