@@ -1,6 +1,6 @@
 {
   "name": "angular-ui-alias",
-  "version": "0.2.3",
+  "version": "",
   "main": "./alias.js",
   "dependencies": {
     "angular": ">= 1.0.2"
