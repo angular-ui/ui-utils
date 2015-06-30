@@ -13,6 +13,7 @@ function uiUploader($log) {
   self.files = [];
   self.options = {};
   self.activeUploads = 0;
+  self.uploadedFiles = 0;
   $log.info('uiUploader loaded');
   function addFiles(files) {
     for (var i = 0; i < files.length; i++) {
@@ -90,8 +91,13 @@ function uiUploader($log) {
     // Triggered when upload is completed:
     xhr.onload = function () {
       self.activeUploads -= 1;
+      self.uploadedFiles += 1;
       startUpload(self.options);
       self.options.onCompleted(file, xhr.responseText);
+      if (self.uploadedFiles === self.files.length) {
+        self.uploadedFiles = 0;
+        self.options.onCompletedAll(self.files);
+      }
     };
     // Triggered when upload fails:
     xhr.onerror = function () {
