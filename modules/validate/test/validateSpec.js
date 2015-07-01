@@ -47,6 +47,17 @@ describe('uiValidate', function () {
       expect(scope.form.input.$valid).toBeFalsy();
       expect(scope.form.input.$error).toEqual({ validator: true });
     }));
+
+    it('should keep the invalid value in model if it is marked as invalid', inject(function () {
+
+      var testValue = 'test123';
+      scope.value = testValue;
+      scope.validate = falseValidator;
+      var inputElm = compileAndDigest('<input name="input" ng-model="value" ui-validate="\'validate($value)\'">', scope);
+      expect(scope.form.input.$valid).toBeFalsy();
+      expect(scope.value).toEqual(testValue);
+      expect(inputElm.val()).toEqual(testValue);
+    }));
   });
 
   describe('validation on model change', function () {
@@ -95,6 +106,19 @@ describe('uiValidate', function () {
       expect(scope.form.input.$valid).toBeFalsy();
       expect(scope.form.input.$error.key1).toBeFalsy();
       expect(scope.form.input.$error.key2).toBeTruthy();
+    });
+
+    it('should show subsequent validation errors as false if the first of multiple validators fails, but the other validations do not fail', function () {
+
+      scope.validate1 = falseValidator;
+      scope.validate2 = trueValidator;
+      scope.validate3 = trueValidator;
+
+      compileAndDigest('<input name="input" ng-model="value" ui-validate="{key1 : \'validate1($value)\', key2 : \'validate2($value)\', key3 : \'validate2($value)\'}">', scope);
+      expect(scope.form.input.$valid).toBeFalsy();
+      expect(scope.form.input.$error.key1).toBeTruthy();
+      expect(scope.form.input.$error.key2).toBeFalsy();
+      expect(scope.form.input.$error.key3).toBeFalsy();
     });
   });
 
