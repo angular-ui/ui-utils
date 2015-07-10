@@ -12,7 +12,7 @@ At least, the parts that still seemed relevant. This repository is kept lite.
 * [ui-mask](https://github.com/angular-ui/ui-mask)
 * [ui-event](https://github.com/angular-ui/ui-event)
 * [ui-scrollpoint](https://github.com/angular-ui/ui-scrollpoint)
-* [ui-virtualize](https://github.com/angular-ui/ui-virtualize)
+* [ui-scroll](https://github.com/angular-ui/ui-scroll)
 * [ui-uploader](https://github.com/angular-ui/ui-uploader)
 
 ## Requirements
