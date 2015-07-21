@@ -1,5 +1,5 @@
 angular.module('ui.utils', [
-  'ui.virtualize',
+  'ui.scroll',
   'ui.scrollpoint',
   'ui.event',
   'ui.mask',
